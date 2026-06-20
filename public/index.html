@@ -129,12 +129,11 @@ nav{
   border-bottom:1px solid var(--border);
   padding:0 48px;
   display:flex;align-items:center;justify-content:space-between;
-  position:relative;
   height:80px;
   transition:all 0.3s;
 }
 nav.scrolled{background:var(--bg-glass-light);box-shadow:var(--shadow-glass);height:70px}
-.nav-logo{display:flex;align-items:center;text-decoration:none;cursor:pointer;flex-shrink:0;}
+.nav-logo{display:flex;align-items:center;text-decoration:none;cursor:pointer;flex:1;}
 .nav-logo:hover img{filter:brightness(1.2) drop-shadow(0 0 10px rgba(255,106,0,0.6))}
 .logo-shield{
   width:44px;height:48px;
@@ -147,7 +146,7 @@ nav.scrolled{background:var(--bg-glass-light);box-shadow:var(--shadow-glass);hei
 .logo-text-wrap .logo-main{font-family:'Outfit',sans-serif;font-size:18px;font-weight:800;letter-spacing:0.05em;color:#fff;text-transform:uppercase;line-height:1.1}
 .logo-text-wrap .logo-sub{font-size:10px;font-weight:600;letter-spacing:0.2em;color:var(--accent-cyan);text-transform:uppercase;margin-top:2px}
 
-.nav-links{display:flex;align-items:center;gap:8px;list-style:none;position:absolute;left:50%;transform:translateX(-50%)}
+.nav-links{display:flex;align-items:center;gap:8px;list-style:none}
 .nav-links>li{position:relative}
 .nav-links>li>a{
   display:flex;align-items:center;gap:6px;
@@ -189,7 +188,7 @@ nav.scrolled{background:var(--bg-glass-light);box-shadow:var(--shadow-glass);hei
 .nav-dropdown .dd-icon{width:28px;height:28px;background:rgba(255,255,255,0.05);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;transition:background 0.2s, color 0.2s;}
 .nav-dropdown a:hover .dd-icon{background:var(--accent-cyan);color:#000}
 
-.nav-right{display:flex;align-items:center;gap:12px;justify-content:flex-end}
+.nav-right{display:flex;align-items:center;gap:12px;justify-content:flex-end;flex:1;}
 .nav-portal-btn{
   display:flex;align-items:center;gap:6px;
   padding:8px 16px;

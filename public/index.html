@@ -128,20 +128,14 @@ nav{
   backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
   border-bottom:1px solid var(--border);
   padding:0 48px;
-  display:grid;grid-template-columns:1fr auto 1fr;align-items:center;
+  display:flex;align-items:center;justify-content:space-between;
+  position:relative;
   height:80px;
   transition:all 0.3s;
 }
 nav.scrolled{background:var(--bg-glass-light);box-shadow:var(--shadow-glass);height:70px}
-.nav-logo{display:flex;align-items:center;gap:0;text-decoration:none;cursor:pointer;
-  background:rgba(255,255,255,0.06);
-  border:1px solid rgba(255,255,255,0.1);
-  border-radius:12px;
-  padding:6px 16px 6px 8px;
-  transition:background 0.2s,border-color 0.2s;
-  width:fit-content;
-}
-.nav-logo:hover{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.2)}
+.nav-logo{display:flex;align-items:center;text-decoration:none;cursor:pointer;flex-shrink:0;}
+.nav-logo:hover img{filter:brightness(1.2) drop-shadow(0 0 10px rgba(255,106,0,0.6))}
 .logo-shield{
   width:44px;height:48px;
   background:linear-gradient(135deg, var(--accent), var(--accent-glow));
@@ -153,7 +147,7 @@ nav.scrolled{background:var(--bg-glass-light);box-shadow:var(--shadow-glass);hei
 .logo-text-wrap .logo-main{font-family:'Outfit',sans-serif;font-size:18px;font-weight:800;letter-spacing:0.05em;color:#fff;text-transform:uppercase;line-height:1.1}
 .logo-text-wrap .logo-sub{font-size:10px;font-weight:600;letter-spacing:0.2em;color:var(--accent-cyan);text-transform:uppercase;margin-top:2px}
 
-.nav-links{display:flex;align-items:center;gap:8px;list-style:none;justify-content:center}
+.nav-links{display:flex;align-items:center;gap:8px;list-style:none;position:absolute;left:50%;transform:translateX(-50%)}
 .nav-links>li{position:relative}
 .nav-links>li>a{
   display:flex;align-items:center;gap:6px;
@@ -881,8 +875,6 @@ footer{background:#020617;padding:100px 48px 40px;border-top:1px solid rgba(255,
 ═══════════════════════════════════════ */
 @media(max-width:1024px){
   .nav-links,.ann-links{display:none}
-  nav{grid-template-columns:auto 1fr auto}
-  .logo-text-wrap{display:none}
   .hero{grid-template-columns:1fr;min-height:auto;padding-top:40px;padding-bottom:40px}
   .hero-visual{display:none}
   .hero-content{padding:60px 48px}
@@ -1122,7 +1114,7 @@ footer{background:#020617;padding:100px 48px 40px;border-top:1px solid rgba(255,
 ════════════════════════════ -->
 <nav id="navbar" role="navigation" aria-label="Main navigation">
   <a class="nav-logo" onclick="navigate('home')" role="button" aria-label="Vision Performance Inc. Home">
-    <img src="/images/logo-nav.png" alt="Vision Performance Inc." style="height:56px;width:auto;display:block;object-fit:contain;filter:drop-shadow(0 0 8px rgba(255,106,0,0.5)) brightness(1.15);">
+    <img src="/images/logo-nav.png" alt="Vision Performance Inc." style="height:64px;width:auto;display:block;object-fit:contain;">
   </a>
 
   <ul class="nav-links" role="list">

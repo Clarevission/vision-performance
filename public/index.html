@@ -133,7 +133,7 @@ nav{
   transition:all 0.3s;
 }
 nav.scrolled{background:var(--bg-glass-light);box-shadow:var(--shadow-glass);height:70px}
-.nav-logo{display:flex;align-items:center;text-decoration:none;cursor:pointer;flex:1;}
+.nav-logo{display:flex;align-items:center;text-decoration:none;cursor:pointer;flex-shrink:0;margin-right:32px;}
 .nav-logo:hover img{filter:brightness(1.2) drop-shadow(0 0 10px rgba(255,106,0,0.6))}
 .logo-shield{
   width:44px;height:48px;
@@ -1103,8 +1103,6 @@ footer{background:#020617;padding:100px 48px 40px;border-top:1px solid rgba(255,
   <div class="ann-links">
     <a onclick="navigate('contact')">Contact</a>
     <a onclick="navigate('industrial')">Corporate Programs</a>
-    <a onclick="navigate('book')">Book Exam</a>
-    <a onclick="navigate('portal')">Client Portal Login</a>
   </div>
 </div>
 

@@ -1,4 +1,4 @@
-// â•â•â•â• PRODUCTS DATA â•â•â•â•
+// ════ PRODUCTS DATA ════
 const allProducts=[
   {id:1,name:'Performance Frame Alpha',col:'Professional Performance',price:185,badge:'pro',desc:'Lightweight titanium for executives and engineers.',shape:'rect',photo:'https://images.unsplash.com/photo-1766998224439-9f048ed4d687?auto=format&fit=crop&w=600&h=600&q=85'},
   {id:2,name:'Performance Frame Vector',col:'Professional Performance',price:210,badge:'new',desc:'Ergonomic spring hinges for all-day comfort.',shape:'rect',photo:'https://images.unsplash.com/photo-1617791932882-a70117e3564d?auto=format&fit=crop&w=600&h=600&q=85'},
@@ -23,7 +23,7 @@ const allProducts=[
   {id:21,name:'Blue Light Screen Protector',col:'Accessories',price:20,badge:'',desc:'Anti-blue light film for laptop screens.',shape:'acc',photo:'https://images.unsplash.com/photo-1726626258806-09db08d3b5c1?auto=format&fit=crop&w=600&h=600&q=85'},
 ];
 
-// â•â•â•â• CANVAS DRAWING â•â•â•â•
+// ════ CANVAS DRAWING ════
 const FRAME_COLORS={'Professional Performance':'#0A1F44','Digital Eye Performance':'#2F5D8C','Industrial Prescription Safety':'#F97316','Lunettes Signature':'#1A3A5C','Accessories':'#4A5568'};
 function drawFrame(canvas,shape,col){
   const ctx=canvas.getContext('2d'),w=canvas.width,h=canvas.height;
@@ -44,7 +44,7 @@ function productCardHTML(p,prefix='c'){
   const imgEl=p.photo
     ?'<img src="'+p.photo+'" alt="'+p.name+'" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;">'
     :'<canvas id="'+prefix+p.id+'" width="320" height="320" aria-hidden="true"></canvas>';
-  return`<div class="product-card" role="listitem"><div class="product-img">${imgEl}${p.badge?`<div class="product-badge ${bm[p.badge]||''}">${p.badge==='csa'?'CSA Compliant':p.badge==='new'?'New':'Pro'}</div>`:''}<button class="product-wishlist" onclick="showToast('Saved to wishlist')" aria-label="Add to wishlist">â™¡</button></div><div class="product-info"><div class="product-collection">${p.col}</div><div class="product-name">${p.name}</div><div class="product-desc">${p.desc}</div><div class="product-footer"><div class="product-price">$${p.price}</div><button class="add-to-cart-btn" onclick="addToCart(${p.id})">Add to Cart</button></div></div></div>`;
+  return`<div class="product-card" role="listitem"><div class="product-img">${imgEl}${p.badge?`<div class="product-badge ${bm[p.badge]||''}">${p.badge==='csa'?'CSA Compliant':p.badge==='new'?'New':'Pro'}</div>`:''}<button class="product-wishlist" onclick="showToast('Saved to wishlist')" aria-label="Add to wishlist">♡</button></div><div class="product-info"><div class="product-collection">${p.col}</div><div class="product-name">${p.name}</div><div class="product-desc">${p.desc}</div><div class="product-footer"><div class="product-price">$${p.price}</div><button class="add-to-cart-btn" onclick="addToCart(${p.id})">Add to Cart</button></div></div></div>`;
 }
 function renderTo(id,filter='all',limit=null){
   const el=document.getElementById(id);if(!el)return;
@@ -64,7 +64,7 @@ function filterShop(f){
   prods.forEach(p=>setTimeout(()=>{const c=document.getElementById(`s${p.id}`);if(c)drawFrame(c,p.shape,p.col);},30));
 }
 
-// â•â•â•â• CART â•â•â•â•
+// ════ CART ════
 let cart=[];
 function addToCart(id){
   const p=allProducts.find(x=>x.id===id);
@@ -81,13 +81,13 @@ function updateCart(){
   document.getElementById('cartTotalAmt').textContent=`$${total.toFixed(2)}`;
   const body=document.getElementById('cartBody');
   if(!cart.length){body.innerHTML='<div class="cart-empty">Your cart is empty.</div>';return;}
-  body.innerHTML=cart.map(item=>`<div class="cart-line"><div class="cart-line-img">${item.photo?'<img src="'+item.photo+'" alt="'+item.name+'" style="width:100%;height:100%;object-fit:cover;border-radius:12px;display:block;">':'<canvas id="cc'+item.id+'" width="160" height="120" aria-hidden="true" style="border-radius:12px;"></canvas>'}</div><div><div class="cart-line-name">${item.name}</div><div class="cart-line-col">${item.col}</div><div class="cart-qty"><button class="qty-b" onclick="changeQty(${item.id},-1)" aria-label="Decrease quantity">âˆ’</button><span class="qty-n">${item.qty}</span><button class="qty-b" onclick="changeQty(${item.id},1)" aria-label="Increase quantity">+</button></div></div><div class="cart-line-price">$${(item.price*item.qty).toFixed(2)}</div></div>`).join('');
+  body.innerHTML=cart.map(item=>`<div class="cart-line"><div class="cart-line-img">${item.photo?'<img src="'+item.photo+'" alt="'+item.name+'" style="width:100%;height:100%;object-fit:cover;border-radius:12px;display:block;">':'<canvas id="cc'+item.id+'" width="160" height="120" aria-hidden="true" style="border-radius:12px;"></canvas>'}</div><div><div class="cart-line-name">${item.name}</div><div class="cart-line-col">${item.col}</div><div class="cart-qty"><button class="qty-b" onclick="changeQty(${item.id},-1)" aria-label="Decrease quantity">−</button><span class="qty-n">${item.qty}</span><button class="qty-b" onclick="changeQty(${item.id},1)" aria-label="Increase quantity">+</button></div></div><div class="cart-line-price">$${(item.price*item.qty).toFixed(2)}</div></div>`).join('');
   cart.forEach(item=>setTimeout(()=>{const c=document.getElementById(`cc${item.id}`);if(c)drawFrame(c,item.shape,item.col);},30));
 }
 function changeQty(id,d){const i=cart.findIndex(x=>x.id===id);cart[i].qty+=d;if(cart[i].qty<=0)cart.splice(i,1);updateCart();}
 function toggleCart(){document.getElementById('cartSidebar').classList.toggle('open');document.getElementById('cartOverlay').classList.toggle('open');}
 
-// â•â•â•â• NAVIGATION â•â•â•â•
+// ════ NAVIGATION ════
 function navigate(page,collection=null){
   document.querySelectorAll('.page').forEach(p=>{
     const isActive=p.id===`page-${page}`;
@@ -103,7 +103,7 @@ function navigate(page,collection=null){
   setTimeout(()=>triggerReveals(),120);
 }
 
-// â•â•â•â• PATH SELECTOR (B2B/B2C) â•â•â•â•
+// ════ PATH SELECTOR (B2B/B2C) ════
 function setPath(type,btn){
   document.querySelectorAll('.path-btn').forEach(b=>{b.classList.remove('active');b.setAttribute('aria-pressed','false');});
   btn.classList.add('active');btn.setAttribute('aria-pressed','true');
@@ -111,7 +111,7 @@ function setPath(type,btn){
   document.getElementById('hero-b2b').style.display=type==='b2b'?'block':'none';
 }
 
-// â•â•â•â• ROI CALCULATOR â•â•â•â•
+// ════ ROI CALCULATOR ════
 const VP_PRICES={10:220,50:190,150:165};
 function calcROI(){
   const emp=parseInt(document.getElementById('roiEmp').value);
@@ -131,11 +131,11 @@ function calcROI(){
 }
 calcROI();
 
-// â•â•â•â• FORMS â•â•â•â•
+// ════ FORMS ════
 async function submitForm(type){
   const btn=document.querySelector(`[onclick="submitForm('${type}')"]`);
   const orig=btn?btn.innerHTML:'';
-  if(btn){btn.disabled=true;btn.innerHTML='Sendingâ€¦';}
+  if(btn){btn.disabled=true;btn.innerHTML='Sending…';}
   const fields={
     mobile:{org:'#mc-org',contact:'#mc-contact',email:'#mc-email',phone:'#mc-phone',employees:'#mc-employees',date:'#mc-date',address:'#mc-address',notes:'#mc-notes'},
     corporate:{company:'#corp-company',contact:'#corp-contact',email:'#corp-email',phone:'#corp-phone',employees:'#corp-employees',date:'#corp-date',location:'#corp-location',notes:'#corp-notes'},
@@ -149,15 +149,15 @@ async function submitForm(type){
     const j=await r.json();
     if(r.ok){const msgs={mobile:"Mobile clinic request submitted! We'll contact you within 1 business day.",corporate:"Corporate program request submitted! A representative will be in touch shortly.",contact:"Message sent! We'll respond within 1 business day."};showToast(msgs[type]||j.message||'Submitted!');for(const[k,sel]of Object.entries(map)){const el=document.querySelector(sel);if(el)el.value='';}}
     else{showToast(j.error||'Something went wrong. Please try again.');}
-  }catch(e){showToast('Our contact form requires the full server. For beta testing, please email info@visionperformanceinc.ca â€” we\'ll respond within 1 business day.');}
+  }catch(e){showToast('Our contact form requires the full server. For beta testing, please email info@visionperformanceinc.ca — we\'ll respond within 1 business day.');}
   finally{if(btn){btn.disabled=false;btn.innerHTML=orig;}}
 }
 
-// â•â•â•â• TOAST â•â•â•â•
+// ════ TOAST ════
 let toastTimer;
 function showToast(msg){clearTimeout(toastTimer);document.getElementById('toastMsg').textContent=msg;document.getElementById('toast').classList.add('show');toastTimer=setTimeout(()=>document.getElementById('toast').classList.remove('show'),3200);}
 
-// â•â•â•â• MOBILE NAV â•â•â•â•
+// ════ MOBILE NAV ════
 function toggleMobileNav(){
   const btn=document.getElementById('navHamburger');
   const drawer=document.getElementById('mobNavDrawer');
@@ -170,8 +170,8 @@ function toggleMobileNav(){
   drawer.setAttribute('aria-modal',open?'true':'false');
   document.body.style.overflow=open?'hidden':'';
 }
-// â•â•â•â• CHAT â•â•â•â•
-const chatReplies={"Get a corporate quote":"Great! I'll connect you with our corporate team. Please fill out our quick form: [Industrial Programs â†’]","Book mobile clinic":"Sure! Our mobile clinic visits workplaces across Canada. Use the form on the Mobile Clinic page to schedule.","Shop eyewear":"Of course! Browse our collections at the Shop page â€” we have Professional, Digital Eye, Industrial Safety, and Lunettes ranges."};
+// ════ CHAT ════
+const chatReplies={"Get a corporate quote":"Great! I'll connect you with our corporate team. Please fill out our quick form: [Industrial Programs →]","Book mobile clinic":"Sure! Our mobile clinic visits workplaces across Canada. Use the form on the Mobile Clinic page to schedule.","Shop eyewear":"Of course! Browse our collections at the Shop page — we have Professional, Digital Eye, Industrial Safety, and Lunettes ranges."};
 function toggleChat(){
   const open=document.getElementById('chatPanel').classList.toggle('open');
   if(open){const notif=document.querySelector('.chat-notif');if(notif)notif.style.display='none';}
@@ -180,13 +180,13 @@ function chatReply(msg){addChatMsg(msg,'user');setTimeout(()=>{const reply=chatR
 function sendChat(){const input=document.getElementById('chatInput');const msg=input.value.trim();if(!msg)return;addChatMsg(msg,'user');input.value='';setTimeout(()=>addChatMsg("Thank you for your message. Our team will follow up within 1 business day. In the meantime, feel free to browse our programs above.",'bot'),800);}
 function addChatMsg(text,from){const msgs=document.getElementById('chatMessages');const div=document.createElement('div');div.className=`chat-msg ${from}`;div.textContent=text;msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;}
 
-// â•â•â•â• STICKY BAR â•â•â•â•
+// ════ STICKY BAR ════
 window.addEventListener('scroll',()=>{
   document.getElementById('stickyBar').classList.toggle('visible',window.scrollY>400);
   document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>60);
 });
 
-// â•â•â•â• REVEAL ANIMATIONS â•â•â•â•
+// ════ REVEAL ANIMATIONS ════
 function triggerReveals(){
   document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el=>{
     const r=el.getBoundingClientRect();
@@ -196,7 +196,7 @@ function triggerReveals(){
 const revealObs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');}),{threshold:0.08});
 document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el=>revealObs.observe(el));
 
-// â•â•â•â• FOOTER INJECTION â•â•â•â•
+// ════ FOOTER INJECTION ════
 function injectFooters(){
   const tpl=document.getElementById('footerTemplate');
   ['home','shop','mobile','industrial','book','about','contact','learn','portal','privacy'].forEach(page=>{
@@ -206,7 +206,7 @@ function injectFooters(){
 }
 injectFooters();
 
-// â•â•â•â• ACCESSIBILITY: keyboard support for click-only elements â•â•â•â•
+// ════ ACCESSIBILITY: keyboard support for click-only elements ════
 document.querySelectorAll('a[onclick]:not([href]),[role="button"],.audience-card,.path-card,.service-card,.industry-card,.resource-card,.learn-card,.book-option,.testimonial-card[onclick]').forEach(el=>{
   if(!el.hasAttribute('tabindex'))el.setAttribute('tabindex','0');
   if(!el.hasAttribute('role'))el.setAttribute('role','button');
@@ -218,7 +218,7 @@ document.addEventListener('keydown',e=>{
   }
 });
 
-// â•â•â•â• INIT â•â•â•â•
+// ════ INIT ════
 // Set aria-hidden on all inactive pages at load so screen readers only see page-home
 document.querySelectorAll('.page:not(.active)').forEach(p=>p.setAttribute('aria-hidden','true'));
 // Show PIPEDA privacy notice if not yet acknowledged

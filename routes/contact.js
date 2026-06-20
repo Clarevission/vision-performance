@@ -24,7 +24,7 @@ router.post('/', async (req, res) => {
     <h2 style="color:#FF6A00;font-family:sans-serif;">New Contact Form Submission</h2>
     <table style="font-family:sans-serif;font-size:14px;border-collapse:collapse;width:100%">
       <tr><td style="padding:8px;color:#666;width:160px"><strong>Name</strong></td><td style="padding:8px">${safeName}</td></tr>
-      <tr style="background:#f9f9f9"><td style="padding:8px;color:#666"><strong>Company</strong></td><td style="padding:8px">${safeCompany || 'â€”'}</td></tr>
+      <tr style="background:#f9f9f9"><td style="padding:8px;color:#666"><strong>Company</strong></td><td style="padding:8px">${safeCompany || '—'}</td></tr>
       <tr><td style="padding:8px;color:#666"><strong>Email</strong></td><td style="padding:8px"><a href="mailto:${safeEmail}">${safeEmail}</a></td></tr>
       <tr style="background:#f9f9f9"><td style="padding:8px;color:#666"><strong>Subject</strong></td><td style="padding:8px">${safeSubject}</td></tr>
       <tr><td style="padding:8px;color:#666;vertical-align:top"><strong>Message</strong></td><td style="padding:8px;white-space:pre-wrap">${safeMessage}</td></tr>
@@ -34,7 +34,7 @@ router.post('/', async (req, res) => {
   try {
     await sendMail({
       to: process.env.NOTIFY_EMAIL || 'info@visionperformanceinc.ca',
-      subject: `[Contact] ${safeSubject} â€” ${safeName}`,
+      subject: `[Contact] ${safeSubject} — ${safeName}`,
       html,
       text: `Name: ${safeName}\nCompany: ${safeCompany}\nEmail: ${safeEmail}\nSubject: ${safeSubject}\n\n${safeMessage}`,
     });
@@ -42,11 +42,11 @@ router.post('/', async (req, res) => {
     // Auto-reply to sender
     await sendMail({
       to: safeEmail,
-      subject: 'We received your message â€” Vision Performance Inc.',
+      subject: 'We received your message — Vision Performance Inc.',
       html: `<p style="font-family:sans-serif">Hi ${safeName},</p>
              <p style="font-family:sans-serif">Thanks for reaching out. Our team will respond within 1 business day.</p>
-             <p style="font-family:sans-serif">â€” Vision Performance Team</p>`,
-      text: `Hi ${safeName},\n\nThanks for reaching out. Our team will respond within 1 business day.\n\nâ€” Vision Performance Team`,
+             <p style="font-family:sans-serif">— Vision Performance Team</p>`,
+      text: `Hi ${safeName},\n\nThanks for reaching out. Our team will respond within 1 business day.\n\n— Vision Performance Team`,
     });
 
     res.json({ message: "Message sent! We'll respond within 1 business day." });

@@ -1,4 +1,4 @@
-﻿// â•â•â•â• PRODUCTS DATA â•â•â•â•
+// â•â•â•â• PRODUCTS DATA â•â•â•â•
 const allProducts=[
   {id:1,name:'Performance Frame Alpha',col:'Professional Performance',price:185,badge:'pro',desc:'Lightweight titanium for executives and engineers.',shape:'rect',photo:'https://images.unsplash.com/photo-1766998224439-9f048ed4d687?auto=format&fit=crop&w=600&h=600&q=85'},
   {id:2,name:'Performance Frame Vector',col:'Professional Performance',price:210,badge:'new',desc:'Ergonomic spring hinges for all-day comfort.',shape:'rect',photo:'https://images.unsplash.com/photo-1617791932882-a70117e3564d?auto=format&fit=crop&w=600&h=600&q=85'},

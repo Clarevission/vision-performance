@@ -1,4 +1,4 @@
-﻿const express = require('express');
+const express = require('express');
 const { isEmail, escape, trim } = require('validator');
 const { sendMail } = require('../lib/mailer');
 

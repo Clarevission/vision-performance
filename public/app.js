@@ -218,6 +218,169 @@ document.addEventListener('keydown',e=>{
   }
 });
 
+// ════ CLIENT PORTAL ════
+let portalUser = null;
+let portalEmployeesCache = null;
+let portalOrdersCache = null;
+
+async function portalLogin(e) {
+  e.preventDefault();
+  const btn = document.getElementById('portal-login-btn');
+  const errEl = document.getElementById('portal-login-error');
+  const email = document.getElementById('portal-email').value;
+  const password = document.getElementById('portal-password').value;
+  btn.textContent = 'Signing in…'; btn.disabled = true;
+  errEl.style.display = 'none';
+  try {
+    const res = await fetch('/api/portal/login', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ email, password }), credentials: 'same-origin'
+    });
+    const data = await res.json();
+    if (!res.ok) { errEl.textContent = data.error || 'Login failed'; errEl.style.display = 'block'; return; }
+    portalUser = data.user;
+    showPortalDashboard();
+  } catch { errEl.textContent = 'Network error. Please try again.'; errEl.style.display = 'block'; }
+  finally { btn.textContent = 'Sign In to Portal'; btn.disabled = false; }
+}
+
+async function portalLogout() {
+  await fetch('/api/portal/logout', { method: 'POST', credentials: 'same-origin' });
+  portalUser = null; portalEmployeesCache = null; portalOrdersCache = null;
+  document.getElementById('portal-login-screen').style.display = '';
+  document.getElementById('portal-dashboard-screen').style.display = 'none';
+  document.getElementById('portal-email').value = '';
+  document.getElementById('portal-password').value = '';
+}
+
+function showPortalDashboard() {
+  document.getElementById('portal-login-screen').style.display = 'none';
+  document.getElementById('portal-dashboard-screen').style.display = '';
+  document.getElementById('portal-user-name').textContent = portalUser.name || portalUser.email;
+  document.getElementById('portal-company-name').textContent = portalUser.company;
+  showPortalTab('dashboard', document.querySelector('.ptab'));
+  loadPortalDashboard();
+}
+
+async function checkPortalSession() {
+  try {
+    const res = await fetch('/api/portal/me', { credentials: 'same-origin' });
+    if (res.ok) { const d = await res.json(); portalUser = d.user; showPortalDashboard(); }
+  } catch {}
+}
+
+function showPortalTab(tab, btn) {
+  document.querySelectorAll('.portal-tab-content').forEach(el => el.style.display = 'none');
+  document.querySelectorAll('.ptab').forEach(b => b.classList.remove('active'));
+  document.getElementById('ptab-' + tab).style.display = '';
+  if (btn) btn.classList.add('active');
+  if (tab === 'employees' && !portalEmployeesCache) loadPortalEmployees();
+  if (tab === 'orders' && !portalOrdersCache) loadPortalOrders();
+  if (tab === 'compliance') loadPortalCompliance();
+}
+
+function statusBadge(s) {
+  const labels = { complete:'✓ Complete', pending:'⏳ Pending', processing:'⚙ Processing', in_review:'🔍 In Review' };
+  return '<span class="pbadge pbadge-' + s + '">' + (labels[s]||s) + '</span>';
+}
+
+function fmtDate(d) {
+  if (!d) return '—';
+  return new Date(d).toLocaleDateString('en-CA', { month:'short', day:'numeric', year:'numeric' });
+}
+
+async function loadPortalDashboard() {
+  document.getElementById('dashboard-orders-body').innerHTML = '<div class="portal-loading">Loading…</div>';
+  try {
+    const res = await fetch('/api/portal/dashboard', { credentials: 'same-origin' });
+    const d = await res.json();
+    document.getElementById('stat-employees').textContent = d.totalEmployees ?? '—';
+    document.getElementById('stat-compliance').textContent = d.complianceRate != null ? d.complianceRate + '%' : '—';
+    document.getElementById('stat-pending').textContent = d.pendingOrders ?? '—';
+    const rows = d.recentOrders || [];
+    if (!rows.length) { document.getElementById('dashboard-orders-body').innerHTML = '<div class="portal-empty">No orders yet.</div>'; return; }
+    document.getElementById('dashboard-orders-body').innerHTML = rows.map(function(o) {
+      return '<div class="ptable-row"><div class="ptable-cell-name">' + (o.employee_name||'—') + '</div><div class="ptable-cell">' + (o.frame_name||'—') + '</div><div class="ptable-cell">' + fmtDate(o.order_date) + '</div><div class="ptable-cell">' + (o.compliance_type||'—') + '</div><div>' + statusBadge(o.status) + '</div></div>';
+    }).join('');
+  } catch { document.getElementById('dashboard-orders-body').innerHTML = '<div class="portal-empty">Failed to load data.</div>'; }
+}
+
+async function loadPortalEmployees() {
+  document.getElementById('employees-body').innerHTML = '<div class="portal-loading">Loading…</div>';
+  try {
+    const res = await fetch('/api/portal/employees', { credentials: 'same-origin' });
+    const d = await res.json();
+    portalEmployeesCache = d.employees || [];
+    renderEmployees(portalEmployeesCache);
+  } catch { document.getElementById('employees-body').innerHTML = '<div class="portal-empty">Failed to load employees.</div>'; }
+}
+
+function renderEmployees(list) {
+  const body = document.getElementById('employees-body');
+  if (!list.length) { body.innerHTML = '<div class="portal-empty">No employees enrolled yet.</div>'; return; }
+  body.innerHTML = list.map(function(e) {
+    return '<div class="ptable-row" style="grid-template-columns:2fr 1.5fr 1.5fr 1fr 1fr;"><div class="ptable-cell-name">' + e.name + '</div><div class="ptable-cell">' + (e.department||'—') + '</div><div class="ptable-cell">' + (e.job_title||'—') + '</div><div class="ptable-cell">' + fmtDate(e.enrolled_at) + '</div><div><span class="pbadge ' + (e.eligible ? 'pbadge-eligible' : 'pbadge-ineligible') + '">' + (e.eligible ? '✓ Eligible' : 'Ineligible') + '</span></div></div>';
+  }).join('');
+}
+
+function filterEmployees() {
+  if (!portalEmployeesCache) return;
+  const q = document.getElementById('emp-search').value.toLowerCase();
+  renderEmployees(portalEmployeesCache.filter(function(e) {
+    return e.name.toLowerCase().includes(q) || (e.department||'').toLowerCase().includes(q) || (e.job_title||'').toLowerCase().includes(q);
+  }));
+}
+
+async function loadPortalOrders() {
+  document.getElementById('orders-body').innerHTML = '<div class="portal-loading">Loading…</div>';
+  try {
+    const res = await fetch('/api/portal/orders', { credentials: 'same-origin' });
+    const d = await res.json();
+    portalOrdersCache = d.orders || [];
+    renderOrders(portalOrdersCache);
+  } catch { document.getElementById('orders-body').innerHTML = '<div class="portal-empty">Failed to load orders.</div>'; }
+}
+
+function renderOrders(list) {
+  const body = document.getElementById('orders-body');
+  if (!list.length) { body.innerHTML = '<div class="portal-empty">No orders found.</div>'; return; }
+  body.innerHTML = list.map(function(o) {
+    return '<div class="ptable-row" style="grid-template-columns:2fr 1.5fr 1.5fr 1fr 1fr;"><div class="ptable-cell-name">' + (o.employee_name||'—') + '</div><div class="ptable-cell">' + (o.frame_name||'—') + '</div><div class="ptable-cell">' + (o.lens_type||'—') + '</div><div class="ptable-cell">' + fmtDate(o.order_date) + '</div><div>' + statusBadge(o.status) + '</div></div>';
+  }).join('');
+}
+
+function filterOrders() {
+  if (!portalOrdersCache) return;
+  const f = document.getElementById('order-status-filter').value;
+  renderOrders(f ? portalOrdersCache.filter(function(o){ return o.status === f; }) : portalOrdersCache);
+}
+
+async function loadPortalCompliance() {
+  document.getElementById('compliance-docs-body').innerHTML = '<div class="portal-loading">Loading…</div>';
+  document.getElementById('compliance-summary-body').innerHTML = '';
+  try {
+    const res = await fetch('/api/portal/compliance', { credentials: 'same-origin' });
+    const d = await res.json();
+    const docs = d.docs || [];
+    const stats = d.stats || [];
+    const typeIcons = { certificate:'📋', wcb_report:'🛡️', safety_doc:'⚠️', report:'📊' };
+    if (!docs.length) {
+      document.getElementById('compliance-docs-body').innerHTML = '<div class="portal-empty">No documents available yet. Contact Vision Performance to request compliance documentation.</div>';
+    } else {
+      document.getElementById('compliance-docs-body').innerHTML = docs.map(function(doc) {
+        return '<div class="pdoc-row"><div style="display:flex;align-items:center;gap:16px;"><div class="pdoc-icon">' + (typeIcons[doc.doc_type]||'📄') + '</div><div><div style="font-size:14px;font-weight:600;color:white;margin-bottom:4px;">' + doc.title + '</div><div style="font-size:12px;color:var(--text-muted);">Issued ' + fmtDate(doc.issue_date) + ' · ' + (doc.doc_type||'document').replace('_',' ') + '</div></div></div>' + (doc.file_url ? '<a class="pdoc-download" href="' + doc.file_url + '" target="_blank" rel="noopener">⬇ Download</a>' : '<span style="font-size:12px;color:var(--text-muted);font-family:Outfit,sans-serif;">Contact VPI to request</span>') + '</div>';
+      }).join('');
+    }
+    if (stats.length) {
+      document.getElementById('compliance-summary-body').innerHTML = stats.map(function(s) {
+        return '<div style="display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid rgba(255,255,255,0.05);"><div style="font-size:14px;color:white;font-weight:600;">' + (s.compliance_type||'Standard') + '</div><div style="font-family:Outfit,sans-serif;font-size:13px;color:var(--text-muted);">' + s.count + ' completed order' + (s.count!=1?'s':'') + '</div></div>';
+      }).join('');
+    } else {
+      document.getElementById('compliance-summary-body').innerHTML = '<div class="portal-empty">No completed orders yet.</div>';
+    }
+  } catch { document.getElementById('compliance-docs-body').innerHTML = '<div class="portal-empty">Failed to load compliance data.</div>'; }
+}
+
 // ════ INIT ════
 // Set aria-hidden on all inactive pages at load so screen readers only see page-home
 document.querySelectorAll('.page:not(.active)').forEach(p=>p.setAttribute('aria-hidden','true'));
@@ -226,3 +389,5 @@ if(!localStorage.getItem('vp-privacy-ack')){const cb=document.getElementById('co
 renderTo('homeProdsGrid','all',8);
 filterShop('all');
 triggerReveals();
+// Restore portal session if user was already logged in
+checkPortalSession();

@@ -666,7 +666,50 @@ nav.scrolled{background:var(--bg-glass-light);box-shadow:var(--shadow-glass);hei
 .status-review{background:rgba(0,240,255,0.1);color:var(--accent-cyan);border:1px solid rgba(0,240,255,0.2)}
 
 /* ═══════════════════════════════════════
-   FREE TRIAL CTA 
+   CLIENT PORTAL DASHBOARD
+═══════════════════════════════════════ */
+.ptab{background:transparent;border:none;padding:8px 16px;font-family:Outfit,sans-serif;font-size:12px;font-weight:700;letter-spacing:0.05em;color:rgba(255,255,255,0.45);cursor:pointer;border-radius:8px;transition:all 0.2s;}
+.ptab:hover{color:white;background:rgba(255,255,255,0.06)}
+.ptab.active{color:white;background:rgba(255,255,255,0.1)}
+.ptab-link{background:none;border:none;color:var(--accent-cyan);font-family:Outfit,sans-serif;font-size:12px;font-weight:700;cursor:pointer;padding:0;}
+.pstat-card{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:16px;padding:28px 24px;}
+.pstat-num{font-family:Outfit,sans-serif;font-size:36px;font-weight:900;color:white;line-height:1;margin-bottom:8px;}
+.pstat-label{font-family:Outfit,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);}
+.pdash-card{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:16px;overflow:hidden;}
+.pdash-card-header{padding:20px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);}
+.pdash-card-title{font-family:Outfit,sans-serif;font-size:14px;font-weight:800;letter-spacing:0.05em;color:white;}
+.ptable-wrap{overflow-x:auto;}
+.ptable-head{display:grid;grid-template-columns:2fr 1.5fr 1fr 1fr 1fr;gap:12px;padding:12px 24px;font-family:Outfit,sans-serif;font-size:10px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);background:rgba(255,255,255,0.02);}
+.ptable-row{display:grid;grid-template-columns:2fr 1.5fr 1fr 1fr 1fr;gap:12px;padding:16px 24px;border-bottom:1px solid rgba(255,255,255,0.05);transition:background 0.15s;cursor:pointer;align-items:center;}
+.ptable-row:hover{background:rgba(255,255,255,0.03)}
+.ptable-row:last-child{border-bottom:none}
+.ptable-cell-name{font-size:14px;font-weight:600;color:white;}
+.ptable-cell{font-size:13px;color:var(--text-muted);}
+.pbadge{display:inline-flex;align-items:center;gap:5px;font-family:Outfit,sans-serif;font-size:10px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:4px 10px;border-radius:100px;}
+.pbadge-complete{background:rgba(16,185,129,0.12);color:#10B981;border:1px solid rgba(16,185,129,0.25)}
+.pbadge-pending{background:rgba(245,158,11,0.12);color:#F59E0B;border:1px solid rgba(245,158,11,0.25)}
+.pbadge-processing{background:rgba(0,240,255,0.1);color:var(--accent-cyan);border:1px solid rgba(0,240,255,0.2)}
+.pbadge-in_review{background:rgba(139,92,246,0.12);color:#8B5CF6;border:1px solid rgba(139,92,246,0.25)}
+.pbadge-eligible{background:rgba(16,185,129,0.12);color:#10B981;border:1px solid rgba(16,185,129,0.25)}
+.pbadge-ineligible{background:rgba(239,68,68,0.1);color:#EF4444;border:1px solid rgba(239,68,68,0.2)}
+.portal-tab-content{animation:fadeIn 0.2s ease;}
+.pdoc-row{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid rgba(255,255,255,0.05);}
+.pdoc-row:last-child{border-bottom:none}
+.pdoc-icon{width:40px;height:40px;background:rgba(0,240,255,0.08);border:1px solid rgba(0,240,255,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.pdoc-download{background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:8px;padding:8px 16px;color:white;font-family:Outfit,sans-serif;font-size:12px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:all 0.2s;}
+.pdoc-download:hover{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.2)}
+.portal-loading{text-align:center;padding:48px;color:var(--text-muted);font-family:Outfit,sans-serif;font-size:14px;}
+.portal-empty{text-align:center;padding:48px;color:var(--text-muted);font-family:Outfit,sans-serif;font-size:14px;}
+@media(max-width:768px){
+  .pstat-card{padding:20px 16px;}
+  .pstat-num{font-size:28px;}
+  #portal-stats-grid{grid-template-columns:1fr 1fr!important;}
+  .ptable-head,.ptable-row{grid-template-columns:2fr 1fr 1fr!important;gap:8px;padding:12px 16px;}
+  .ptable-head>div:nth-child(2),.ptable-row>div:nth-child(2){display:none}
+}
+
+/* ═══════════════════════════════════════
+   FREE TRIAL CTA
 ═══════════════════════════════════════ */
 .trial-banner{background:linear-gradient(135deg, #0f172a 0%, #020617 100%);padding:100px 48px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);position:relative;overflow:hidden}
 .trial-banner::before{content:'';position:absolute;top:0;left:0;width:100%;height:100%;background:radial-gradient(ellipse at right, rgba(255,106,0,0.1), transparent 50%);pointer-events:none}
@@ -1682,13 +1725,154 @@ footer{background:#020617;padding:100px 48px 40px;border-top:1px solid rgba(255,
 
 <!-- PORTAL PAGE (NEW) -->
 <div class="page" id="page-portal">
-  <div class="page-hero"><div class="page-hero-inner"><div class="page-breadcrumb"><a onclick="navigate('home')">Home</a><span>/</span><span style="color:rgba(255,255,255,0.45)">Client Portal</span></div><div class="page-hero-title">Client Portal <span style="color:var(--orange)">Login</span></div><div class="page-hero-sub">Manage your corporate vision program — track orders, compliance, and employee eligibility 24/7.</div></div></div>
-  <section class="section" style="background:var(--grey);"><div class="container" style="max-width:560px;"><div class="form-card reveal" style="text-align:center;padding:64px 48px;"><div style="font-size:56px;margin-bottom:24px;">🔐</div><div class="form-title">Portal Coming Soon</div><div class="form-sub" style="margin-bottom:32px;">The client portal is currently in development. Corporate program clients will receive secure login credentials by email once their program is activated.</div><div style="background:rgba(0,240,255,0.06);border:1px solid rgba(0,240,255,0.2);border-radius:var(--radius);padding:20px 24px;margin-bottom:32px;text-align:left;"><div style="font-family:Outfit,sans-serif;font-size:11px;font-weight:800;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent-cyan);margin-bottom:12px;">Portal Features in Development</div><ul style="list-style:none;display:flex;flex-direction:column;gap:8px;"><li style="font-size:13px;color:var(--text-muted);display:flex;align-items:center;gap:8px;"><span style="color:var(--accent-cyan);">✓</span> Real-time order &amp; compliance tracking</li><li style="font-size:13px;color:var(--text-muted);display:flex;align-items:center;gap:8px;"><span style="color:var(--accent-cyan);">✓</span> Employee eligibility management</li><li style="font-size:13px;color:var(--text-muted);display:flex;align-items:center;gap:8px;"><span style="color:var(--accent-cyan);">✓</span> Compliance documentation downloads</li><li style="font-size:13px;color:var(--text-muted);display:flex;align-items:center;gap:8px;"><span style="color:var(--accent-cyan);">✓</span> Program metrics &amp; usage reports</li></ul></div><div style="display:flex;flex-direction:column;gap:12px;"><button class="btn btn-orange btn-arrow" style="width:100%;justify-content:center;" onclick="navigate('industrial')">Request Corporate Program Access</button><button class="btn btn-outline-navy btn-sm" style="width:100%;justify-content:center;" onclick="navigate('contact')">Contact Us for Portal Access</button></div></div></div></section>
-  <section class="section" style="background:white;padding-top:60px;padding-bottom:60px;"><div class="container"><div class="reveal" style="text-align:center;margin-bottom:40px;"><span class="section-eyebrow" style="justify-content:center;">Portal Features</span><h2 class="section-headline" style="text-align:center;">Everything You Need to <span>Manage Your Program</span></h2></div><div class="grid-3">
-    <div class="service-card reveal"><div class="sc-icon" style="font-size:20px;display:flex;align-items:center;justify-content:center;">📊</div><div class="sc-title">Real-Time Dashboard</div><div class="sc-desc">View compliance rates, pending orders, and employee statuses at a glance. Full program metrics updated in real-time.</div></div>
-    <div class="service-card reveal d1"><div class="sc-icon" style="font-size:20px;">📋</div><div class="sc-title">Compliance Documentation</div><div class="sc-desc">Download CSA compliance certificates, WCB reports, and safety documentation for any employee or date range.</div></div>
-    <div class="service-card reveal d2"><div class="sc-icon" style="font-size:20px;">👥</div><div class="sc-title">Employee Management</div><div class="sc-desc">Add/remove employees, manage eligibility, track fitting status, and manage reorder schedules with zero admin overhead.</div></div>
-  </div></div></section>
+
+  <!-- ── LOGIN SCREEN ── -->
+  <div id="portal-login-screen">
+    <div class="page-hero"><div class="page-hero-inner"><div class="page-breadcrumb"><a onclick="navigate('home')">Home</a><span>/</span><span style="color:rgba(255,255,255,0.45)">Client Portal</span></div><div class="page-hero-title">Client Portal <span style="color:var(--orange)">Login</span></div><div class="page-hero-sub">Secure access for corporate program clients. Manage orders, compliance, and employee eligibility 24/7.</div></div></div>
+    <section class="section" style="background:var(--grey);">
+      <div class="container" style="max-width:480px;">
+        <div class="form-card reveal" style="padding:48px;">
+          <div style="text-align:center;margin-bottom:32px;">
+            <div style="width:64px;height:64px;background:linear-gradient(135deg,var(--navy),var(--orange));border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 16px;">🔐</div>
+            <div class="form-title" style="margin-bottom:8px;">Sign In to Your Portal</div>
+            <div class="form-sub">Enter the credentials provided by Vision Performance Inc.</div>
+          </div>
+          <div id="portal-login-error" style="display:none;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:var(--radius);padding:12px 16px;margin-bottom:20px;color:#EF4444;font-size:13px;font-family:Outfit,sans-serif;font-weight:600;"></div>
+          <form id="portal-login-form" onsubmit="portalLogin(event)">
+            <div class="form-group">
+              <label class="form-label" for="portal-email">Email Address</label>
+              <input class="form-control" type="email" id="portal-email" name="email" placeholder="you@company.com" required autocomplete="email">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="portal-password">Password</label>
+              <input class="form-control" type="password" id="portal-password" name="password" placeholder="••••••••" required autocomplete="current-password">
+            </div>
+            <button type="submit" class="btn btn-orange btn-arrow" style="width:100%;justify-content:center;margin-top:8px;" id="portal-login-btn">Sign In to Portal</button>
+          </form>
+          <div style="text-align:center;margin-top:24px;padding-top:24px;border-top:1px solid var(--border);">
+            <div style="font-size:13px;color:var(--text-muted);font-family:Outfit,sans-serif;">Don't have portal access yet?</div>
+            <button class="btn btn-outline-navy btn-sm" style="margin-top:12px;" onclick="navigate('industrial')">Request Corporate Program Access</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ── DASHBOARD (shown after login) ── -->
+  <div id="portal-dashboard-screen" style="display:none;">
+
+    <!-- Portal Top Bar -->
+    <div style="background:var(--navy);border-bottom:1px solid rgba(255,255,255,0.08);padding:0 48px;display:flex;align-items:center;justify-content:space-between;height:64px;position:sticky;top:80px;z-index:400;">
+      <div style="display:flex;align-items:center;gap:32px;">
+        <div style="font-family:Outfit,sans-serif;font-size:11px;font-weight:800;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent-cyan);">Client Portal</div>
+        <div style="display:flex;gap:4px;" id="portal-tabs">
+          <button class="ptab active" onclick="showPortalTab('dashboard',this)">Dashboard</button>
+          <button class="ptab" onclick="showPortalTab('employees',this)">Employees</button>
+          <button class="ptab" onclick="showPortalTab('orders',this)">Orders</button>
+          <button class="ptab" onclick="showPortalTab('compliance',this)">Compliance</button>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;">
+        <div style="text-align:right;">
+          <div id="portal-user-name" style="font-family:Outfit,sans-serif;font-size:13px;font-weight:700;color:white;"></div>
+          <div id="portal-company-name" style="font-family:Outfit,sans-serif;font-size:11px;color:var(--text-muted);"></div>
+        </div>
+        <button onclick="portalLogout()" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:8px 14px;color:var(--text-muted);font-family:Outfit,sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.color='white'" onmouseout="this.style.color='var(--text-muted)'">Sign Out</button>
+      </div>
+    </div>
+
+    <div style="background:var(--grey);min-height:calc(100vh - 144px);padding:40px 48px;">
+
+      <!-- DASHBOARD TAB -->
+      <div id="ptab-dashboard" class="portal-tab-content">
+        <div style="margin-bottom:32px;">
+          <div style="font-family:Outfit,sans-serif;font-size:24px;font-weight:900;color:white;margin-bottom:4px;">Program Dashboard</div>
+          <div style="font-size:14px;color:var(--text-muted);">Real-time overview of your corporate vision program</div>
+        </div>
+        <!-- Stats -->
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:32px;" id="portal-stats-grid">
+          <div class="pstat-card"><div class="pstat-num" id="stat-employees">—</div><div class="pstat-label">Active Employees</div></div>
+          <div class="pstat-card"><div class="pstat-num" style="color:var(--success);" id="stat-compliance">—</div><div class="pstat-label">Compliance Rate</div></div>
+          <div class="pstat-card"><div class="pstat-num" style="color:var(--orange);" id="stat-pending">—</div><div class="pstat-label">Pending Orders</div></div>
+          <div class="pstat-card"><div class="pstat-num" style="color:var(--accent-cyan);" id="stat-year">2026</div><div class="pstat-label">Program Year</div></div>
+        </div>
+        <!-- Recent Orders Table -->
+        <div class="pdash-card">
+          <div class="pdash-card-header">
+            <div class="pdash-card-title">Recent Orders</div>
+            <button class="ptab-link" onclick="showPortalTab('orders',document.querySelectorAll('.ptab')[2])">View All →</button>
+          </div>
+          <div class="ptable-wrap">
+            <div class="ptable-head"><div>Employee</div><div>Frame</div><div>Date</div><div>Type</div><div>Status</div></div>
+            <div id="dashboard-orders-body"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EMPLOYEES TAB -->
+      <div id="ptab-employees" class="portal-tab-content" style="display:none;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;">
+          <div>
+            <div style="font-family:Outfit,sans-serif;font-size:24px;font-weight:900;color:white;margin-bottom:4px;">Employee Management</div>
+            <div style="font-size:14px;color:var(--text-muted);">Manage eligibility and track your enrolled workforce</div>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <input id="emp-search" type="text" placeholder="Search employees..." oninput="filterEmployees()" style="background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:8px;padding:10px 16px;color:white;font-family:Outfit,sans-serif;font-size:13px;width:220px;outline:none;">
+          </div>
+        </div>
+        <div class="pdash-card">
+          <div class="ptable-wrap">
+            <div class="ptable-head" style="grid-template-columns:2fr 1.5fr 1.5fr 1fr 1fr;"><div>Name</div><div>Department</div><div>Job Title</div><div>Enrolled</div><div>Status</div></div>
+            <div id="employees-body"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ORDERS TAB -->
+      <div id="ptab-orders" class="portal-tab-content" style="display:none;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;">
+          <div>
+            <div style="font-family:Outfit,sans-serif;font-size:24px;font-weight:900;color:white;margin-bottom:4px;">Order History</div>
+            <div style="font-size:14px;color:var(--text-muted);">All orders for your program — click a row for details</div>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <select id="order-status-filter" onchange="filterOrders()" style="background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:8px;padding:10px 16px;color:white;font-family:Outfit,sans-serif;font-size:13px;outline:none;cursor:pointer;">
+              <option value="">All Statuses</option>
+              <option value="complete">Complete</option>
+              <option value="pending">Pending</option>
+              <option value="processing">Processing</option>
+              <option value="in_review">In Review</option>
+            </select>
+          </div>
+        </div>
+        <div class="pdash-card">
+          <div class="ptable-wrap">
+            <div class="ptable-head" style="grid-template-columns:2fr 1.5fr 1.5fr 1fr 1fr;"><div>Employee</div><div>Frame</div><div>Lens</div><div>Date</div><div>Status</div></div>
+            <div id="orders-body"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COMPLIANCE TAB -->
+      <div id="ptab-compliance" class="portal-tab-content" style="display:none;">
+        <div style="margin-bottom:32px;">
+          <div style="font-family:Outfit,sans-serif;font-size:24px;font-weight:900;color:white;margin-bottom:4px;">Compliance Centre</div>
+          <div style="font-size:14px;color:var(--text-muted);">Download CSA certificates, WCB reports, and safety documentation</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px;" id="compliance-stats-row"></div>
+        <div class="pdash-card">
+          <div class="pdash-card-header"><div class="pdash-card-title">Available Documents</div></div>
+          <div id="compliance-docs-body" style="padding:8px 0;"></div>
+        </div>
+        <div class="pdash-card" style="margin-top:24px;">
+          <div class="pdash-card-header"><div class="pdash-card-title">Compliance Summary by Type</div></div>
+          <div id="compliance-summary-body" style="padding:8px 0;"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <div id="footer-portal"></div>
 </div>
 

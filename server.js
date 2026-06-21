@@ -96,6 +96,11 @@ app.use('/api/admin', adminRoute);
 // Health check
 app.get('/health', (_req, res) => res.json({ status: 'ok' }));
 
+// Standalone portal page
+app.get('/portal', (_req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'portal.html'));
+});
+
 // Static assets
 app.use(express.static(path.join(__dirname, 'public'), {
   maxAge: '1d',

@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Client Portal — Vision Performance Inc.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0a0e1a;
+  --card:#111827;
+  --orange:#FF6A00;
+  --cyan:#00F0FF;
+  --border:rgba(255,255,255,0.08);
+  --muted:rgba(255,255,255,0.35);
+  --text:rgba(255,255,255,0.85);
+  --success:#22c55e;
+  --danger:#ef4444;
+  --warning:#f59e0b;
+  --radius:10px;
+}
+body{
+  font-family:'Outfit',sans-serif;
+  background:var(--navy);
+  color:var(--text);
+  min-height:100vh;
+}
+
+/* ── LOGIN ── */
+#login-screen{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:40px 20px;
+}
+.login-wrap{width:100%;max-width:420px;}
+.login-logo{text-align:center;margin-bottom:32px;}
+.login-logo img{height:72px;width:auto;object-fit:contain;}
+.login-label{
+  display:block;
+  font-size:11px;font-weight:700;
+  letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--muted);
+  margin-top:10px;
+}
+.login-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:36px;
+}
+.login-title{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px;}
+.login-sub{font-size:13px;color:var(--muted);margin-bottom:28px;}
+.field-label{
+  display:block;
+  font-size:11px;font-weight:700;
+  letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:7px;
+}
+.field-input{
+  width:100%;
+  background:#0d1422;
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:8px;
+  padding:12px 14px;
+  font-family:'Outfit',sans-serif;
+  font-size:14px;
+  color:#fff;
+  outline:none;
+  transition:border-color 0.2s;
+}
+.field-input:focus{border-color:rgba(255,255,255,0.3);}
+.field-input::placeholder{color:rgba(255,255,255,0.2);}
+.field-group{margin-bottom:16px;}
+.btn-signin{
+  width:100%;
+  background:var(--orange);
+  border:none;
+  border-radius:8px;
+  padding:14px;
+  font-family:'Outfit',sans-serif;
+  font-size:15px;font-weight:800;
+  color:#fff;
+  cursor:pointer;
+  margin-top:8px;
+  transition:opacity 0.2s,transform 0.1s;
+}
+.btn-signin:hover{opacity:0.88;}
+.btn-signin:active{transform:scale(0.99);}
+.btn-signin:disabled{opacity:0.5;cursor:not-allowed;}
+.login-error{
+  display:none;
+  background:rgba(239,68,68,0.1);
+  border:1px solid rgba(239,68,68,0.3);
+  border-radius:8px;
+  padding:11px 14px;
+  margin-bottom:18px;
+  color:#ef4444;
+  font-size:13px;font-weight:600;
+}
+.login-footer{
+  text-align:center;
+  margin-top:20px;
+  padding-top:20px;
+  border-top:1px solid var(--border);
+}
+.login-footer span{font-size:13px;color:var(--muted);}
+.login-footer a{color:var(--orange);font-size:13px;font-weight:700;text-decoration:none;cursor:pointer;}
+.back-link{
+  text-align:center;margin-top:18px;
+}
+.back-link a{
+  font-size:12px;color:rgba(255,255,255,0.2);
+  text-decoration:none;cursor:pointer;
+}
+.back-link a:hover{color:rgba(255,255,255,0.5);}
+
+/* ── DASHBOARD ── */
+#dashboard-screen{display:none;min-height:100vh;flex-direction:column;}
+.dash-topbar{
+  background:#0d1422;
+  border-bottom:1px solid var(--border);
+  padding:0 40px;
+  height:64px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;
+  flex-shrink:0;
+}
+.dash-topbar-left{display:flex;align-items:center;gap:28px;}
+.dash-portal-label{font-size:11px;font-weight:800;letter-spacing:0.18em;text-transform:uppercase;color:var(--cyan);}
+.dash-tabs{display:flex;gap:2px;}
+.dtab{
+  background:none;border:none;
+  padding:8px 14px;
+  font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;
+  color:var(--muted);cursor:pointer;border-radius:6px;
+  transition:all 0.15s;
+}
+.dtab:hover{color:#fff;background:rgba(255,255,255,0.05);}
+.dtab.active{color:#fff;background:rgba(255,255,255,0.1);}
+.dash-topbar-right{display:flex;align-items:center;gap:16px;}
+.user-info{text-align:right;}
+.user-name{font-size:13px;font-weight:700;color:#fff;}
+.user-company{font-size:11px;color:var(--muted);}
+.btn-signout{
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:7px;padding:7px 13px;
+  font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;
+  color:var(--muted);cursor:pointer;
+  transition:all 0.2s;
+}
+.btn-signout:hover{color:#fff;border-color:rgba(255,255,255,0.25);}
+.dash-body{flex:1;padding:36px 40px;background:#0b0f1c;}
+
+/* tab panels */
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+/* section title */
+.section-title{font-size:22px;font-weight:900;color:#fff;margin-bottom:4px;}
+.section-sub{font-size:13px;color:var(--muted);margin-bottom:28px;}
+
+/* stat cards */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px;}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:22px;}
+.stat-num{font-size:32px;font-weight:900;color:#fff;line-height:1;}
+.stat-lbl{font-size:12px;font-weight:600;color:var(--muted);margin-top:6px;text-transform:uppercase;letter-spacing:0.08em;}
+
+/* cards */
+.dash-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:20px;}
+.dash-card-hd{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--border);}
+.dash-card-title{font-size:15px;font-weight:800;color:#fff;}
+.dash-card-link{font-size:12px;font-weight:700;color:var(--cyan);background:none;border:none;cursor:pointer;}
+.dash-card-link:hover{text-decoration:underline;}
+
+/* table */
+.tbl-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;}
+th{font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);padding:11px 18px;text-align:left;background:rgba(255,255,255,0.02);}
+td{font-size:13px;color:var(--text);padding:13px 18px;border-top:1px solid rgba(255,255,255,0.04);}
+tr:hover td{background:rgba(255,255,255,0.02);}
+
+/* badges */
+.badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;}
+.badge-complete{background:rgba(34,197,94,0.15);color:#22c55e;}
+.badge-pending{background:rgba(245,158,11,0.15);color:#f59e0b;}
+.badge-processing{background:rgba(0,240,255,0.12);color:#00F0FF;}
+.badge-in_review{background:rgba(168,85,247,0.15);color:#a855f7;}
+.badge-eligible{background:rgba(34,197,94,0.15);color:#22c55e;}
+.badge-ineligible{background:rgba(239,68,68,0.15);color:#ef4444;}
+
+/* filter bar */
+.filter-bar{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+.filter-input,.filter-select{
+  background:#0d1422;border:1px solid rgba(255,255,255,0.1);
+  border-radius:8px;padding:9px 12px;
+  font-family:'Outfit',sans-serif;font-size:13px;color:#fff;
+  outline:none;
+}
+.filter-input{flex:1;max-width:300px;}
+.filter-input::placeholder{color:rgba(255,255,255,0.2);}
+
+/* compliance doc row */
+.doc-row{display:flex;align-items:center;justify-content:space-between;padding:16px 22px;border-top:1px solid rgba(255,255,255,0.04);}
+.doc-row:first-child{border-top:none;}
+.doc-info{display:flex;align-items:center;gap:14px;}
+.doc-icon{width:38px;height:38px;background:rgba(0,240,255,0.08);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.doc-name{font-size:14px;font-weight:700;color:#fff;}
+.doc-meta{font-size:12px;color:var(--muted);margin-top:2px;}
+.doc-dl{font-size:12px;font-weight:700;color:var(--cyan);text-decoration:none;}
+.doc-dl:hover{text-decoration:underline;}
+
+/* empty / loading */
+.state-msg{padding:40px;text-align:center;color:var(--muted);font-size:14px;}
+
+/* compliance summary */
+.comp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px;}
+.comp-item{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px;}
+.comp-type{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:6px;}
+.comp-count{font-size:26px;font-weight:900;color:var(--cyan);}
+
+@media(max-width:768px){
+  .stats-grid{grid-template-columns:repeat(2,1fr);}
+  .comp-grid{grid-template-columns:repeat(2,1fr);}
+  .dash-topbar{padding:0 16px;}
+  .dash-body{padding:20px 16px;}
+  .dash-portal-label{display:none;}
+  td:nth-child(n+3){display:none;}
+  th:nth-child(n+3){display:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════ LOGIN ══════ -->
+<div id="login-screen">
+  <div class="login-wrap">
+    <div class="login-logo">
+      <img src="/images/logo-light.png" alt="Vision Performance Inc."
+           onerror="this.style.display='none';document.getElementById('logo-text').style.display='block'">
+      <div id="logo-text" style="display:none;font-size:20px;font-weight:900;color:#fff;letter-spacing:0.05em;">VISION <span style="color:var(--orange)">PERFORMANCE</span></div>
+      <span class="login-label">Client Portal</span>
+    </div>
+    <div class="login-card">
+      <div class="login-title">Sign In</div>
+      <div class="login-sub">Enter the credentials provided to your organization.</div>
+      <div class="login-error" id="login-error"></div>
+      <form onsubmit="doLogin(event)">
+        <div class="field-group">
+          <label class="field-label" for="f-email">Email</label>
+          <input class="field-input" type="email" id="f-email" placeholder="you@company.com" required autocomplete="email">
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="f-pass">Password</label>
+          <input class="field-input" type="password" id="f-pass" placeholder="••••••••" required autocomplete="current-password">
+        </div>
+        <button class="btn-signin" type="submit" id="signin-btn">Sign In</button>
+      </form>
+      <div class="login-footer">
+        <span>Need access? </span>
+        <a href="/#industrial">Request Access →</a>
+      </div>
+    </div>
+    <div class="back-link"><a href="/">← Back to Website</a></div>
+  </div>
+</div>
+
+<!-- ══════ DASHBOARD ══════ -->
+<div id="dashboard-screen">
+  <div class="dash-topbar">
+    <div class="dash-topbar-left">
+      <span class="dash-portal-label">Client Portal</span>
+      <div class="dash-tabs">
+        <button class="dtab active" onclick="showTab('dashboard',this)">Dashboard</button>
+        <button class="dtab" onclick="showTab('employees',this)">Employees</button>
+        <button class="dtab" onclick="showTab('orders',this)">Orders</button>
+        <button class="dtab" onclick="showTab('compliance',this)">Compliance</button>
+      </div>
+    </div>
+    <div class="dash-topbar-right">
+      <div class="user-info">
+        <div class="user-name" id="user-name"></div>
+        <div class="user-company" id="user-company"></div>
+      </div>
+      <button class="btn-signout" onclick="doLogout()">Sign Out</button>
+    </div>
+  </div>
+
+  <div class="dash-body">
+
+    <!-- DASHBOARD TAB -->
+    <div class="tab-panel active" id="tab-dashboard">
+      <div class="section-title">Program Dashboard</div>
+      <div class="section-sub">Real-time overview of your corporate vision program</div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-num" id="st-employees">—</div><div class="stat-lbl">Active Employees</div></div>
+        <div class="stat-card"><div class="stat-num" id="st-compliance" style="color:var(--success)">—</div><div class="stat-lbl">Compliance Rate</div></div>
+        <div class="stat-card"><div class="stat-num" id="st-pending" style="color:var(--orange)">—</div><div class="stat-lbl">Pending Orders</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:var(--cyan)">2026</div><div class="stat-lbl">Program Year</div></div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-card-hd">
+          <span class="dash-card-title">Recent Orders</span>
+          <button class="dash-card-link" onclick="showTab('orders',document.querySelectorAll('.dtab')[2])">View All →</button>
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Employee</th><th>Frame / Product</th><th>Date</th><th>Status</th></tr></thead>
+            <tbody id="recent-orders-body"><tr><td colspan="4" class="state-msg">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- EMPLOYEES TAB -->
+    <div class="tab-panel" id="tab-employees">
+      <div class="section-title">Employees</div>
+      <div class="section-sub">Manage enrolled employees and eligibility</div>
+      <div class="filter-bar">
+        <input class="filter-input" type="text" id="emp-search" placeholder="Search by name or department…" oninput="filterEmployees()">
+      </div>
+      <div class="dash-card">
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Name</th><th>Department</th><th>Job Title</th><th>Enrolled</th><th>Eligibility</th></tr></thead>
+            <tbody id="employees-body"><tr><td colspan="5" class="state-msg">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ORDERS TAB -->
+    <div class="tab-panel" id="tab-orders">
+      <div class="section-title">Order History</div>
+      <div class="section-sub">Full order history for your program</div>
+      <div class="filter-bar">
+        <select class="filter-select" id="order-filter" onchange="filterOrders()">
+          <option value="">All Statuses</option>
+          <option value="pending">Pending</option>
+          <option value="processing">Processing</option>
+          <option value="in_review">In Review</option>
+          <option value="complete">Complete</option>
+        </select>
+      </div>
+      <div class="dash-card">
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Employee</th><th>Frame / Product</th><th>Compliance Type</th><th>Date</th><th>Status</th></tr></thead>
+            <tbody id="orders-body"><tr><td colspan="5" class="state-msg">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMPLIANCE TAB -->
+    <div class="tab-panel" id="tab-compliance">
+      <div class="section-title">Compliance Documents</div>
+      <div class="section-sub">Certificates and compliance records for your program</div>
+      <div class="comp-grid" id="comp-grid"></div>
+      <div class="dash-card" id="comp-docs-card">
+        <div id="comp-docs-body"><div class="state-msg">Loading…</div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+let user = null;
+let empCache = null;
+let ordCache = null;
+
+// ── SESSION RESTORE ──
+(async () => {
+  try {
+    const r = await fetch('/api/portal/me', { credentials: 'same-origin' });
+    if (r.ok) { const d = await r.json(); user = d.user; showDashboard(); }
+  } catch {}
+})();
+
+// ── LOGIN ──
+async function doLogin(e) {
+  e.preventDefault();
+  const btn = document.getElementById('signin-btn');
+  const err = document.getElementById('login-error');
+  const email = document.getElementById('f-email').value;
+  const pass  = document.getElementById('f-pass').value;
+  btn.disabled = true; btn.textContent = 'Signing in…';
+  err.style.display = 'none';
+  try {
+    const r = await fetch('/api/portal/login', {
+      method: 'POST', credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password: pass }),
+    });
+    const d = await r.json();
+    if (!r.ok) { err.textContent = d.error || 'Login failed'; err.style.display = ''; btn.disabled = false; btn.textContent = 'Sign In'; return; }
+    user = d.user;
+    showDashboard();
+  } catch { err.textContent = 'Network error. Please try again.'; err.style.display = ''; btn.disabled = false; btn.textContent = 'Sign In'; }
+}
+
+async function doLogout() {
+  await fetch('/api/portal/logout', { method: 'POST', credentials: 'same-origin' });
+  user = null; empCache = null; ordCache = null;
+  document.getElementById('dashboard-screen').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('f-email').value = '';
+  document.getElementById('f-pass').value = '';
+  document.getElementById('signin-btn').disabled = false;
+  document.getElementById('signin-btn').textContent = 'Sign In';
+}
+
+function showDashboard() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('dashboard-screen').style.display = 'flex';
+  document.getElementById('user-name').textContent = user.name || user.email;
+  document.getElementById('user-company').textContent = user.company;
+  loadDashboard();
+}
+
+// ── TABS ──
+function showTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.dtab').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  if (btn) btn.classList.add('active');
+  if (name === 'employees' && !empCache) loadEmployees();
+  if (name === 'orders'    && !ordCache) loadOrders();
+  if (name === 'compliance') loadCompliance();
+}
+
+// ── DATA LOADERS ──
+async function loadDashboard() {
+  try {
+    const d = await (await fetch('/api/portal/dashboard', { credentials: 'same-origin' })).json();
+    document.getElementById('st-employees').textContent = d.totalEmployees ?? '—';
+    document.getElementById('st-compliance').textContent = d.complianceRate != null ? d.complianceRate + '%' : '—';
+    document.getElementById('st-pending').textContent = d.pendingOrders ?? '—';
+    const tbody = document.getElementById('recent-orders-body');
+    if (!d.recentOrders?.length) { tbody.innerHTML = '<tr><td colspan="4" class="state-msg">No orders yet.</td></tr>'; return; }
+    tbody.innerHTML = d.recentOrders.map(o => `<tr>
+      <td style="font-weight:700">${esc(o.employee_name||'—')}</td>
+      <td>${esc(o.frame_name||'—')}</td>
+      <td>${fmtDate(o.order_date)}</td>
+      <td>${badge(o.status)}</td>
+    </tr>`).join('');
+  } catch { document.getElementById('recent-orders-body').innerHTML = '<tr><td colspan="4" class="state-msg">Error loading data.</td></tr>'; }
+}
+
+async function loadEmployees() {
+  try {
+    const d = await (await fetch('/api/portal/employees', { credentials: 'same-origin' })).json();
+    empCache = d.employees;
+    renderEmployees(empCache);
+  } catch { document.getElementById('employees-body').innerHTML = '<tr><td colspan="5" class="state-msg">Error loading employees.</td></tr>'; }
+}
+function renderEmployees(list) {
+  const tbody = document.getElementById('employees-body');
+  if (!list?.length) { tbody.innerHTML = '<tr><td colspan="5" class="state-msg">No employees found.</td></tr>'; return; }
+  tbody.innerHTML = list.map(e => `<tr>
+    <td style="font-weight:700">${esc(e.name)}</td>
+    <td>${esc(e.department||'—')}</td>
+    <td>${esc(e.job_title||'—')}</td>
+    <td>${e.enrolled_at ? fmtDate(e.enrolled_at) : '—'}</td>
+    <td>${e.eligible ? '<span class="badge badge-eligible">Eligible</span>' : '<span class="badge badge-ineligible">Ineligible</span>'}</td>
+  </tr>`).join('');
+}
+function filterEmployees() {
+  const q = document.getElementById('emp-search').value.toLowerCase();
+  if (!empCache) return;
+  renderEmployees(q ? empCache.filter(e => (e.name+e.department+e.job_title).toLowerCase().includes(q)) : empCache);
+}
+
+async function loadOrders() {
+  try {
+    const d = await (await fetch('/api/portal/orders', { credentials: 'same-origin' })).json();
+    ordCache = d.orders;
+    renderOrders(ordCache);
+  } catch { document.getElementById('orders-body').innerHTML = '<tr><td colspan="5" class="state-msg">Error loading orders.</td></tr>'; }
+}
+function renderOrders(list) {
+  const tbody = document.getElementById('orders-body');
+  if (!list?.length) { tbody.innerHTML = '<tr><td colspan="5" class="state-msg">No orders found.</td></tr>'; return; }
+  tbody.innerHTML = list.map(o => `<tr>
+    <td style="font-weight:700">${esc(o.employee_name||'—')}</td>
+    <td>${esc(o.frame_name||'—')}</td>
+    <td>${esc(o.compliance_type||'—')}</td>
+    <td>${fmtDate(o.order_date)}</td>
+    <td>${badge(o.status)}</td>
+  </tr>`).join('');
+}
+function filterOrders() {
+  const v = document.getElementById('order-filter').value;
+  if (!ordCache) return;
+  renderOrders(v ? ordCache.filter(o => o.status === v) : ordCache);
+}
+
+async function loadCompliance() {
+  try {
+    const d = await (await fetch('/api/portal/compliance', { credentials: 'same-origin' })).json();
+    // summary grid
+    const grid = document.getElementById('comp-grid');
+    if (d.stats?.length) {
+      grid.innerHTML = d.stats.map(s => `<div class="comp-item"><div class="comp-type">${esc(s.compliance_type||'General')}</div><div class="comp-count">${s.count}</div><div style="font-size:12px;color:var(--muted);margin-top:4px;">Completed</div></div>`).join('');
+    } else { grid.innerHTML = ''; }
+    // docs
+    const body = document.getElementById('comp-docs-body');
+    if (!d.docs?.length) { body.innerHTML = '<div class="state-msg">No compliance documents on file.</div>'; return; }
+    body.innerHTML = d.docs.map(doc => `<div class="doc-row">
+      <div class="doc-info">
+        <div class="doc-icon">📄</div>
+        <div>
+          <div class="doc-name">${esc(doc.title)}</div>
+          <div class="doc-meta">${esc(doc.doc_type||'Document')} · ${doc.issue_date ? fmtDate(doc.issue_date) : '—'}</div>
+        </div>
+      </div>
+      ${doc.file_url ? `<a class="doc-dl" href="${esc(doc.file_url)}" target="_blank" rel="noopener">Download ↗</a>` : '<span style="font-size:12px;color:var(--muted)">On file</span>'}
+    </div>`).join('');
+  } catch { document.getElementById('comp-docs-body').innerHTML = '<div class="state-msg">Error loading documents.</div>'; }
+}
+
+// ── HELPERS ──
+function badge(s) {
+  const map = { complete:'badge-complete', pending:'badge-pending', processing:'badge-processing', in_review:'badge-in_review' };
+  return `<span class="badge ${map[s]||''}">${(s||'').replace('_',' ')}</span>`;
+}
+function fmtDate(d) {
+  if (!d) return '—';
+  return new Date(d).toLocaleDateString('en-CA', { year:'numeric', month:'short', day:'numeric' });
+}
+function esc(s) {
+  return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>

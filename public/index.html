@@ -1723,8 +1723,8 @@ footer{background:#020617;padding:100px 48px 40px;border-top:1px solid rgba(255,
   <div id="footer-learn"></div>
 </div>
 
-<!-- PORTAL PAGE (NEW) -->
-<div class="page" id="page-portal">
+<!-- PORTAL PAGE — redirects to /portal via navigate() -->
+<div class="page" id="page-portal" style="display:none!important">
 
   <!-- ── LOGIN SCREEN ── -->
   <div id="portal-login-screen" style="min-height:100vh;background:#0a0e1a;display:flex;align-items:center;justify-content:center;padding:40px 20px;">
@@ -1922,7 +1922,46 @@ footer{background:#020617;padding:100px 48px 40px;border-top:1px solid rgba(255,
   </footer>
 </template>
 
+<!-- Google Analytics — replace G-XXXXXXXXXX with your GA4 Measurement ID -->
+<!-- To get your ID: analytics.google.com → Admin → Data Streams → your stream → Measurement ID -->
+<!--
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer=window.dataLayer||[];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js',new Date());
+  gtag('config','G-XXXXXXXXXX');
+</script>
+-->
+
 <script src="/app.js" defer></script>
+
+<!-- ── COOKIE CONSENT BANNER ── -->
+<div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:#0f172a;border-top:1px solid rgba(255,255,255,0.1);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;">
+  <p style="margin:0;font-family:Outfit,sans-serif;font-size:13px;color:rgba(255,255,255,0.7);line-height:1.6;">
+    We use essential cookies for session management and site functionality. No tracking or advertising cookies are used.
+    <a onclick="navigate('privacy')" style="color:#FF6A00;cursor:pointer;font-weight:600;margin-left:6px;">Privacy Policy</a>
+  </p>
+  <div style="display:flex;gap:10px;flex-shrink:0;">
+    <button onclick="acceptCookies()" style="background:#FF6A00;border:none;border-radius:7px;padding:9px 20px;font-family:Outfit,sans-serif;font-size:13px;font-weight:700;color:white;cursor:pointer;">Accept</button>
+    <button onclick="declineCookies()" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);border-radius:7px;padding:9px 20px;font-family:Outfit,sans-serif;font-size:13px;font-weight:600;color:rgba(255,255,255,0.6);cursor:pointer;">Decline Non-Essential</button>
+  </div>
+</div>
+<script>
+(function(){
+  if(!localStorage.getItem('cookie-consent')){
+    document.getElementById('cookie-banner').style.display='flex';
+  }
+})();
+function acceptCookies(){
+  localStorage.setItem('cookie-consent','accepted');
+  document.getElementById('cookie-banner').style.display='none';
+}
+function declineCookies(){
+  localStorage.setItem('cookie-consent','declined');
+  document.getElementById('cookie-banner').style.display='none';
+}
+</script>
 
 </body>
 </html>

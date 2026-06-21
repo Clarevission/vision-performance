@@ -281,12 +281,68 @@ tr:hover td{background:rgba(255,255,255,0.02);}
         </div>
         <button class="btn-signin" type="submit" id="signin-btn">Sign In</button>
       </form>
+      <div style="text-align:center;margin-top:16px;">
+        <button type="button" onclick="showScreen('forgot')" style="background:none;border:none;color:var(--muted);font-family:'Outfit',sans-serif;font-size:13px;cursor:pointer;padding:0;">Forgot your password?</button>
+      </div>
       <div class="login-footer">
         <span>Need access? </span>
         <a href="/#industrial">Request Access →</a>
       </div>
     </div>
     <div class="back-link"><a href="/">← Back to Website</a></div>
+  </div>
+</div>
+
+<!-- ══════ FORGOT PASSWORD ══════ -->
+<div id="forgot-screen" style="display:none;min-height:100vh;align-items:center;justify-content:center;padding:40px 20px;">
+  <div style="width:100%;max-width:420px;">
+    <div class="login-logo">
+      <img src="/images/logo-dark-alt.png" alt="Vision Performance Inc." onerror="this.style.display='none'">
+      <span class="login-label">Client Portal</span>
+    </div>
+    <div class="login-card">
+      <div class="login-title">Reset Password</div>
+      <div class="login-sub">Enter your email and we'll send you a reset link.</div>
+      <div class="login-error" id="forgot-error" role="alert"></div>
+      <div id="forgot-success" style="display:none;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);border-radius:8px;padding:11px 14px;margin-bottom:18px;color:#22c55e;font-size:13px;font-weight:600;"></div>
+      <form onsubmit="doForgot(event)">
+        <div class="field-group">
+          <label class="field-label" for="forgot-email">Email</label>
+          <input class="field-input" type="email" id="forgot-email" placeholder="you@company.com" required autocomplete="email">
+        </div>
+        <button class="btn-signin" type="submit" id="forgot-btn">Send Reset Link</button>
+      </form>
+      <div style="text-align:center;margin-top:20px;">
+        <button onclick="showScreen('login')" style="background:none;border:none;color:var(--muted);font-family:'Outfit',sans-serif;font-size:13px;cursor:pointer;">← Back to Sign In</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ RESET PASSWORD ══════ -->
+<div id="reset-screen" style="display:none;min-height:100vh;align-items:center;justify-content:center;padding:40px 20px;">
+  <div style="width:100%;max-width:420px;">
+    <div class="login-logo">
+      <img src="/images/logo-dark-alt.png" alt="Vision Performance Inc." onerror="this.style.display='none'">
+      <span class="login-label">Client Portal</span>
+    </div>
+    <div class="login-card">
+      <div class="login-title">Choose New Password</div>
+      <div class="login-sub">Enter a new password for your account.</div>
+      <div class="login-error" id="reset-error" role="alert"></div>
+      <div id="reset-success" style="display:none;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);border-radius:8px;padding:11px 14px;margin-bottom:18px;color:#22c55e;font-size:13px;font-weight:600;"></div>
+      <form onsubmit="doReset(event)">
+        <div class="field-group">
+          <label class="field-label" for="reset-pass">New Password</label>
+          <input class="field-input" type="password" id="reset-pass" placeholder="Min. 8 characters" required minlength="8" autocomplete="new-password">
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="reset-confirm">Confirm Password</label>
+          <input class="field-input" type="password" id="reset-confirm" placeholder="Repeat password" required minlength="8" autocomplete="new-password">
+        </div>
+        <button class="btn-signin" type="submit" id="reset-btn">Set New Password</button>
+      </form>
+    </div>
   </div>
 </div>
 
@@ -397,8 +453,27 @@ let ordCache   = null;
 let compCache  = null;
 let submitting = false;
 
-// ── SESSION RESTORE ──
+// ── SCREEN SWITCHER ──
+function showScreen(name) {
+  ['login-screen','forgot-screen','reset-screen'].forEach(id => {
+    const el = document.getElementById(id);
+    el.style.display = 'none';
+  });
+  const target = document.getElementById(name + '-screen');
+  target.style.display = 'flex';
+}
+
+// ── SESSION RESTORE + TOKEN CHECK ──
 (async () => {
+  const params = new URLSearchParams(window.location.search);
+  const token  = params.get('token');
+  if (token) {
+    // Strip token from URL bar without reloading
+    window.history.replaceState({}, '', '/portal');
+    document.getElementById('reset-screen').dataset.token = token;
+    showScreen('reset');
+    return;
+  }
   try {
     const r = await fetch('/api/portal/me', { credentials: 'same-origin' });
     if (r.ok) { const d = await r.json(); user = d.user; showDashboard(); }
@@ -454,21 +529,84 @@ async function doLogin(e) {
   }
 }
 
+// ── FORGOT PASSWORD ──
+async function doForgot(e) {
+  e.preventDefault();
+  if (submitting) return;
+  const email = document.getElementById('forgot-email').value.trim();
+  const errEl = document.getElementById('forgot-error');
+  const succEl = document.getElementById('forgot-success');
+  const btn = e.target.querySelector('button[type=submit]');
+  errEl.textContent = '';
+  succEl.style.display = 'none';
+  if (!email) { errEl.textContent = 'Please enter your email address.'; return; }
+  submitting = true;
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+  try {
+    const r = await fetch('/api/portal/forgot-password', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    });
+    // Always show success to prevent email enumeration
+    succEl.textContent = 'If that email is registered, you'll receive a reset link shortly.';
+    succEl.style.display = 'block';
+    btn.textContent = 'Sent';
+  } catch {
+    errEl.textContent = 'Network error. Please try again.';
+    btn.disabled = false;
+    btn.textContent = 'Send Reset Link';
+  } finally {
+    submitting = false;
+  }
+}
+
+// ── RESET PASSWORD ──
+async function doReset(e) {
+  e.preventDefault();
+  if (submitting) return;
+  const token = document.getElementById('reset-screen').dataset.token;
+  const pass = document.getElementById('reset-pass').value;
+  const confirm = document.getElementById('reset-confirm').value;
+  const errEl = document.getElementById('reset-error');
+  const succEl = document.getElementById('reset-success');
+  const btn = e.target.querySelector('button[type=submit]');
+  errEl.textContent = '';
+  succEl.style.display = 'none';
+  if (!pass || pass.length < 8) { errEl.textContent = 'Password must be at least 8 characters.'; return; }
+  if (pass !== confirm) { errEl.textContent = 'Passwords do not match.'; return; }
+  if (!token) { errEl.textContent = 'Invalid reset link. Please request a new one.'; return; }
+  submitting = true;
+  btn.disabled = true;
+  btn.textContent = 'Saving…';
+  try {
+    const r = await fetch('/api/portal/reset-password', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token, password: pass }),
+    });
+    const d = await r.json();
+    if (!r.ok) { errEl.textContent = d.error || 'Reset failed.'; btn.disabled = false; btn.textContent = 'Set New Password'; return; }
+    succEl.textContent = 'Password updated! Redirecting to sign in…';
+    succEl.style.display = 'block';
+    btn.textContent = 'Done';
+    setTimeout(() => showScreen('login'), 2000);
+  } catch {
+    errEl.textContent = 'Network error. Please try again.';
+    btn.disabled = false;
+    btn.textContent = 'Set New Password';
+  } finally {
+    submitting = false;
+  }
+}
+
 // ── LOGOUT ──
 async function doLogout() {
   try {
     await fetch('/api/portal/logout', { method: 'POST', credentials: 'same-origin' });
-  } catch { /* always clear UI even if request fails */ }
-  user = null; empCache = null; ordCache = null; compCache = null; submitting = false;
-  document.getElementById('dashboard-screen').style.display = 'none';
-  document.getElementById('login-screen').style.display = 'flex';
-  document.getElementById('f-email').value = '';
-  document.getElementById('f-pass').value = '';
-  document.getElementById('f-pass').type = 'password';
-  document.getElementById('pw-toggle').textContent = '👁';
-  document.getElementById('signin-btn').disabled = false;
-  document.getElementById('signin-btn').textContent = 'Sign In';
-  document.title = 'Client Portal — Vision Performance Inc.';
+  } catch { /* always redirect even if request fails */ }
+  window.location.href = '/';
 }
 
 // ── SHOW DASHBOARD ──

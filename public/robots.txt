@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /api/
 
-Sitemap: https://www.visionperformance.ca/sitemap.xml
+Sitemap: https://visionperformanceinc.ca/sitemap.xml

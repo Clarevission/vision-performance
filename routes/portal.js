@@ -1,7 +1,9 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
 const router = express.Router();
 const db = require('../lib/db');
+const { sendMail } = require('../lib/mailer');
 
 function requireAuth(req, res, next) {
   if (req.session && req.session.userId) return next();
@@ -96,6 +98,73 @@ router.get('/orders', requireAuth, async (req, res) => {
     );
     res.json({ orders: rows });
   } catch (e) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// POST /api/portal/forgot-password
+router.post('/forgot-password', async (req, res) => {
+  const { email } = req.body;
+  if (!email) return res.status(400).json({ error: 'Email required' });
+  try {
+    const { rows } = await db.query(
+      'SELECT id, name FROM portal_users WHERE email=$1',
+      [email.toLowerCase().trim()]
+    );
+    // Always return ok — never reveal whether email exists
+    if (!rows[0]) return res.json({ ok: true });
+    // Invalidate any existing unused tokens for this user
+    await db.query('UPDATE password_reset_tokens SET used=true WHERE user_id=$1 AND used=false', [rows[0].id]);
+    const token = crypto.randomBytes(32).toString('hex');
+    const expires = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+    await db.query(
+      'INSERT INTO password_reset_tokens(user_id,token,expires_at) VALUES($1,$2,$3)',
+      [rows[0].id, token, expires]
+    );
+    const origin = process.env.APP_ORIGIN || 'https://visionperformanceinc.ca';
+    const resetUrl = `${origin}/portal?token=${token}`;
+    await sendMail({
+      to: email,
+      subject: 'Reset your Vision Performance Portal password',
+      html: `
+        <div style="font-family:sans-serif;max-width:480px;margin:0 auto;">
+          <h2 style="color:#0a0e1a;">Password Reset Request</h2>
+          <p>Hi ${rows[0].name || 'there'},</p>
+          <p>Click the button below to reset your Client Portal password. This link expires in <strong>1 hour</strong>.</p>
+          <p style="margin:32px 0;">
+            <a href="${resetUrl}" style="background:#FF6A00;color:white;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:700;">Reset My Password</a>
+          </p>
+          <p style="color:#666;font-size:13px;">Or copy this link: ${resetUrl}</p>
+          <p style="color:#666;font-size:13px;">If you did not request a password reset, you can safely ignore this email.</p>
+          <hr style="border:none;border-top:1px solid #eee;margin:24px 0;">
+          <p style="color:#999;font-size:12px;">Vision Performance Inc. · Edmonton, Alberta, Canada</p>
+        </div>`,
+      text: `Reset your password: ${resetUrl}\n\nThis link expires in 1 hour. If you did not request this, ignore this email.`,
+    });
+    res.json({ ok: true });
+  } catch (e) {
+    console.error('Forgot password error:', e);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// POST /api/portal/reset-password
+router.post('/reset-password', async (req, res) => {
+  const { token, password } = req.body;
+  if (!token || !password) return res.status(400).json({ error: 'Token and password required' });
+  if (password.length < 8) return res.status(400).json({ error: 'Password must be at least 8 characters' });
+  try {
+    const { rows } = await db.query(
+      'SELECT * FROM password_reset_tokens WHERE token=$1 AND used=false AND expires_at > NOW()',
+      [token]
+    );
+    if (!rows[0]) return res.status(400).json({ error: 'This reset link is invalid or has expired. Please request a new one.' });
+    const hash = await bcrypt.hash(password, 12);
+    await db.query('UPDATE portal_users SET password_hash=$1 WHERE id=$2', [hash, rows[0].user_id]);
+    await db.query('UPDATE password_reset_tokens SET used=true WHERE id=$1', [rows[0].id]);
+    res.json({ ok: true });
+  } catch (e) {
+    console.error('Reset password error:', e);
     res.status(500).json({ error: 'Server error' });
   }
 });

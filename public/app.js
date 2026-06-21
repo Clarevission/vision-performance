@@ -94,6 +94,9 @@ function navigate(page,collection=null){
     p.classList.toggle('active',isActive);
     p.setAttribute('aria-hidden',String(!isActive));
   });
+  // Hide navbar on portal page so login is fully fullscreen
+  const navbar=document.getElementById('navbar');
+  if(navbar) navbar.style.display=page==='portal'?'none':'';
   document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('nav-active'));
   const target=document.getElementById(`page-${page}`);
   if(target){window.scrollTo({top:0,behavior:'smooth'});}
@@ -251,9 +254,12 @@ async function portalLogout() {
   document.getElementById('portal-dashboard-screen').style.display = 'none';
   document.getElementById('portal-email').value = '';
   document.getElementById('portal-password').value = '';
+  // Keep navbar hidden — still on portal page (login screen)
 }
 
 function showPortalDashboard() {
+  const navbar = document.getElementById('navbar');
+  if (navbar) navbar.style.display = 'none';
   document.getElementById('portal-login-screen').style.display = 'none';
   document.getElementById('portal-dashboard-screen').style.display = '';
   document.getElementById('portal-user-name').textContent = portalUser.name || portalUser.email;

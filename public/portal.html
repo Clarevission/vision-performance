@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Client Portal — Vision Performance Inc.</title>
+<link rel="icon" href="/images/logo-badge.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -15,7 +16,7 @@
   --orange:#FF6A00;
   --cyan:#00F0FF;
   --border:rgba(255,255,255,0.08);
-  --muted:rgba(255,255,255,0.35);
+  --muted:rgba(255,255,255,0.55);
   --text:rgba(255,255,255,0.85);
   --success:#22c55e;
   --danger:#ef4444;
@@ -39,7 +40,7 @@ body{
 }
 .login-wrap{width:100%;max-width:420px;}
 .login-logo{text-align:center;margin-bottom:32px;}
-.login-logo img{height:72px;width:auto;object-fit:contain;}
+.login-logo img{width:220px;height:auto;object-fit:contain;}
 .login-label{
   display:block;
   font-size:11px;font-weight:700;
@@ -77,6 +78,15 @@ body{
 .field-input:focus{border-color:rgba(255,255,255,0.3);}
 .field-input::placeholder{color:rgba(255,255,255,0.2);}
 .field-group{margin-bottom:16px;}
+.pw-wrap{position:relative;}
+.pw-wrap .field-input{padding-right:44px;}
+.pw-toggle{
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  background:none;border:none;cursor:pointer;
+  color:var(--muted);font-size:16px;padding:4px;
+  line-height:1;
+}
+.pw-toggle:hover{color:#fff;}
 .btn-signin{
   width:100%;
   background:var(--orange);
@@ -110,15 +120,11 @@ body{
   border-top:1px solid var(--border);
 }
 .login-footer span{font-size:13px;color:var(--muted);}
-.login-footer a{color:var(--orange);font-size:13px;font-weight:700;text-decoration:none;cursor:pointer;}
-.back-link{
-  text-align:center;margin-top:18px;
-}
-.back-link a{
-  font-size:12px;color:rgba(255,255,255,0.2);
-  text-decoration:none;cursor:pointer;
-}
-.back-link a:hover{color:rgba(255,255,255,0.5);}
+.login-footer a{color:var(--orange);font-size:13px;font-weight:700;text-decoration:none;}
+.login-footer a:hover{text-decoration:underline;}
+.back-link{text-align:center;margin-top:18px;}
+.back-link a{font-size:12px;color:rgba(255,255,255,0.3);text-decoration:none;}
+.back-link a:hover{color:rgba(255,255,255,0.6);}
 
 /* ── DASHBOARD ── */
 #dashboard-screen{display:none;min-height:100vh;flex-direction:column;}
@@ -131,29 +137,32 @@ body{
   position:sticky;top:0;z-index:100;
   flex-shrink:0;
 }
-.dash-topbar-left{display:flex;align-items:center;gap:28px;}
-.dash-portal-label{font-size:11px;font-weight:800;letter-spacing:0.18em;text-transform:uppercase;color:var(--cyan);}
-.dash-tabs{display:flex;gap:2px;}
+.dash-topbar-left{display:flex;align-items:center;gap:28px;min-width:0;}
+.dash-portal-label{font-size:11px;font-weight:800;letter-spacing:0.18em;text-transform:uppercase;color:var(--cyan);flex-shrink:0;}
+.dash-tabs{display:flex;gap:2px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.dash-tabs::-webkit-scrollbar{display:none;}
 .dtab{
   background:none;border:none;
-  padding:8px 14px;
+  padding:10px 14px;
   font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;
   color:var(--muted);cursor:pointer;border-radius:6px;
-  transition:all 0.15s;
+  transition:all 0.15s;white-space:nowrap;
+  min-height:44px;
 }
 .dtab:hover{color:#fff;background:rgba(255,255,255,0.05);}
 .dtab.active{color:#fff;background:rgba(255,255,255,0.1);}
-.dash-topbar-right{display:flex;align-items:center;gap:16px;}
+.dash-topbar-right{display:flex;align-items:center;gap:16px;flex-shrink:0;}
 .user-info{text-align:right;}
 .user-name{font-size:13px;font-weight:700;color:#fff;}
 .user-company{font-size:11px;color:var(--muted);}
 .btn-signout{
   background:rgba(255,255,255,0.05);
   border:1px solid rgba(255,255,255,0.1);
-  border-radius:7px;padding:7px 13px;
+  border-radius:7px;padding:10px 16px;
   font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;
   color:var(--muted);cursor:pointer;
   transition:all 0.2s;
+  min-height:44px;
 }
 .btn-signout:hover{color:#fff;border-color:rgba(255,255,255,0.25);}
 .dash-body{flex:1;padding:36px 40px;background:#0b0f1c;}
@@ -202,9 +211,11 @@ tr:hover td{background:rgba(255,255,255,0.02);}
   border-radius:8px;padding:9px 12px;
   font-family:'Outfit',sans-serif;font-size:13px;color:#fff;
   outline:none;
+  -webkit-appearance:none;appearance:none;
 }
 .filter-input{flex:1;max-width:300px;}
 .filter-input::placeholder{color:rgba(255,255,255,0.2);}
+.filter-select{padding-right:28px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(255,255,255,0.35)'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;}
 
 /* compliance doc row */
 .doc-row{display:flex;align-items:center;justify-content:space-between;padding:16px 22px;border-top:1px solid rgba(255,255,255,0.04);}
@@ -216,14 +227,14 @@ tr:hover td{background:rgba(255,255,255,0.02);}
 .doc-dl{font-size:12px;font-weight:700;color:var(--cyan);text-decoration:none;}
 .doc-dl:hover{text-decoration:underline;}
 
-/* empty / loading */
-.state-msg{padding:40px;text-align:center;color:var(--muted);font-size:14px;}
-
 /* compliance summary */
 .comp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px;}
 .comp-item{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px;}
 .comp-type{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:6px;}
 .comp-count{font-size:26px;font-weight:900;color:var(--cyan);}
+
+/* empty / loading */
+.state-msg{padding:40px;text-align:center;color:var(--muted);font-size:14px;}
 
 @media(max-width:768px){
   .stats-grid{grid-template-columns:repeat(2,1fr);}
@@ -233,6 +244,11 @@ tr:hover td{background:rgba(255,255,255,0.02);}
   .dash-portal-label{display:none;}
   td:nth-child(n+3){display:none;}
   th:nth-child(n+3){display:none;}
+}
+@media(max-width:480px){
+  .login-card{padding:24px;}
+  .stats-grid{grid-template-columns:repeat(2,1fr);}
+  .user-info{display:none;}
 }
 </style>
 </head>
@@ -250,15 +266,18 @@ tr:hover td{background:rgba(255,255,255,0.02);}
     <div class="login-card">
       <div class="login-title">Sign In</div>
       <div class="login-sub">Enter the credentials provided to your organization.</div>
-      <div class="login-error" id="login-error"></div>
-      <form onsubmit="doLogin(event)">
+      <div class="login-error" id="login-error" role="alert"></div>
+      <form id="login-form" onsubmit="doLogin(event)" novalidate>
         <div class="field-group">
           <label class="field-label" for="f-email">Email</label>
           <input class="field-input" type="email" id="f-email" placeholder="you@company.com" required autocomplete="email">
         </div>
         <div class="field-group">
           <label class="field-label" for="f-pass">Password</label>
-          <input class="field-input" type="password" id="f-pass" placeholder="••••••••" required autocomplete="current-password">
+          <div class="pw-wrap">
+            <input class="field-input" type="password" id="f-pass" placeholder="••••••••" required autocomplete="current-password">
+            <button type="button" class="pw-toggle" id="pw-toggle" onclick="togglePassword()" aria-label="Show password">👁</button>
+          </div>
         </div>
         <button class="btn-signin" type="submit" id="signin-btn">Sign In</button>
       </form>
@@ -276,11 +295,11 @@ tr:hover td{background:rgba(255,255,255,0.02);}
   <div class="dash-topbar">
     <div class="dash-topbar-left">
       <span class="dash-portal-label">Client Portal</span>
-      <div class="dash-tabs">
-        <button class="dtab active" onclick="showTab('dashboard',this)">Dashboard</button>
-        <button class="dtab" onclick="showTab('employees',this)">Employees</button>
-        <button class="dtab" onclick="showTab('orders',this)">Orders</button>
-        <button class="dtab" onclick="showTab('compliance',this)">Compliance</button>
+      <div class="dash-tabs" role="tablist">
+        <button class="dtab active" role="tab" aria-selected="true"  onclick="showTab('dashboard',this)">Dashboard</button>
+        <button class="dtab"        role="tab" aria-selected="false" onclick="showTab('employees',this)">Employees</button>
+        <button class="dtab"        role="tab" aria-selected="false" onclick="showTab('orders',this)">Orders</button>
+        <button class="dtab"        role="tab" aria-selected="false" onclick="showTab('compliance',this)">Compliance</button>
       </div>
     </div>
     <div class="dash-topbar-right">
@@ -295,14 +314,14 @@ tr:hover td{background:rgba(255,255,255,0.02);}
   <div class="dash-body">
 
     <!-- DASHBOARD TAB -->
-    <div class="tab-panel active" id="tab-dashboard">
+    <div class="tab-panel active" id="tab-dashboard" role="tabpanel">
       <div class="section-title">Program Dashboard</div>
       <div class="section-sub">Real-time overview of your corporate vision program</div>
       <div class="stats-grid">
         <div class="stat-card"><div class="stat-num" id="st-employees">—</div><div class="stat-lbl">Active Employees</div></div>
         <div class="stat-card"><div class="stat-num" id="st-compliance" style="color:var(--success)">—</div><div class="stat-lbl">Compliance Rate</div></div>
         <div class="stat-card"><div class="stat-num" id="st-pending" style="color:var(--orange)">—</div><div class="stat-lbl">Pending Orders</div></div>
-        <div class="stat-card"><div class="stat-num" style="color:var(--cyan)">2026</div><div class="stat-lbl">Program Year</div></div>
+        <div class="stat-card"><div class="stat-num" id="st-year" style="color:var(--cyan)">—</div><div class="stat-lbl">Program Year</div></div>
       </div>
       <div class="dash-card">
         <div class="dash-card-hd">
@@ -319,11 +338,11 @@ tr:hover td{background:rgba(255,255,255,0.02);}
     </div>
 
     <!-- EMPLOYEES TAB -->
-    <div class="tab-panel" id="tab-employees">
+    <div class="tab-panel" id="tab-employees" role="tabpanel">
       <div class="section-title">Employees</div>
       <div class="section-sub">Manage enrolled employees and eligibility</div>
       <div class="filter-bar">
-        <input class="filter-input" type="text" id="emp-search" placeholder="Search by name or department…" oninput="filterEmployees()">
+        <input class="filter-input" type="search" id="emp-search" placeholder="Search by name or department…" oninput="filterEmployees()" aria-label="Search employees">
       </div>
       <div class="dash-card">
         <div class="tbl-wrap">
@@ -336,11 +355,11 @@ tr:hover td{background:rgba(255,255,255,0.02);}
     </div>
 
     <!-- ORDERS TAB -->
-    <div class="tab-panel" id="tab-orders">
+    <div class="tab-panel" id="tab-orders" role="tabpanel">
       <div class="section-title">Order History</div>
       <div class="section-sub">Full order history for your program</div>
       <div class="filter-bar">
-        <select class="filter-select" id="order-filter" onchange="filterOrders()">
+        <select class="filter-select" id="order-filter" onchange="filterOrders()" aria-label="Filter by status">
           <option value="">All Statuses</option>
           <option value="pending">Pending</option>
           <option value="processing">Processing</option>
@@ -359,10 +378,10 @@ tr:hover td{background:rgba(255,255,255,0.02);}
     </div>
 
     <!-- COMPLIANCE TAB -->
-    <div class="tab-panel" id="tab-compliance">
+    <div class="tab-panel" id="tab-compliance" role="tabpanel">
       <div class="section-title">Compliance Documents</div>
       <div class="section-sub">Certificates and compliance records for your program</div>
-      <div class="comp-grid" id="comp-grid"></div>
+      <div class="comp-grid" id="comp-grid" style="display:none;"></div>
       <div class="dash-card" id="comp-docs-card">
         <div id="comp-docs-body"><div class="state-msg">Loading…</div></div>
       </div>
@@ -372,9 +391,11 @@ tr:hover td{background:rgba(255,255,255,0.02);}
 </div>
 
 <script>
-let user = null;
-let empCache = null;
-let ordCache = null;
+let user       = null;
+let empCache   = null;
+let ordCache   = null;
+let compCache  = null;
+let submitting = false;
 
 // ── SESSION RESTORE ──
 (async () => {
@@ -384,118 +405,188 @@ let ordCache = null;
   } catch {}
 })();
 
+// ── PASSWORD TOGGLE ──
+function togglePassword() {
+  const input = document.getElementById('f-pass');
+  const btn   = document.getElementById('pw-toggle');
+  const show  = input.type === 'password';
+  input.type  = show ? 'text' : 'password';
+  btn.textContent = show ? '🙈' : '👁';
+  btn.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+}
+
 // ── LOGIN ──
 async function doLogin(e) {
   e.preventDefault();
-  const btn = document.getElementById('signin-btn');
-  const err = document.getElementById('login-error');
-  const email = document.getElementById('f-email').value;
+  if (submitting) return;
+  submitting = true;
+  const btn   = document.getElementById('signin-btn');
+  const err   = document.getElementById('login-error');
+  const email = document.getElementById('f-email').value.trim();
   const pass  = document.getElementById('f-pass').value;
-  btn.disabled = true; btn.textContent = 'Signing in…';
+  btn.disabled = true;
+  btn.textContent = 'Signing in…';
   err.style.display = 'none';
   try {
     const r = await fetch('/api/portal/login', {
-      method: 'POST', credentials: 'same-origin',
+      method: 'POST',
+      credentials: 'same-origin',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password: pass }),
     });
     const d = await r.json();
-    if (!r.ok) { err.textContent = d.error || 'Login failed'; err.style.display = ''; btn.disabled = false; btn.textContent = 'Sign In'; return; }
+    if (!r.ok) {
+      err.textContent = d.error || 'Login failed. Please try again.';
+      err.style.display = '';
+      btn.disabled = false;
+      btn.textContent = 'Sign In';
+      submitting = false;
+      return;
+    }
     user = d.user;
     showDashboard();
-  } catch { err.textContent = 'Network error. Please try again.'; err.style.display = ''; btn.disabled = false; btn.textContent = 'Sign In'; }
+  } catch {
+    err.textContent = 'Network error. Please check your connection and try again.';
+    err.style.display = '';
+    btn.disabled = false;
+    btn.textContent = 'Sign In';
+    submitting = false;
+  }
 }
 
+// ── LOGOUT ──
 async function doLogout() {
-  await fetch('/api/portal/logout', { method: 'POST', credentials: 'same-origin' });
-  user = null; empCache = null; ordCache = null;
+  try {
+    await fetch('/api/portal/logout', { method: 'POST', credentials: 'same-origin' });
+  } catch { /* always clear UI even if request fails */ }
+  user = null; empCache = null; ordCache = null; compCache = null; submitting = false;
   document.getElementById('dashboard-screen').style.display = 'none';
   document.getElementById('login-screen').style.display = 'flex';
   document.getElementById('f-email').value = '';
   document.getElementById('f-pass').value = '';
+  document.getElementById('f-pass').type = 'password';
+  document.getElementById('pw-toggle').textContent = '👁';
   document.getElementById('signin-btn').disabled = false;
   document.getElementById('signin-btn').textContent = 'Sign In';
+  document.title = 'Client Portal — Vision Performance Inc.';
 }
 
+// ── SHOW DASHBOARD ──
 function showDashboard() {
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('dashboard-screen').style.display = 'flex';
-  document.getElementById('user-name').textContent = user.name || user.email;
+  document.getElementById('user-name').textContent    = user.name  || user.email;
   document.getElementById('user-company').textContent = user.company;
+  document.getElementById('st-year').textContent = new Date().getFullYear();
   loadDashboard();
 }
 
 // ── TABS ──
 function showTab(name, btn) {
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.dtab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.dtab').forEach(b => {
+    b.classList.remove('active');
+    b.setAttribute('aria-selected', 'false');
+  });
   document.getElementById('tab-' + name).classList.add('active');
-  if (btn) btn.classList.add('active');
-  if (name === 'employees' && !empCache) loadEmployees();
-  if (name === 'orders'    && !ordCache) loadOrders();
-  if (name === 'compliance') loadCompliance();
+  if (btn) { btn.classList.add('active'); btn.setAttribute('aria-selected', 'true'); }
+  document.title = name.charAt(0).toUpperCase() + name.slice(1) + ' — VPI Client Portal';
+  if (name === 'employees'  && !empCache)  loadEmployees();
+  if (name === 'orders'     && !ordCache)  loadOrders();
+  if (name === 'compliance' && !compCache) loadCompliance();
 }
 
 // ── DATA LOADERS ──
 async function loadDashboard() {
   try {
     const d = await (await fetch('/api/portal/dashboard', { credentials: 'same-origin' })).json();
-    document.getElementById('st-employees').textContent = d.totalEmployees ?? '—';
-    document.getElementById('st-compliance').textContent = d.complianceRate != null ? d.complianceRate + '%' : '—';
-    document.getElementById('st-pending').textContent = d.pendingOrders ?? '—';
+    document.getElementById('st-employees').textContent  = d.totalEmployees  ?? '—';
+    document.getElementById('st-compliance').textContent = d.complianceRate  != null ? d.complianceRate + '%' : '—';
+    document.getElementById('st-pending').textContent    = d.pendingOrders   ?? '—';
     const tbody = document.getElementById('recent-orders-body');
-    if (!d.recentOrders?.length) { tbody.innerHTML = '<tr><td colspan="4" class="state-msg">No orders yet.</td></tr>'; return; }
+    if (!d.recentOrders?.length) {
+      tbody.innerHTML = '<tr><td colspan="4" class="state-msg">No orders yet.</td></tr>';
+      return;
+    }
     tbody.innerHTML = d.recentOrders.map(o => `<tr>
       <td style="font-weight:700">${esc(o.employee_name||'—')}</td>
       <td>${esc(o.frame_name||'—')}</td>
       <td>${fmtDate(o.order_date)}</td>
-      <td>${badge(o.status)}</td>
+      <td>${statusBadge(o.status)}</td>
     </tr>`).join('');
-  } catch { document.getElementById('recent-orders-body').innerHTML = '<tr><td colspan="4" class="state-msg">Error loading data.</td></tr>'; }
+  } catch {
+    document.getElementById('recent-orders-body').innerHTML =
+      '<tr><td colspan="4" class="state-msg">Error loading data. Please refresh.</td></tr>';
+  }
 }
 
 async function loadEmployees() {
+  document.getElementById('employees-body').innerHTML =
+    '<tr><td colspan="5" class="state-msg">Loading…</td></tr>';
   try {
     const d = await (await fetch('/api/portal/employees', { credentials: 'same-origin' })).json();
     empCache = d.employees;
     renderEmployees(empCache);
-  } catch { document.getElementById('employees-body').innerHTML = '<tr><td colspan="5" class="state-msg">Error loading employees.</td></tr>'; }
+  } catch {
+    document.getElementById('employees-body').innerHTML =
+      '<tr><td colspan="5" class="state-msg">Error loading employees. Please refresh.</td></tr>';
+  }
 }
+
 function renderEmployees(list) {
   const tbody = document.getElementById('employees-body');
-  if (!list?.length) { tbody.innerHTML = '<tr><td colspan="5" class="state-msg">No employees found.</td></tr>'; return; }
+  if (!list?.length) {
+    tbody.innerHTML = '<tr><td colspan="5" class="state-msg">No employees found.</td></tr>';
+    return;
+  }
   tbody.innerHTML = list.map(e => `<tr>
     <td style="font-weight:700">${esc(e.name)}</td>
     <td>${esc(e.department||'—')}</td>
     <td>${esc(e.job_title||'—')}</td>
     <td>${e.enrolled_at ? fmtDate(e.enrolled_at) : '—'}</td>
-    <td>${e.eligible ? '<span class="badge badge-eligible">Eligible</span>' : '<span class="badge badge-ineligible">Ineligible</span>'}</td>
+    <td>${e.eligible
+      ? '<span class="badge badge-eligible">Eligible</span>'
+      : '<span class="badge badge-ineligible">Ineligible</span>'}</td>
   </tr>`).join('');
 }
+
 function filterEmployees() {
   const q = document.getElementById('emp-search').value.toLowerCase();
   if (!empCache) return;
-  renderEmployees(q ? empCache.filter(e => (e.name+e.department+e.job_title).toLowerCase().includes(q)) : empCache);
+  renderEmployees(q
+    ? empCache.filter(e =>
+        `${e.name||''} ${e.department||''} ${e.job_title||''}`.toLowerCase().includes(q))
+    : empCache);
 }
 
 async function loadOrders() {
+  document.getElementById('orders-body').innerHTML =
+    '<tr><td colspan="5" class="state-msg">Loading…</td></tr>';
   try {
     const d = await (await fetch('/api/portal/orders', { credentials: 'same-origin' })).json();
     ordCache = d.orders;
     renderOrders(ordCache);
-  } catch { document.getElementById('orders-body').innerHTML = '<tr><td colspan="5" class="state-msg">Error loading orders.</td></tr>'; }
+  } catch {
+    document.getElementById('orders-body').innerHTML =
+      '<tr><td colspan="5" class="state-msg">Error loading orders. Please refresh.</td></tr>';
+  }
 }
+
 function renderOrders(list) {
   const tbody = document.getElementById('orders-body');
-  if (!list?.length) { tbody.innerHTML = '<tr><td colspan="5" class="state-msg">No orders found.</td></tr>'; return; }
+  if (!list?.length) {
+    tbody.innerHTML = '<tr><td colspan="5" class="state-msg">No orders found.</td></tr>';
+    return;
+  }
   tbody.innerHTML = list.map(o => `<tr>
     <td style="font-weight:700">${esc(o.employee_name||'—')}</td>
     <td>${esc(o.frame_name||'—')}</td>
     <td>${esc(o.compliance_type||'—')}</td>
     <td>${fmtDate(o.order_date)}</td>
-    <td>${badge(o.status)}</td>
+    <td>${statusBadge(o.status)}</td>
   </tr>`).join('');
 }
+
 function filterOrders() {
   const v = document.getElementById('order-filter').value;
   if (!ordCache) return;
@@ -503,40 +594,64 @@ function filterOrders() {
 }
 
 async function loadCompliance() {
+  document.getElementById('comp-docs-body').innerHTML = '<div class="state-msg">Loading…</div>';
   try {
     const d = await (await fetch('/api/portal/compliance', { credentials: 'same-origin' })).json();
-    // summary grid
+    compCache = d;
     const grid = document.getElementById('comp-grid');
     if (d.stats?.length) {
-      grid.innerHTML = d.stats.map(s => `<div class="comp-item"><div class="comp-type">${esc(s.compliance_type||'General')}</div><div class="comp-count">${s.count}</div><div style="font-size:12px;color:var(--muted);margin-top:4px;">Completed</div></div>`).join('');
-    } else { grid.innerHTML = ''; }
-    // docs
+      grid.style.display = '';
+      grid.innerHTML = d.stats.map(s => `
+        <div class="comp-item">
+          <div class="comp-type">${esc(s.compliance_type||'General')}</div>
+          <div class="comp-count">${s.count}</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px;">Completed</div>
+        </div>`).join('');
+    } else {
+      grid.style.display = 'none';
+    }
     const body = document.getElementById('comp-docs-body');
-    if (!d.docs?.length) { body.innerHTML = '<div class="state-msg">No compliance documents on file.</div>'; return; }
-    body.innerHTML = d.docs.map(doc => `<div class="doc-row">
-      <div class="doc-info">
-        <div class="doc-icon">📄</div>
-        <div>
-          <div class="doc-name">${esc(doc.title)}</div>
-          <div class="doc-meta">${esc(doc.doc_type||'Document')} · ${doc.issue_date ? fmtDate(doc.issue_date) : '—'}</div>
+    if (!d.docs?.length) {
+      body.innerHTML = '<div class="state-msg">No compliance documents on file.</div>';
+      return;
+    }
+    body.innerHTML = d.docs.map(doc => `
+      <div class="doc-row">
+        <div class="doc-info">
+          <div class="doc-icon">📄</div>
+          <div>
+            <div class="doc-name">${esc(doc.title)}</div>
+            <div class="doc-meta">${esc(doc.doc_type||'Document')} · ${doc.issue_date ? fmtDate(doc.issue_date) : '—'}</div>
+          </div>
         </div>
-      </div>
-      ${doc.file_url ? `<a class="doc-dl" href="${esc(doc.file_url)}" target="_blank" rel="noopener">Download ↗</a>` : '<span style="font-size:12px;color:var(--muted)">On file</span>'}
-    </div>`).join('');
-  } catch { document.getElementById('comp-docs-body').innerHTML = '<div class="state-msg">Error loading documents.</div>'; }
+        ${doc.file_url
+          ? `<a class="doc-dl" href="${esc(doc.file_url)}" target="_blank" rel="noopener noreferrer">Download ↗</a>`
+          : '<span style="font-size:12px;color:var(--muted)">On file</span>'}
+      </div>`).join('');
+  } catch {
+    document.getElementById('comp-docs-body').innerHTML =
+      '<div class="state-msg">Error loading documents. Please refresh.</div>';
+  }
 }
 
 // ── HELPERS ──
-function badge(s) {
-  const map = { complete:'badge-complete', pending:'badge-pending', processing:'badge-processing', in_review:'badge-in_review' };
-  return `<span class="badge ${map[s]||''}">${(s||'').replace('_',' ')}</span>`;
+function statusBadge(s) {
+  const map = {
+    complete:   'badge-complete',
+    pending:    'badge-pending',
+    processing: 'badge-processing',
+    in_review:  'badge-in_review',
+  };
+  return `<span class="badge ${map[s]||''}">${esc((s||'').replace('_',' '))}</span>`;
 }
+
 function fmtDate(d) {
   if (!d) return '—';
   return new Date(d).toLocaleDateString('en-CA', { year:'numeric', month:'short', day:'numeric' });
 }
+
 function esc(s) {
-  return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
 }
 </script>
 </body>

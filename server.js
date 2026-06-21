@@ -76,11 +76,18 @@ app.use('/api', apiLimiter);
 app.use('/api/portal/login', rateLimit({ windowMs: 15 * 60 * 1000, max: 10, message: { error: 'Too many login attempts.' } }));
 
 // Reject cross-origin form submissions
+const ALLOWED_ORIGINS = [
+  'https://visionperformanceinc.ca',
+  'https://www.visionperformanceinc.ca',
+  'https://visionperformanceinc.com',
+  'https://www.visionperformanceinc.com',
+  ...(process.env.APP_ORIGIN ? [process.env.APP_ORIGIN] : []),
+  `http://localhost:${PORT}`,
+];
 app.use('/api', (req, res, next) => {
-  if (req.path.startsWith('/admin')) return next(); // admin calls come from curl/Postman
-  const allowedOrigin = process.env.APP_ORIGIN || `http://localhost:${PORT}`;
-  const origin = req.get('origin') || req.get('referer');
-  if (origin && !origin.startsWith(allowedOrigin)) {
+  if (req.path.startsWith('/admin')) return next();
+  const origin = req.get('origin') || req.get('referer') || '';
+  if (origin && !ALLOWED_ORIGINS.some(o => origin.startsWith(o))) {
     return res.status(403).json({ error: 'Forbidden' });
   }
   next();

@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS orders (
   frame_name VARCHAR(255),
   lens_type VARCHAR(100),
   order_date DATE,
-  status VARCHAR(50) DEFAULT 'pending',
+  status VARCHAR(50) DEFAULT 'pending' CHECK (status IN ('pending','processing','in_review','complete')),
   compliance_type VARCHAR(50),
   notes TEXT,
   created_at TIMESTAMP DEFAULT NOW()
@@ -62,3 +62,13 @@ CREATE TABLE IF NOT EXISTS session (
 ) WITH (OIDS=FALSE);
 
 CREATE INDEX IF NOT EXISTS IDX_session_expire ON session(expire);
+
+-- Add status constraint to existing tables (safe to run multiple times)
+DO $$ BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_constraint WHERE conname = 'orders_status_check'
+  ) THEN
+    ALTER TABLE orders ADD CONSTRAINT orders_status_check
+      CHECK (status IN ('pending','processing','in_review','complete'));
+  END IF;
+END $$;

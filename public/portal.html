@@ -550,7 +550,7 @@ async function doForgot(e) {
       body: JSON.stringify({ email }),
     });
     // Always show success to prevent email enumeration
-    succEl.textContent = 'If that email is registered, you'll receive a reset link shortly.';
+    succEl.textContent = "If that email is registered, you'll receive a reset link shortly.";
     succEl.style.display = 'block';
     btn.textContent = 'Sent';
   } catch {

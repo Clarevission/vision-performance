@@ -72,6 +72,30 @@ CREATE TABLE IF NOT EXISTS password_reset_tokens (
   created_at TIMESTAMP DEFAULT NOW()
 );
 
+-- Enquiries table — stores all inbound form submissions
+CREATE TABLE IF NOT EXISTS enquiries (
+  id SERIAL PRIMARY KEY,
+  type VARCHAR(20) NOT NULL CHECK (type IN ('contact','mobile','corporate','appointment')),
+  status VARCHAR(20) DEFAULT 'new' CHECK (status IN ('new','in_progress','closed')),
+  name VARCHAR(255),
+  email VARCHAR(255),
+  phone VARCHAR(50),
+  company VARCHAR(255),
+  subject VARCHAR(255),
+  message TEXT,
+  org VARCHAR(255),
+  employees VARCHAR(50),
+  preferred_date VARCHAR(100),
+  preferred_time VARCHAR(50),
+  address TEXT,
+  location VARCHAR(255),
+  exam_type VARCHAR(50),
+  notes TEXT,
+  staff_notes TEXT,
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW()
+);
+
 -- Add status constraint to existing orders table (safe to re-run)
 DO $$ BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'orders_status_check') THEN

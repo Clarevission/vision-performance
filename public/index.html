@@ -1692,7 +1692,51 @@ footer{background:#020617;padding:100px 48px 40px;border-top:1px solid rgba(255,
 <!-- BOOK, ABOUT, CONTACT, LEARN, PORTAL pages kept concise -->
 <div class="page" id="page-book">
   <div class="page-hero"><div class="page-hero-inner"><div class="page-breadcrumb"><a onclick="navigate('home')">Home</a><span>/</span><span style="color:rgba(255,255,255,0.45)">Book</span></div><div class="page-hero-title">Book an <span style="color:var(--orange)">Appointment</span></div><div class="page-hero-sub">All exams are conducted by licensed optometrists registered with their provincial College of Optometrists.</div></div></div>
-  <section class="section" style="background:white;"><div class="container"><div class="book-options"><div class="book-option featured reveal" onclick="navigate('mobile')"><span class="bo-icon">🚐</span><div class="bo-title">Mobile Clinic Visit</div><div class="bo-desc">We come to your workplace. Ideal for 10+ employees needing occupational vision care and safety eyewear.</div><button class="btn btn-orange btn-arrow">Request Mobile Clinic</button></div><div class="book-option reveal d1" onclick="showToast('Clinic booking — powered by Acuity/Calendly')"><span class="bo-icon">🏥</span><div class="bo-title">In-Clinic Eye Exam</div><div class="bo-desc">Comprehensive eye exam at our Edmonton clinic. Includes vision assessment, prescription update, and frame selection.</div><button class="btn btn-navy btn-arrow">Book Appointment</button></div><div class="book-option reveal" onclick="navigate('industrial')"><span class="bo-icon">🏢</span><div class="bo-title">Corporate Program</div><div class="bo-desc">Annual workplace vision program for your entire workforce with compliance reporting included.</div><button class="btn btn-outline-navy btn-arrow">Request Corporate Quote</button></div><div class="book-option reveal d1" onclick="showToast('Digital eye consultation — coming soon')"><span class="bo-icon">💻</span><div class="bo-title">Digital Eye Consultation</div><div class="bo-desc">Specialized assessment for screen workers experiencing digital eye strain, headaches, or visual discomfort.</div><button class="btn btn-outline-navy btn-arrow">Book Consultation</button></div></div></div></section>
+  <section class="section" style="background:white;"><div class="container">
+    <div class="book-options">
+      <div class="book-option featured reveal" onclick="navigate('mobile')"><span class="bo-icon">🚐</span><div class="bo-title">Mobile Clinic Visit</div><div class="bo-desc">We come to your workplace. Ideal for 10+ employees needing occupational vision care and safety eyewear.</div><button class="btn btn-orange btn-arrow">Request Mobile Clinic</button></div>
+      <div class="book-option reveal d1" onclick="document.getElementById('appt-form-section').scrollIntoView({behavior:'smooth'});document.getElementById('appt-exam-type').value='In-Clinic Eye Exam'"><span class="bo-icon">🏥</span><div class="bo-title">In-Clinic Eye Exam</div><div class="bo-desc">Comprehensive eye exam at our Edmonton clinic. Includes vision assessment, prescription update, and frame selection.</div><button class="btn btn-navy btn-arrow">Book Appointment</button></div>
+      <div class="book-option reveal" onclick="navigate('industrial')"><span class="bo-icon">🏢</span><div class="bo-title">Corporate Program</div><div class="bo-desc">Annual workplace vision program for your entire workforce with compliance reporting included.</div><button class="btn btn-outline-navy btn-arrow">Request Corporate Quote</button></div>
+      <div class="book-option reveal d1" onclick="document.getElementById('appt-form-section').scrollIntoView({behavior:'smooth'});document.getElementById('appt-exam-type').value='Digital Eye Consultation'"><span class="bo-icon">💻</span><div class="bo-title">Digital Eye Consultation</div><div class="bo-desc">Specialized assessment for screen workers experiencing digital eye strain, headaches, or visual discomfort.</div><button class="btn btn-outline-navy btn-arrow">Book Consultation</button></div>
+    </div>
+
+    <!-- APPOINTMENT BOOKING FORM -->
+    <div id="appt-form-section" style="margin-top:64px;max-width:680px;margin-left:auto;margin-right:auto">
+      <div style="text-align:center;margin-bottom:36px">
+        <span style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--orange)">Request an Appointment</span>
+        <h2 style="font-family:Montserrat;font-size:28px;font-weight:800;color:var(--navy);margin-top:8px">Book Your Exam</h2>
+        <p style="font-size:15px;color:var(--mid);margin-top:10px">Fill in the form below and our team will confirm your appointment within 1 business day.</p>
+      </div>
+      <div class="form-card" style="box-shadow:0 4px 24px rgba(0,0,0,0.08)">
+        <form id="apptForm" onsubmit="submitForm('appointment');return false;" novalidate>
+          <div class="form-grid">
+            <div class="fg"><label class="fl" for="appt-name">Full Name *</label><input id="appt-name" class="fi" placeholder="Your full name" autocomplete="name" required></div>
+            <div class="fg"><label class="fl" for="appt-phone">Phone</label><input id="appt-phone" class="fi" type="tel" placeholder="+1 (780) 000-0000" autocomplete="tel"></div>
+            <div class="fg full"><label class="fl" for="appt-email">Email *</label><input id="appt-email" class="fi" type="email" placeholder="you@email.com" autocomplete="email" required></div>
+            <div class="fg full"><label class="fl" for="appt-exam-type">Exam Type *</label>
+              <select id="appt-exam-type" class="fs" required>
+                <option value="">Select exam type…</option>
+                <option>In-Clinic Eye Exam</option>
+                <option>Digital Eye Consultation</option>
+                <option>Occupational Vision Assessment</option>
+              </select>
+            </div>
+            <div class="fg"><label class="fl" for="appt-date">Preferred Date</label><input id="appt-date" class="fi" type="date"></div>
+            <div class="fg"><label class="fl" for="appt-time">Preferred Time</label>
+              <select id="appt-time" class="fs">
+                <option value="">No preference</option>
+                <option>Morning (8am–12pm)</option>
+                <option>Afternoon (12pm–4pm)</option>
+                <option>Late Afternoon (4pm–6pm)</option>
+              </select>
+            </div>
+            <div class="fg full"><label class="fl" for="appt-notes">Additional Notes</label><textarea id="appt-notes" class="ft" placeholder="Any relevant vision history, concerns, or special requirements…"></textarea></div>
+          </div>
+          <div class="form-submit"><button type="submit" class="btn btn-orange btn-arrow">Request Appointment</button></div>
+        </form>
+      </div>
+    </div>
+  </div></section>
   <div id="footer-book"></div>
 </div>
 

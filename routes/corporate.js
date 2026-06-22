@@ -1,6 +1,8 @@
+'use strict';
 const express = require('express');
 const { isEmail, escape, trim } = require('validator');
 const { sendMail } = require('../lib/mailer');
+const db = require('../lib/db');
 
 const router = express.Router();
 
@@ -16,6 +18,17 @@ router.post('/', async (req, res) => {
 
   const safe = (v, max = 300) => escape(trim(v || '')).slice(0, max);
   const safeEmail = trim(email).toLowerCase().slice(0, 254);
+
+  try {
+    await db.query(
+      `INSERT INTO enquiries (type, name, email, phone, company, employees, preferred_date, location, notes)
+       VALUES ('corporate', $1, $2, $3, $4, $5, $6, $7, $8)`,
+      [safe(contact), safeEmail, safe(phone), safe(company), safe(employees) || null,
+       safe(date) || null, safe(location) || null, safe(notes, 2000) || null]
+    );
+  } catch (dbErr) {
+    console.error('Corporate DB save error:', dbErr);
+  }
 
   const html = `
     <h2 style="color:#FF6A00;font-family:sans-serif;">New Corporate Program Request</h2>
@@ -38,7 +51,6 @@ router.post('/', async (req, res) => {
       html,
       text: `Company: ${safe(company)}\nContact: ${safe(contact)}\nEmail: ${safeEmail}\nPhone: ${safe(phone)}\nEmployees: ${safe(employees)}\nStart Date: ${safe(date)}\nLocation: ${safe(location)}\nNotes: ${safe(notes, 2000)}`,
     });
-
     await sendMail({
       to: safeEmail,
       subject: 'Corporate Program Request Received — Vision Performance Inc.',
@@ -47,7 +59,6 @@ router.post('/', async (req, res) => {
              <p style="font-family:sans-serif">— Vision Performance Team</p>`,
       text: `Hi ${safe(contact)},\n\nThank you for your interest in a corporate vision program for ${safe(company)}. A Vision Performance representative will be in touch within 1 business day with a customized proposal.\n\n— Vision Performance Team`,
     });
-
     res.json({ message: "Corporate program request submitted! A representative will be in touch shortly." });
   } catch (err) {
     console.error('Corporate mail error:', err);

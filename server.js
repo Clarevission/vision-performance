@@ -5,11 +5,13 @@ const rateLimit = require('express-rate-limit');
 const path = require('path');
 
 const db = require('./lib/db');
-const contactRoute = require('./routes/contact');
-const mobileRoute = require('./routes/mobile');
-const corporateRoute = require('./routes/corporate');
-const portalRoute = require('./routes/portal');
-const adminRoute = require('./routes/admin');
+const contactRoute     = require('./routes/contact');
+const mobileRoute      = require('./routes/mobile');
+const corporateRoute   = require('./routes/corporate');
+const appointmentRoute = require('./routes/appointment');
+const portalRoute      = require('./routes/portal');
+const staffRoute       = require('./routes/staff');
+const adminRoute       = require('./routes/admin');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -66,11 +68,13 @@ app.use('/api', (req, res, next) => {
 });
 
 // API routes
-app.use('/api/contact', contactRoute);
-app.use('/api/mobile', mobileRoute);
-app.use('/api/corporate', corporateRoute);
-app.use('/api/portal', portalRoute);
-app.use('/api/admin', adminRoute);
+app.use('/api/contact',     contactRoute);
+app.use('/api/mobile',      mobileRoute);
+app.use('/api/corporate',   corporateRoute);
+app.use('/api/appointment', appointmentRoute);
+app.use('/api/portal',      portalRoute);
+app.use('/api/staff',       staffRoute);
+app.use('/api/admin',       adminRoute);
 
 // Health check
 app.get('/health', (_req, res) => res.json({ status: 'ok' }));
@@ -78,6 +82,11 @@ app.get('/health', (_req, res) => res.json({ status: 'ok' }));
 // Standalone portal page
 app.get('/portal', (_req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'portal.html'));
+});
+
+// Staff command centre
+app.get('/staff', (_req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'staff.html'));
 });
 
 // Static assets

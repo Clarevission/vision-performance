@@ -142,7 +142,8 @@ async function submitForm(type){
   const fields={
     mobile:{org:'#mc-org',contact:'#mc-contact',email:'#mc-email',phone:'#mc-phone',employees:'#mc-employees',date:'#mc-date',address:'#mc-address',notes:'#mc-notes'},
     corporate:{company:'#corp-company',contact:'#corp-contact',email:'#corp-email',phone:'#corp-phone',employees:'#corp-employees',date:'#corp-date',location:'#corp-location',notes:'#corp-notes'},
-    contact:{name:'#ct-name',company:'#ct-company',email:'#ct-email',subject:'#ct-subject',message:'#ct-message'}
+    contact:{name:'#ct-name',company:'#ct-company',email:'#ct-email',subject:'#ct-subject',message:'#ct-message'},
+    appointment:{name:'#appt-name',email:'#appt-email',phone:'#appt-phone',exam_type:'#appt-exam-type',preferred_date:'#appt-date',preferred_time:'#appt-time',notes:'#appt-notes'}
   };
   const data={};
   const map=fields[type]||{};
@@ -150,7 +151,7 @@ async function submitForm(type){
   try{
     const r=await fetch(`/api/${type}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
     const j=await r.json();
-    if(r.ok){const msgs={mobile:"Mobile clinic request submitted! We'll contact you within 1 business day.",corporate:"Corporate program request submitted! A representative will be in touch shortly.",contact:"Message sent! We'll respond within 1 business day."};showToast(msgs[type]||j.message||'Submitted!');for(const[k,sel]of Object.entries(map)){const el=document.querySelector(sel);if(el)el.value='';}}
+    if(r.ok){const msgs={mobile:"Mobile clinic request submitted! We'll contact you within 1 business day.",corporate:"Corporate program request submitted! A representative will be in touch shortly.",contact:"Message sent! We'll respond within 1 business day.",appointment:"Appointment request received! We'll confirm within 1 business day."};showToast(msgs[type]||j.message||'Submitted!');for(const[k,sel]of Object.entries(map)){const el=document.querySelector(sel);if(el)el.value='';}}
     else{showToast(j.error||'Something went wrong. Please try again.');}
   }catch(e){showToast('Our contact form requires the full server. For beta testing, please email info@visionperformanceinc.ca — we\'ll respond within 1 business day.');}
   finally{if(btn){btn.disabled=false;btn.innerHTML=orig;}}

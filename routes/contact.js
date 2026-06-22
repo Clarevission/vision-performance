@@ -1,6 +1,8 @@
+'use strict';
 const express = require('express');
 const { isEmail, escape, trim } = require('validator');
 const { sendMail } = require('../lib/mailer');
+const db = require('../lib/db');
 
 const router = express.Router();
 
@@ -14,11 +16,23 @@ router.post('/', async (req, res) => {
     return res.status(400).json({ error: 'Please enter a valid email address.' });
   }
 
-  const safeName = escape(trim(name)).slice(0, 120);
+  const safeName    = escape(trim(name)).slice(0, 120);
   const safeCompany = escape(trim(company || '')).slice(0, 120);
   const safeSubject = escape(trim(subject || 'General Enquiry')).slice(0, 200);
   const safeMessage = escape(trim(message)).slice(0, 4000);
-  const safeEmail = trim(email).toLowerCase().slice(0, 254);
+  const safeEmail   = trim(email).toLowerCase().slice(0, 254);
+
+  // Save to DB first — so nothing is lost even if email fails
+  try {
+    await db.query(
+      `INSERT INTO enquiries (type, name, email, company, subject, message)
+       VALUES ('contact', $1, $2, $3, $4, $5)`,
+      [safeName, safeEmail, safeCompany || null, safeSubject, safeMessage]
+    );
+  } catch (dbErr) {
+    console.error('Contact DB save error:', dbErr);
+    // Don't block the response — still attempt email
+  }
 
   const html = `
     <h2 style="color:#FF6A00;font-family:sans-serif;">New Contact Form Submission</h2>
@@ -38,8 +52,6 @@ router.post('/', async (req, res) => {
       html,
       text: `Name: ${safeName}\nCompany: ${safeCompany}\nEmail: ${safeEmail}\nSubject: ${safeSubject}\n\n${safeMessage}`,
     });
-
-    // Auto-reply to sender
     await sendMail({
       to: safeEmail,
       subject: 'We received your message — Vision Performance Inc.',
@@ -48,7 +60,6 @@ router.post('/', async (req, res) => {
              <p style="font-family:sans-serif">— Vision Performance Team</p>`,
       text: `Hi ${safeName},\n\nThanks for reaching out. Our team will respond within 1 business day.\n\n— Vision Performance Team`,
     });
-
     res.json({ message: "Message sent! We'll respond within 1 business day." });
   } catch (err) {
     console.error('Contact mail error:', err);

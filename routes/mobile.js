@@ -1,6 +1,8 @@
+'use strict';
 const express = require('express');
 const { isEmail, escape, trim } = require('validator');
 const { sendMail } = require('../lib/mailer');
+const db = require('../lib/db');
 
 const router = express.Router();
 
@@ -16,6 +18,17 @@ router.post('/', async (req, res) => {
 
   const safe = (v, max = 300) => escape(trim(v || '')).slice(0, max);
   const safeEmail = trim(email).toLowerCase().slice(0, 254);
+
+  try {
+    await db.query(
+      `INSERT INTO enquiries (type, name, email, phone, org, employees, preferred_date, address, notes)
+       VALUES ('mobile', $1, $2, $3, $4, $5, $6, $7, $8)`,
+      [safe(contact), safeEmail, safe(phone) || null, safe(org), safe(employees) || null,
+       safe(date) || null, safe(address), safe(notes, 2000) || null]
+    );
+  } catch (dbErr) {
+    console.error('Mobile DB save error:', dbErr);
+  }
 
   const html = `
     <h2 style="color:#FF6A00;font-family:sans-serif;">New Mobile Clinic Request</h2>
@@ -38,7 +51,6 @@ router.post('/', async (req, res) => {
       html,
       text: `Organization: ${safe(org)}\nContact: ${safe(contact)}\nEmail: ${safeEmail}\nPhone: ${safe(phone)}\nEmployees: ${safe(employees)}\nDate: ${safe(date)}\nAddress: ${safe(address)}\nNotes: ${safe(notes, 2000)}`,
     });
-
     await sendMail({
       to: safeEmail,
       subject: 'Mobile Clinic Request Received — Vision Performance Inc.',
@@ -47,7 +59,6 @@ router.post('/', async (req, res) => {
              <p style="font-family:sans-serif">— Vision Performance Team</p>`,
       text: `Hi ${safe(contact)},\n\nThank you for requesting a mobile clinic visit for ${safe(org)}. Our team will contact you within 1 business day to confirm your site visit details.\n\n— Vision Performance Team`,
     });
-
     res.json({ message: "Mobile clinic request submitted! We'll contact you within 1 business day." });
   } catch (err) {
     console.error('Mobile clinic mail error:', err);

@@ -617,7 +617,9 @@ function showDashboard() {
   document.getElementById('user-name').textContent    = user.name  || user.email;
   document.getElementById('user-company').textContent = user.company;
   document.getElementById('st-year').textContent = new Date().getFullYear();
-  loadDashboard();
+  const validTabs = ['dashboard', 'employees', 'orders', 'compliance'];
+  const hash = window.location.hash.replace('#', '');
+  showTab(validTabs.includes(hash) ? hash : 'dashboard');
 }
 
 // ── TABS ──
@@ -629,7 +631,12 @@ function showTab(name, btn) {
   });
   document.getElementById('tab-' + name).classList.add('active');
   if (btn) { btn.classList.add('active'); btn.setAttribute('aria-selected', 'true'); }
+  else {
+    const match = [...document.querySelectorAll('.dtab')].find(b => b.getAttribute('onclick').includes("'" + name + "'"));
+    if (match) { match.classList.add('active'); match.setAttribute('aria-selected', 'true'); }
+  }
   document.title = name.charAt(0).toUpperCase() + name.slice(1) + ' — VPI Client Portal';
+  history.replaceState(null, '', '/portal#' + name);
   if (name === 'employees'  && !empCache)  loadEmployees();
   if (name === 'orders'     && !ordCache)  loadOrders();
   if (name === 'compliance' && !compCache) loadCompliance();

@@ -4,10 +4,13 @@ const crypto = require('crypto');
 const router = express.Router();
 const db = require('../lib/db');
 const { sendMail } = require('../lib/mailer');
+const { setAuthCookie, clearAuthCookie, getAuthPayload } = require('../lib/auth');
 
 function requireAuth(req, res, next) {
-  if (req.session && req.session.userId) return next();
-  res.status(401).json({ error: 'Not authenticated' });
+  const auth = getAuthPayload(req);
+  if (!auth) return res.status(401).json({ error: 'Not authenticated' });
+  req.auth = auth;
+  next();
 }
 
 // POST /api/portal/login
@@ -23,9 +26,7 @@ router.post('/login', async (req, res) => {
     if (!user) return res.status(401).json({ error: 'Invalid email or password' });
     const valid = await bcrypt.compare(password, user.password_hash);
     if (!valid) return res.status(401).json({ error: 'Invalid email or password' });
-    req.session.userId = user.id;
-    req.session.companyId = user.company_id;
-    req.session.role = user.role;
+    setAuthCookie(res, { userId: user.id, companyId: user.company_id, role: user.role });
     res.json({ ok: true, user: { name: user.name, email: user.email, company: user.company_name, role: user.role } });
   } catch (e) {
     console.error('Login error:', e);
@@ -35,7 +36,8 @@ router.post('/login', async (req, res) => {
 
 // POST /api/portal/logout
 router.post('/logout', (req, res) => {
-  req.session.destroy(() => res.json({ ok: true }));
+  clearAuthCookie(res);
+  res.json({ ok: true });
 });
 
 // GET /api/portal/me
@@ -43,7 +45,7 @@ router.get('/me', requireAuth, async (req, res) => {
   try {
     const { rows } = await db.query(
       'SELECT pu.name, pu.email, pu.role, c.name AS company_name, c.plan FROM portal_users pu JOIN companies c ON pu.company_id = c.id WHERE pu.id = $1',
-      [req.session.userId]
+      [req.auth.userId]
     );
     if (!rows[0]) return res.status(401).json({ error: 'Not found' });
     res.json({ user: { name: rows[0].name, email: rows[0].email, company: rows[0].company_name, plan: rows[0].plan, role: rows[0].role } });
@@ -54,7 +56,7 @@ router.get('/me', requireAuth, async (req, res) => {
 
 // GET /api/portal/dashboard
 router.get('/dashboard', requireAuth, async (req, res) => {
-  const cid = req.session.companyId;
+  const cid = req.auth.companyId;
   try {
     const [empR, orderR, compR, recentR] = await Promise.all([
       db.query('SELECT COUNT(*) FROM employees WHERE company_id=$1 AND eligible=true', [cid]),
@@ -76,7 +78,7 @@ router.get('/dashboard', requireAuth, async (req, res) => {
 
 // GET /api/portal/employees
 router.get('/employees', requireAuth, async (req, res) => {
-  const cid = req.session.companyId;
+  const cid = req.auth.companyId;
   try {
     const { rows } = await db.query(
       'SELECT e.*, (SELECT COUNT(*) FROM orders o WHERE o.employee_id=e.id) AS order_count FROM employees e WHERE e.company_id=$1 ORDER BY e.name',
@@ -90,7 +92,7 @@ router.get('/employees', requireAuth, async (req, res) => {
 
 // GET /api/portal/orders
 router.get('/orders', requireAuth, async (req, res) => {
-  const cid = req.session.companyId;
+  const cid = req.auth.companyId;
   try {
     const { rows } = await db.query(
       'SELECT o.*, e.name AS employee_name FROM orders o LEFT JOIN employees e ON o.employee_id=e.id WHERE o.company_id=$1 ORDER BY o.order_date DESC',
@@ -111,12 +113,10 @@ router.post('/forgot-password', async (req, res) => {
       'SELECT id, name FROM portal_users WHERE email=$1',
       [email.toLowerCase().trim()]
     );
-    // Always return ok — never reveal whether email exists
     if (!rows[0]) return res.json({ ok: true });
-    // Invalidate any existing unused tokens for this user
     await db.query('UPDATE password_reset_tokens SET used=true WHERE user_id=$1 AND used=false', [rows[0].id]);
     const token = crypto.randomBytes(32).toString('hex');
-    const expires = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+    const expires = new Date(Date.now() + 60 * 60 * 1000);
     await db.query(
       'INSERT INTO password_reset_tokens(user_id,token,expires_at) VALUES($1,$2,$3)',
       [rows[0].id, token, expires]
@@ -171,7 +171,7 @@ router.post('/reset-password', async (req, res) => {
 
 // GET /api/portal/compliance
 router.get('/compliance', requireAuth, async (req, res) => {
-  const cid = req.session.companyId;
+  const cid = req.auth.companyId;
   try {
     const [docsR, statsR] = await Promise.all([
       db.query('SELECT * FROM compliance_docs WHERE company_id=$1 ORDER BY issue_date DESC', [cid]),

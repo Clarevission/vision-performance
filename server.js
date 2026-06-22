@@ -3,10 +3,36 @@ const express = require('express');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const session = require('express-session');
-const pgSession = require('connect-pg-simple')(session);
 const path = require('path');
 
 const db = require('./lib/db');
+
+// Custom PostgreSQL session store using our proven db pool
+const SESSION_TTL_MS = 8 * 60 * 60 * 1000;
+class PgStore extends session.Store {
+  get(sid, cb) {
+    db.query('SELECT sess FROM session WHERE sid=$1 AND expire > NOW()', [sid])
+      .then(({ rows }) => cb(null, rows[0] ? rows[0].sess : null))
+      .catch(cb);
+  }
+  set(sid, sess, cb) {
+    const expire = new Date(Date.now() + SESSION_TTL_MS);
+    db.query(
+      `INSERT INTO session(sid,sess,expire) VALUES($1,$2,$3)
+       ON CONFLICT(sid) DO UPDATE SET sess=EXCLUDED.sess, expire=EXCLUDED.expire`,
+      [sid, JSON.stringify(sess), expire]
+    ).then(() => cb(null)).catch(cb);
+  }
+  destroy(sid, cb) {
+    db.query('DELETE FROM session WHERE sid=$1', [sid])
+      .then(() => cb(null)).catch(cb);
+  }
+  touch(sid, sess, cb) {
+    const expire = new Date(Date.now() + SESSION_TTL_MS);
+    db.query('UPDATE session SET expire=$2 WHERE sid=$1', [sid, expire])
+      .then(() => cb(null)).catch(cb);
+  }
+}
 const contactRoute = require('./routes/contact');
 const mobileRoute = require('./routes/mobile');
 const corporateRoute = require('./routes/corporate');
@@ -35,32 +61,19 @@ app.use(helmet({
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 
-// Sessions — stored in PostgreSQL so they survive restarts
-if (process.env.DATABASE_URL) {
-  app.use(session({
-    store: new pgSession({
-      pool: db,
-      tableName: 'session',
-    }),
-    secret: process.env.SESSION_SECRET || 'vpi-dev-secret-change-me',
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      secure: process.env.NODE_ENV === 'production',
-      httpOnly: true,
-      maxAge: 8 * 60 * 60 * 1000, // 8 hours
-      sameSite: 'lax',
-    },
-  }));
-} else {
-  // Dev fallback — in-memory sessions (no DB needed locally)
-  app.use(session({
-    secret: 'vpi-dev-secret',
-    resave: false,
-    saveUninitialized: false,
-    cookie: { secure: false, httpOnly: true, maxAge: 8 * 60 * 60 * 1000 },
-  }));
-}
+// Sessions
+app.use(session({
+  store: process.env.DATABASE_URL ? new PgStore() : undefined,
+  secret: process.env.SESSION_SECRET || 'vpi-dev-secret-change-me',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    maxAge: SESSION_TTL_MS,
+    sameSite: 'lax',
+  },
+}));
 
 // Rate limit all API routes
 const apiLimiter = rateLimit({

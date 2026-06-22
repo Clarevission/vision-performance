@@ -1947,21 +1947,6 @@ footer{background:#020617;padding:100px 48px 40px;border-top:1px solid rgba(255,
     <button onclick="declineCookies()" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);border-radius:7px;padding:9px 20px;font-family:Outfit,sans-serif;font-size:13px;font-weight:600;color:rgba(255,255,255,0.6);cursor:pointer;">Decline Non-Essential</button>
   </div>
 </div>
-<script>
-(function(){
-  if(!localStorage.getItem('cookie-consent')){
-    document.getElementById('cookie-banner').style.display='flex';
-  }
-})();
-function acceptCookies(){
-  localStorage.setItem('cookie-consent','accepted');
-  document.getElementById('cookie-banner').style.display='none';
-}
-function declineCookies(){
-  localStorage.setItem('cookie-consent','declined');
-  document.getElementById('cookie-banner').style.display='none';
-}
-</script>
 
 </body>
 </html>

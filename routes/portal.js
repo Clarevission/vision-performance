@@ -177,7 +177,13 @@ router.get('/compliance', requireAuth, async (req, res) => {
       db.query('SELECT * FROM compliance_docs WHERE company_id=$1 ORDER BY issue_date DESC', [cid]),
       db.query("SELECT compliance_type, COUNT(*) FROM orders WHERE company_id=$1 AND status='complete' GROUP BY compliance_type", [cid]),
     ]);
-    res.json({ docs: docsR.rows, stats: statsR.rows });
+    res.json({
+      docs: docsR.rows.map(d => ({
+        ...d,
+        file_url: d.file_url?.startsWith('https://') ? d.file_url : null,
+      })),
+      stats: statsR.rows,
+    });
   } catch (e) {
     res.status(500).json({ error: 'Server error' });
   }

@@ -29,51 +29,52 @@ body{
   color:var(--text);
   min-height:100vh;
 }
+@keyframes spin{to{transform:rotate(360deg)}}
 
-/* ── LOGIN ── */
-#login-screen{
-  min-height:100vh;
-  display:none;
-  align-items:center;
-  justify-content:center;
+/* ── LOADING ── */
+#loading-screen{
+  display:flex;min-height:100vh;
+  align-items:center;justify-content:center;
+}
+.loading-spinner{
+  width:36px;height:36px;
+  border:3px solid rgba(255,255,255,0.1);
+  border-top-color:var(--orange);
+  border-radius:50%;
+  animation:spin 0.7s linear infinite;
+}
+
+/* ── LOGIN / FORGOT / RESET ── */
+#login-screen,#forgot-screen,#reset-screen{
+  display:none;min-height:100vh;
+  align-items:center;justify-content:center;
   padding:40px 20px;
 }
 .login-wrap{width:100%;max-width:420px;}
 .login-logo{text-align:center;margin-bottom:32px;}
 .login-logo img{width:220px;height:auto;object-fit:contain;}
 .login-label{
-  display:block;
-  font-size:11px;font-weight:700;
+  display:block;font-size:11px;font-weight:700;
   letter-spacing:0.2em;text-transform:uppercase;
-  color:var(--muted);
-  margin-top:10px;
+  color:var(--muted);margin-top:10px;
 }
 .login-card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:36px;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:16px;padding:36px;
 }
 .login-title{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px;}
 .login-sub{font-size:13px;color:var(--muted);margin-bottom:28px;}
 .field-label{
-  display:block;
-  font-size:11px;font-weight:700;
+  display:block;font-size:11px;font-weight:700;
   letter-spacing:0.12em;text-transform:uppercase;
-  color:var(--muted);
-  margin-bottom:7px;
+  color:var(--muted);margin-bottom:7px;
 }
 .field-input{
-  width:100%;
-  background:#0d1422;
+  width:100%;background:#0d1422;
   border:1px solid rgba(255,255,255,0.1);
-  border-radius:8px;
-  padding:12px 14px;
-  font-family:'Outfit',sans-serif;
-  font-size:14px;
-  color:#fff;
-  outline:none;
-  transition:border-color 0.2s;
+  border-radius:8px;padding:12px 14px;
+  font-family:'Outfit',sans-serif;font-size:14px;color:#fff;
+  outline:none;transition:border-color 0.2s;
 }
 .field-input:focus{border-color:rgba(255,255,255,0.3);}
 .field-input::placeholder{color:rgba(255,255,255,0.2);}
@@ -83,40 +84,27 @@ body{
 .pw-toggle{
   position:absolute;right:12px;top:50%;transform:translateY(-50%);
   background:none;border:none;cursor:pointer;
-  color:var(--muted);font-size:16px;padding:4px;
-  line-height:1;
+  color:var(--muted);font-size:16px;padding:4px;line-height:1;
+  min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center;
 }
 .pw-toggle:hover{color:#fff;}
 .btn-signin{
-  width:100%;
-  background:var(--orange);
-  border:none;
-  border-radius:8px;
-  padding:14px;
-  font-family:'Outfit',sans-serif;
-  font-size:15px;font-weight:800;
-  color:#fff;
-  cursor:pointer;
-  margin-top:8px;
-  transition:opacity 0.2s,transform 0.1s;
+  width:100%;background:var(--orange);border:none;border-radius:8px;
+  padding:14px;font-family:'Outfit',sans-serif;font-size:15px;font-weight:800;
+  color:#fff;cursor:pointer;margin-top:8px;
+  transition:opacity 0.2s,transform 0.1s;min-height:44px;
 }
 .btn-signin:hover{opacity:0.88;}
 .btn-signin:active{transform:scale(0.99);}
 .btn-signin:disabled{opacity:0.5;cursor:not-allowed;}
 .login-error{
-  display:none;
-  background:rgba(239,68,68,0.1);
-  border:1px solid rgba(239,68,68,0.3);
-  border-radius:8px;
-  padding:11px 14px;
-  margin-bottom:18px;
-  color:#ef4444;
-  font-size:13px;font-weight:600;
+  display:none;background:rgba(239,68,68,0.1);
+  border:1px solid rgba(239,68,68,0.3);border-radius:8px;
+  padding:11px 14px;margin-bottom:18px;
+  color:#ef4444;font-size:13px;font-weight:600;
 }
 .login-footer{
-  text-align:center;
-  margin-top:20px;
-  padding-top:20px;
+  text-align:center;margin-top:20px;padding-top:20px;
   border-top:1px solid var(--border);
 }
 .login-footer span{font-size:13px;color:var(--muted);}
@@ -129,25 +117,19 @@ body{
 /* ── DASHBOARD ── */
 #dashboard-screen{display:none;min-height:100vh;flex-direction:column;}
 .dash-topbar{
-  background:#0d1422;
-  border-bottom:1px solid var(--border);
-  padding:0 40px;
-  height:64px;
+  background:#0d1422;border-bottom:1px solid var(--border);
+  padding:0 40px;height:64px;
   display:flex;align-items:center;justify-content:space-between;
-  position:sticky;top:0;z-index:100;
-  flex-shrink:0;
+  position:sticky;top:0;z-index:100;flex-shrink:0;
 }
 .dash-topbar-left{display:flex;align-items:center;gap:28px;min-width:0;}
-.dash-portal-label{font-size:11px;font-weight:800;letter-spacing:0.18em;text-transform:uppercase;color:var(--cyan);flex-shrink:0;}
 .dash-tabs{display:flex;gap:2px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
 .dash-tabs::-webkit-scrollbar{display:none;}
 .dtab{
-  background:none;border:none;
-  padding:10px 14px;
+  background:none;border:none;padding:10px 14px;
   font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;
   color:var(--muted);cursor:pointer;border-radius:6px;
-  transition:all 0.15s;white-space:nowrap;
-  min-height:44px;
+  transition:all 0.15s;white-space:nowrap;min-height:44px;
 }
 .dtab:hover{color:#fff;background:rgba(255,255,255,0.05);}
 .dtab.active{color:#fff;background:rgba(255,255,255,0.1);}
@@ -156,13 +138,10 @@ body{
 .user-name{font-size:13px;font-weight:700;color:#fff;}
 .user-company{font-size:11px;color:var(--muted);}
 .btn-signout{
-  background:rgba(255,255,255,0.05);
-  border:1px solid rgba(255,255,255,0.1);
+  background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);
   border-radius:7px;padding:10px 16px;
   font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;
-  color:var(--muted);cursor:pointer;
-  transition:all 0.2s;
-  min-height:44px;
+  color:var(--muted);cursor:pointer;transition:all 0.2s;min-height:44px;
 }
 .btn-signout:hover{color:#fff;border-color:rgba(255,255,255,0.25);}
 .dash-body{flex:1;padding:36px 40px;background:#0b0f1c;}
@@ -171,7 +150,7 @@ body{
 .tab-panel{display:none;}
 .tab-panel.active{display:block;}
 
-/* section title */
+/* section */
 .section-title{font-size:22px;font-weight:900;color:#fff;margin-bottom:4px;}
 .section-sub{font-size:13px;color:var(--muted);margin-bottom:28px;}
 
@@ -210,14 +189,13 @@ tr:hover td{background:rgba(255,255,255,0.02);}
   background:#0d1422;border:1px solid rgba(255,255,255,0.1);
   border-radius:8px;padding:9px 12px;
   font-family:'Outfit',sans-serif;font-size:13px;color:#fff;
-  outline:none;
-  -webkit-appearance:none;appearance:none;
+  outline:none;-webkit-appearance:none;appearance:none;
 }
 .filter-input{flex:1;max-width:300px;}
 .filter-input::placeholder{color:rgba(255,255,255,0.2);}
 .filter-select{padding-right:28px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(255,255,255,0.35)'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;}
 
-/* compliance doc row */
+/* compliance */
 .doc-row{display:flex;align-items:center;justify-content:space-between;padding:16px 22px;border-top:1px solid rgba(255,255,255,0.04);}
 .doc-row:first-child{border-top:none;}
 .doc-info{display:flex;align-items:center;gap:14px;}
@@ -226,8 +204,6 @@ tr:hover td{background:rgba(255,255,255,0.02);}
 .doc-meta{font-size:12px;color:var(--muted);margin-top:2px;}
 .doc-dl{font-size:12px;font-weight:700;color:var(--cyan);text-decoration:none;}
 .doc-dl:hover{text-decoration:underline;}
-
-/* compliance summary */
 .comp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px;}
 .comp-item{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px;}
 .comp-type{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:6px;}
@@ -241,9 +217,7 @@ tr:hover td{background:rgba(255,255,255,0.02);}
   .comp-grid{grid-template-columns:repeat(2,1fr);}
   .dash-topbar{padding:0 16px;}
   .dash-body{padding:20px 16px;}
-  .dash-portal-label{display:none;}
-  td:nth-child(n+3){display:none;}
-  th:nth-child(n+3){display:none;}
+  .mob-hide{display:none;}
 }
 @media(max-width:480px){
   .login-card{padding:24px;}
@@ -254,8 +228,13 @@ tr:hover td{background:rgba(255,255,255,0.02);}
 </head>
 <body>
 
+<!-- ══════ LOADING ══════ -->
+<div id="loading-screen">
+  <div class="loading-spinner" role="status" aria-label="Loading"></div>
+</div>
+
 <!-- ══════ LOGIN ══════ -->
-<div id="login-screen">
+<div id="login-screen" role="main">
   <div class="login-wrap">
     <div class="login-logo">
       <img src="/images/logo-dark-alt.png" alt="Vision Performance Inc."
@@ -266,7 +245,7 @@ tr:hover td{background:rgba(255,255,255,0.02);}
     <div class="login-card">
       <div class="login-title">Sign In</div>
       <div class="login-sub">Enter the credentials provided to your organization.</div>
-      <div class="login-error" id="login-error" role="alert"></div>
+      <div class="login-error" id="login-error" role="alert" aria-live="assertive"></div>
       <form id="login-form" onsubmit="doLogin(event)" novalidate>
         <div class="field-group">
           <label class="field-label" for="f-email">Email</label>
@@ -282,7 +261,7 @@ tr:hover td{background:rgba(255,255,255,0.02);}
         <button class="btn-signin" type="submit" id="signin-btn">Sign In</button>
       </form>
       <div style="text-align:center;margin-top:16px;">
-        <button type="button" onclick="showScreen('forgot')" style="background:none;border:none;color:var(--muted);font-family:'Outfit',sans-serif;font-size:13px;cursor:pointer;padding:0;">Forgot your password?</button>
+        <button type="button" onclick="showScreen('forgot')" style="background:none;border:none;color:var(--muted);font-family:'Outfit',sans-serif;font-size:13px;cursor:pointer;padding:8px 0;min-height:44px;">Forgot your password?</button>
       </div>
       <div class="login-footer">
         <span>Need access? </span>
@@ -294,8 +273,8 @@ tr:hover td{background:rgba(255,255,255,0.02);}
 </div>
 
 <!-- ══════ FORGOT PASSWORD ══════ -->
-<div id="forgot-screen" style="display:none;min-height:100vh;align-items:center;justify-content:center;padding:40px 20px;">
-  <div style="width:100%;max-width:420px;">
+<div id="forgot-screen">
+  <div class="login-wrap">
     <div class="login-logo">
       <img src="/images/logo-dark-alt.png" alt="Vision Performance Inc." onerror="this.style.display='none'">
       <span class="login-label">Client Portal</span>
@@ -303,25 +282,25 @@ tr:hover td{background:rgba(255,255,255,0.02);}
     <div class="login-card">
       <div class="login-title">Reset Password</div>
       <div class="login-sub">Enter your email and we'll send you a reset link.</div>
-      <div class="login-error" id="forgot-error" role="alert"></div>
+      <div class="login-error" id="forgot-error" role="alert" aria-live="assertive"></div>
       <div id="forgot-success" style="display:none;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);border-radius:8px;padding:11px 14px;margin-bottom:18px;color:#22c55e;font-size:13px;font-weight:600;"></div>
-      <form onsubmit="doForgot(event)">
+      <form onsubmit="doForgot(event)" novalidate>
         <div class="field-group">
           <label class="field-label" for="forgot-email">Email</label>
           <input class="field-input" type="email" id="forgot-email" placeholder="you@company.com" required autocomplete="email">
         </div>
-        <button class="btn-signin" type="submit" id="forgot-btn">Send Reset Link</button>
+        <button class="btn-signin" type="submit">Send Reset Link</button>
       </form>
       <div style="text-align:center;margin-top:20px;">
-        <button onclick="showScreen('login')" style="background:none;border:none;color:var(--muted);font-family:'Outfit',sans-serif;font-size:13px;cursor:pointer;">← Back to Sign In</button>
+        <button onclick="showScreen('login')" style="background:none;border:none;color:var(--muted);font-family:'Outfit',sans-serif;font-size:13px;cursor:pointer;padding:8px 0;min-height:44px;">← Back to Sign In</button>
       </div>
     </div>
   </div>
 </div>
 
 <!-- ══════ RESET PASSWORD ══════ -->
-<div id="reset-screen" style="display:none;min-height:100vh;align-items:center;justify-content:center;padding:40px 20px;">
-  <div style="width:100%;max-width:420px;">
+<div id="reset-screen">
+  <div class="login-wrap">
     <div class="login-logo">
       <img src="/images/logo-dark-alt.png" alt="Vision Performance Inc." onerror="this.style.display='none'">
       <span class="login-label">Client Portal</span>
@@ -329,9 +308,9 @@ tr:hover td{background:rgba(255,255,255,0.02);}
     <div class="login-card">
       <div class="login-title">Choose New Password</div>
       <div class="login-sub">Enter a new password for your account.</div>
-      <div class="login-error" id="reset-error" role="alert"></div>
+      <div class="login-error" id="reset-error" role="alert" aria-live="assertive"></div>
       <div id="reset-success" style="display:none;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);border-radius:8px;padding:11px 14px;margin-bottom:18px;color:#22c55e;font-size:13px;font-weight:600;"></div>
-      <form onsubmit="doReset(event)">
+      <form onsubmit="doReset(event)" novalidate>
         <div class="field-group">
           <label class="field-label" for="reset-pass">New Password</label>
           <input class="field-input" type="password" id="reset-pass" placeholder="Min. 8 characters" required minlength="8" autocomplete="new-password">
@@ -340,7 +319,7 @@ tr:hover td{background:rgba(255,255,255,0.02);}
           <label class="field-label" for="reset-confirm">Confirm Password</label>
           <input class="field-input" type="password" id="reset-confirm" placeholder="Repeat password" required minlength="8" autocomplete="new-password">
         </div>
-        <button class="btn-signin" type="submit" id="reset-btn">Set New Password</button>
+        <button class="btn-signin" type="submit">Set New Password</button>
       </form>
     </div>
   </div>
@@ -350,16 +329,18 @@ tr:hover td{background:rgba(255,255,255,0.02);}
 <div id="dashboard-screen">
   <div class="dash-topbar">
     <div class="dash-topbar-left">
-      <a href="/" style="display:flex;align-items:center;flex-shrink:0;"><img src="/images/logo-dark-alt.png" alt="Vision Performance" style="height:44px;width:auto;display:block;"></a>
-      <div class="dash-tabs" role="tablist">
-        <button class="dtab active" role="tab" aria-selected="true"  onclick="showTab('dashboard',this)">Dashboard</button>
-        <button class="dtab"        role="tab" aria-selected="false" onclick="showTab('employees',this)">Employees</button>
-        <button class="dtab"        role="tab" aria-selected="false" onclick="showTab('orders',this)">Orders</button>
-        <button class="dtab"        role="tab" aria-selected="false" onclick="showTab('compliance',this)">Compliance</button>
-      </div>
+      <a href="/" aria-label="Vision Performance — back to website" style="display:flex;align-items:center;flex-shrink:0;">
+        <img src="/images/logo-dark-alt.png" alt="Vision Performance" style="height:44px;width:auto;display:block;">
+      </a>
+      <nav class="dash-tabs" role="tablist" aria-label="Portal sections">
+        <button id="dtab-dashboard"  class="dtab" role="tab" data-tab="dashboard"  aria-selected="false" onclick="showTab('dashboard')">Dashboard</button>
+        <button id="dtab-employees"  class="dtab" role="tab" data-tab="employees"  aria-selected="false" onclick="showTab('employees')">Employees</button>
+        <button id="dtab-orders"     class="dtab" role="tab" data-tab="orders"     aria-selected="false" onclick="showTab('orders')">Orders</button>
+        <button id="dtab-compliance" class="dtab" role="tab" data-tab="compliance" aria-selected="false" onclick="showTab('compliance')">Compliance</button>
+      </nav>
     </div>
     <div class="dash-topbar-right">
-      <div class="user-info">
+      <div class="user-info" aria-hidden="true">
         <div class="user-name" id="user-name"></div>
         <div class="user-company" id="user-company"></div>
       </div>
@@ -370,7 +351,7 @@ tr:hover td{background:rgba(255,255,255,0.02);}
   <div class="dash-body">
 
     <!-- DASHBOARD TAB -->
-    <div class="tab-panel active" id="tab-dashboard" role="tabpanel">
+    <div class="tab-panel" id="tab-dashboard" role="tabpanel" aria-labelledby="dtab-dashboard">
       <div class="section-title">Program Dashboard</div>
       <div class="section-sub">Real-time overview of your corporate vision program</div>
       <div class="stats-grid">
@@ -382,11 +363,16 @@ tr:hover td{background:rgba(255,255,255,0.02);}
       <div class="dash-card">
         <div class="dash-card-hd">
           <span class="dash-card-title">Recent Orders</span>
-          <button class="dash-card-link" onclick="showTab('orders',document.querySelectorAll('.dtab')[2])">View All →</button>
+          <button class="dash-card-link" onclick="showTab('orders')">View All →</button>
         </div>
         <div class="tbl-wrap">
           <table>
-            <thead><tr><th>Employee</th><th>Frame / Product</th><th>Date</th><th>Status</th></tr></thead>
+            <thead><tr>
+              <th>Employee</th>
+              <th class="mob-hide">Frame / Product</th>
+              <th class="mob-hide">Date</th>
+              <th>Status</th>
+            </tr></thead>
             <tbody id="recent-orders-body"><tr><td colspan="4" class="state-msg">Loading…</td></tr></tbody>
           </table>
         </div>
@@ -394,7 +380,7 @@ tr:hover td{background:rgba(255,255,255,0.02);}
     </div>
 
     <!-- EMPLOYEES TAB -->
-    <div class="tab-panel" id="tab-employees" role="tabpanel">
+    <div class="tab-panel" id="tab-employees" role="tabpanel" aria-labelledby="dtab-employees">
       <div class="section-title">Employees</div>
       <div class="section-sub">Manage enrolled employees and eligibility</div>
       <div class="filter-bar">
@@ -403,7 +389,13 @@ tr:hover td{background:rgba(255,255,255,0.02);}
       <div class="dash-card">
         <div class="tbl-wrap">
           <table>
-            <thead><tr><th>Name</th><th>Department</th><th>Job Title</th><th>Enrolled</th><th>Eligibility</th></tr></thead>
+            <thead><tr>
+              <th>Name</th>
+              <th class="mob-hide">Department</th>
+              <th class="mob-hide">Job Title</th>
+              <th class="mob-hide">Enrolled</th>
+              <th>Eligibility</th>
+            </tr></thead>
             <tbody id="employees-body"><tr><td colspan="5" class="state-msg">Loading…</td></tr></tbody>
           </table>
         </div>
@@ -411,7 +403,7 @@ tr:hover td{background:rgba(255,255,255,0.02);}
     </div>
 
     <!-- ORDERS TAB -->
-    <div class="tab-panel" id="tab-orders" role="tabpanel">
+    <div class="tab-panel" id="tab-orders" role="tabpanel" aria-labelledby="dtab-orders">
       <div class="section-title">Order History</div>
       <div class="section-sub">Full order history for your program</div>
       <div class="filter-bar">
@@ -426,7 +418,13 @@ tr:hover td{background:rgba(255,255,255,0.02);}
       <div class="dash-card">
         <div class="tbl-wrap">
           <table>
-            <thead><tr><th>Employee</th><th>Frame / Product</th><th>Compliance Type</th><th>Date</th><th>Status</th></tr></thead>
+            <thead><tr>
+              <th>Employee</th>
+              <th class="mob-hide">Frame / Product</th>
+              <th class="mob-hide">Compliance Type</th>
+              <th class="mob-hide">Date</th>
+              <th>Status</th>
+            </tr></thead>
             <tbody id="orders-body"><tr><td colspan="5" class="state-msg">Loading…</td></tr></tbody>
           </table>
         </div>
@@ -434,7 +432,7 @@ tr:hover td{background:rgba(255,255,255,0.02);}
     </div>
 
     <!-- COMPLIANCE TAB -->
-    <div class="tab-panel" id="tab-compliance" role="tabpanel">
+    <div class="tab-panel" id="tab-compliance" role="tabpanel" aria-labelledby="dtab-compliance">
       <div class="section-title">Compliance Documents</div>
       <div class="section-sub">Certificates and compliance records for your program</div>
       <div class="comp-grid" id="comp-grid" style="display:none;"></div>
@@ -446,360 +444,6 @@ tr:hover td{background:rgba(255,255,255,0.02);}
   </div>
 </div>
 
-<script>
-let user       = null;
-let empCache   = null;
-let ordCache   = null;
-let compCache  = null;
-let submitting = false;
-
-// ── SCREEN SWITCHER ──
-function showScreen(name) {
-  ['login-screen','forgot-screen','reset-screen'].forEach(id => {
-    const el = document.getElementById(id);
-    el.style.display = 'none';
-  });
-  const target = document.getElementById(name + '-screen');
-  target.style.display = 'flex';
-}
-
-// ── SESSION RESTORE + TOKEN CHECK ──
-(async () => {
-  const params = new URLSearchParams(window.location.search);
-  const token  = params.get('token');
-  if (token) {
-    window.history.replaceState({}, '', '/portal');
-    document.getElementById('reset-screen').dataset.token = token;
-    showScreen('reset');
-    return;
-  }
-  try {
-    const r = await fetch('/api/portal/me', { credentials: 'same-origin' });
-    if (r.ok) { const d = await r.json(); user = d.user; showDashboard(); return; }
-  } catch {}
-  // Not authenticated — show login
-  document.getElementById('login-screen').style.display = 'flex';
-})();
-
-// ── PASSWORD TOGGLE ──
-function togglePassword() {
-  const input = document.getElementById('f-pass');
-  const btn   = document.getElementById('pw-toggle');
-  const show  = input.type === 'password';
-  input.type  = show ? 'text' : 'password';
-  btn.textContent = show ? '🙈' : '👁';
-  btn.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
-}
-
-// ── LOGIN ──
-async function doLogin(e) {
-  e.preventDefault();
-  if (submitting) return;
-  submitting = true;
-  const btn   = document.getElementById('signin-btn');
-  const err   = document.getElementById('login-error');
-  const email = document.getElementById('f-email').value.trim();
-  const pass  = document.getElementById('f-pass').value;
-  btn.disabled = true;
-  btn.textContent = 'Signing in…';
-  err.style.display = 'none';
-  try {
-    const r = await fetch('/api/portal/login', {
-      method: 'POST',
-      credentials: 'same-origin',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password: pass }),
-    });
-    const d = await r.json();
-    if (!r.ok) {
-      err.textContent = d.error || 'Login failed. Please try again.';
-      err.style.display = '';
-      btn.disabled = false;
-      btn.textContent = 'Sign In';
-      submitting = false;
-      return;
-    }
-    user = d.user;
-    showDashboard();
-  } catch {
-    err.textContent = 'Network error. Please check your connection and try again.';
-    err.style.display = '';
-    btn.disabled = false;
-    btn.textContent = 'Sign In';
-    submitting = false;
-  }
-}
-
-// ── FORGOT PASSWORD ──
-async function doForgot(e) {
-  e.preventDefault();
-  if (submitting) return;
-  const email = document.getElementById('forgot-email').value.trim();
-  const errEl = document.getElementById('forgot-error');
-  const succEl = document.getElementById('forgot-success');
-  const btn = e.target.querySelector('button[type=submit]');
-  errEl.textContent = '';
-  succEl.style.display = 'none';
-  if (!email) { errEl.textContent = 'Please enter your email address.'; return; }
-  submitting = true;
-  btn.disabled = true;
-  btn.textContent = 'Sending…';
-  try {
-    const r = await fetch('/api/portal/forgot-password', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email }),
-    });
-    // Always show success to prevent email enumeration
-    succEl.textContent = "If that email is registered, you'll receive a reset link shortly.";
-    succEl.style.display = 'block';
-    btn.textContent = 'Sent';
-  } catch {
-    errEl.textContent = 'Network error. Please try again.';
-    btn.disabled = false;
-    btn.textContent = 'Send Reset Link';
-  } finally {
-    submitting = false;
-  }
-}
-
-// ── RESET PASSWORD ──
-async function doReset(e) {
-  e.preventDefault();
-  if (submitting) return;
-  const token = document.getElementById('reset-screen').dataset.token;
-  const pass = document.getElementById('reset-pass').value;
-  const confirm = document.getElementById('reset-confirm').value;
-  const errEl = document.getElementById('reset-error');
-  const succEl = document.getElementById('reset-success');
-  const btn = e.target.querySelector('button[type=submit]');
-  errEl.textContent = '';
-  succEl.style.display = 'none';
-  if (!pass || pass.length < 8) { errEl.textContent = 'Password must be at least 8 characters.'; return; }
-  if (pass !== confirm) { errEl.textContent = 'Passwords do not match.'; return; }
-  if (!token) { errEl.textContent = 'Invalid reset link. Please request a new one.'; return; }
-  submitting = true;
-  btn.disabled = true;
-  btn.textContent = 'Saving…';
-  try {
-    const r = await fetch('/api/portal/reset-password', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token, password: pass }),
-    });
-    const d = await r.json();
-    if (!r.ok) { errEl.textContent = d.error || 'Reset failed.'; btn.disabled = false; btn.textContent = 'Set New Password'; return; }
-    succEl.textContent = 'Password updated! Redirecting to sign in…';
-    succEl.style.display = 'block';
-    btn.textContent = 'Done';
-    setTimeout(() => showScreen('login'), 2000);
-  } catch {
-    errEl.textContent = 'Network error. Please try again.';
-    btn.disabled = false;
-    btn.textContent = 'Set New Password';
-  } finally {
-    submitting = false;
-  }
-}
-
-// ── LOGOUT ──
-async function doLogout() {
-  try {
-    await fetch('/api/portal/logout', { method: 'POST', credentials: 'same-origin' });
-  } catch { /* always redirect even if request fails */ }
-  window.location.href = '/';
-}
-
-// ── SHOW DASHBOARD ──
-function showDashboard() {
-  document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('dashboard-screen').style.display = 'flex';
-  document.getElementById('user-name').textContent    = user.name  || user.email;
-  document.getElementById('user-company').textContent = user.company;
-  document.getElementById('st-year').textContent = new Date().getFullYear();
-  const validTabs = ['dashboard', 'employees', 'orders', 'compliance'];
-  const hash = window.location.hash.replace('#', '');
-  showTab(validTabs.includes(hash) ? hash : 'dashboard');
-}
-
-// ── TABS ──
-function showTab(name, btn) {
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.dtab').forEach(b => {
-    b.classList.remove('active');
-    b.setAttribute('aria-selected', 'false');
-  });
-  document.getElementById('tab-' + name).classList.add('active');
-  if (btn) { btn.classList.add('active'); btn.setAttribute('aria-selected', 'true'); }
-  else {
-    const match = [...document.querySelectorAll('.dtab')].find(b => b.getAttribute('onclick').includes("'" + name + "'"));
-    if (match) { match.classList.add('active'); match.setAttribute('aria-selected', 'true'); }
-  }
-  document.title = name.charAt(0).toUpperCase() + name.slice(1) + ' — VPI Client Portal';
-  history.replaceState(null, '', '/portal#' + name);
-  if (name === 'dashboard')                loadDashboard();
-  if (name === 'employees'  && !empCache)  loadEmployees();
-  if (name === 'orders'     && !ordCache)  loadOrders();
-  if (name === 'compliance' && !compCache) loadCompliance();
-}
-
-// ── DATA LOADERS ──
-async function loadDashboard() {
-  try {
-    const d = await (await fetch('/api/portal/dashboard', { credentials: 'same-origin' })).json();
-    document.getElementById('st-employees').textContent  = d.totalEmployees  ?? '—';
-    document.getElementById('st-compliance').textContent = d.complianceRate  != null ? d.complianceRate + '%' : '—';
-    document.getElementById('st-pending').textContent    = d.pendingOrders   ?? '—';
-    const tbody = document.getElementById('recent-orders-body');
-    if (!d.recentOrders?.length) {
-      tbody.innerHTML = '<tr><td colspan="4" class="state-msg">No orders yet.</td></tr>';
-      return;
-    }
-    tbody.innerHTML = d.recentOrders.map(o => `<tr>
-      <td style="font-weight:700">${esc(o.employee_name||'—')}</td>
-      <td>${esc(o.frame_name||'—')}</td>
-      <td>${fmtDate(o.order_date)}</td>
-      <td>${statusBadge(o.status)}</td>
-    </tr>`).join('');
-  } catch {
-    document.getElementById('recent-orders-body').innerHTML =
-      '<tr><td colspan="4" class="state-msg">Error loading data. Please refresh.</td></tr>';
-  }
-}
-
-async function loadEmployees() {
-  document.getElementById('employees-body').innerHTML =
-    '<tr><td colspan="5" class="state-msg">Loading…</td></tr>';
-  try {
-    const d = await (await fetch('/api/portal/employees', { credentials: 'same-origin' })).json();
-    empCache = d.employees;
-    renderEmployees(empCache);
-  } catch {
-    document.getElementById('employees-body').innerHTML =
-      '<tr><td colspan="5" class="state-msg">Error loading employees. Please refresh.</td></tr>';
-  }
-}
-
-function renderEmployees(list) {
-  const tbody = document.getElementById('employees-body');
-  if (!list?.length) {
-    tbody.innerHTML = '<tr><td colspan="5" class="state-msg">No employees found.</td></tr>';
-    return;
-  }
-  tbody.innerHTML = list.map(e => `<tr>
-    <td style="font-weight:700">${esc(e.name)}</td>
-    <td>${esc(e.department||'—')}</td>
-    <td>${esc(e.job_title||'—')}</td>
-    <td>${e.enrolled_at ? fmtDate(e.enrolled_at) : '—'}</td>
-    <td>${e.eligible
-      ? '<span class="badge badge-eligible">Eligible</span>'
-      : '<span class="badge badge-ineligible">Ineligible</span>'}</td>
-  </tr>`).join('');
-}
-
-function filterEmployees() {
-  const q = document.getElementById('emp-search').value.toLowerCase();
-  if (!empCache) return;
-  renderEmployees(q
-    ? empCache.filter(e =>
-        `${e.name||''} ${e.department||''} ${e.job_title||''}`.toLowerCase().includes(q))
-    : empCache);
-}
-
-async function loadOrders() {
-  document.getElementById('orders-body').innerHTML =
-    '<tr><td colspan="5" class="state-msg">Loading…</td></tr>';
-  try {
-    const d = await (await fetch('/api/portal/orders', { credentials: 'same-origin' })).json();
-    ordCache = d.orders;
-    renderOrders(ordCache);
-  } catch {
-    document.getElementById('orders-body').innerHTML =
-      '<tr><td colspan="5" class="state-msg">Error loading orders. Please refresh.</td></tr>';
-  }
-}
-
-function renderOrders(list) {
-  const tbody = document.getElementById('orders-body');
-  if (!list?.length) {
-    tbody.innerHTML = '<tr><td colspan="5" class="state-msg">No orders found.</td></tr>';
-    return;
-  }
-  tbody.innerHTML = list.map(o => `<tr>
-    <td style="font-weight:700">${esc(o.employee_name||'—')}</td>
-    <td>${esc(o.frame_name||'—')}</td>
-    <td>${esc(o.compliance_type||'—')}</td>
-    <td>${fmtDate(o.order_date)}</td>
-    <td>${statusBadge(o.status)}</td>
-  </tr>`).join('');
-}
-
-function filterOrders() {
-  const v = document.getElementById('order-filter').value;
-  if (!ordCache) return;
-  renderOrders(v ? ordCache.filter(o => o.status === v) : ordCache);
-}
-
-async function loadCompliance() {
-  document.getElementById('comp-docs-body').innerHTML = '<div class="state-msg">Loading…</div>';
-  try {
-    const d = await (await fetch('/api/portal/compliance', { credentials: 'same-origin' })).json();
-    compCache = d;
-    const grid = document.getElementById('comp-grid');
-    if (d.stats?.length) {
-      grid.style.display = '';
-      grid.innerHTML = d.stats.map(s => `
-        <div class="comp-item">
-          <div class="comp-type">${esc(s.compliance_type||'General')}</div>
-          <div class="comp-count">${s.count}</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:4px;">Completed</div>
-        </div>`).join('');
-    } else {
-      grid.style.display = 'none';
-    }
-    const body = document.getElementById('comp-docs-body');
-    if (!d.docs?.length) {
-      body.innerHTML = '<div class="state-msg">No compliance documents on file.</div>';
-      return;
-    }
-    body.innerHTML = d.docs.map(doc => `
-      <div class="doc-row">
-        <div class="doc-info">
-          <div class="doc-icon">📄</div>
-          <div>
-            <div class="doc-name">${esc(doc.title)}</div>
-            <div class="doc-meta">${esc(doc.doc_type||'Document')} · ${doc.issue_date ? fmtDate(doc.issue_date) : '—'}</div>
-          </div>
-        </div>
-        ${doc.file_url
-          ? `<a class="doc-dl" href="${esc(doc.file_url)}" target="_blank" rel="noopener noreferrer">Download ↗</a>`
-          : '<span style="font-size:12px;color:var(--muted)">On file</span>'}
-      </div>`).join('');
-  } catch {
-    document.getElementById('comp-docs-body').innerHTML =
-      '<div class="state-msg">Error loading documents. Please refresh.</div>';
-  }
-}
-
-// ── HELPERS ──
-function statusBadge(s) {
-  const map = {
-    complete:   'badge-complete',
-    pending:    'badge-pending',
-    processing: 'badge-processing',
-    in_review:  'badge-in_review',
-  };
-  return `<span class="badge ${map[s]||''}">${esc((s||'').replace('_',' '))}</span>`;
-}
-
-function fmtDate(d) {
-  if (!d) return '—';
-  return new Date(d).toLocaleDateString('en-CA', { year:'numeric', month:'short', day:'numeric' });
-}
-
-function esc(s) {
-  return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
-}
-</script>
+<script src="/portal.js"></script>
 </body>
 </html>

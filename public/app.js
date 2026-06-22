@@ -397,3 +397,21 @@ filterShop('all');
 triggerReveals();
 // Restore portal session if user was already logged in
 checkPortalSession();
+
+// ════ COOKIE CONSENT ════
+(function(){
+  if(!localStorage.getItem('cookie-consent')){
+    const b=document.getElementById('cookie-banner');
+    if(b) b.style.display='flex';
+  }
+})();
+function acceptCookies(){
+  localStorage.setItem('cookie-consent','accepted');
+  const b=document.getElementById('cookie-banner');
+  if(b) b.style.display='none';
+}
+function declineCookies(){
+  localStorage.setItem('cookie-consent','declined');
+  const b=document.getElementById('cookie-banner');
+  if(b) b.style.display='none';
+}

@@ -33,7 +33,7 @@ body{
 /* ── LOGIN ── */
 #login-screen{
   min-height:100vh;
-  display:flex;
+  display:none;
   align-items:center;
   justify-content:center;
   padding:40px 20px;
@@ -468,7 +468,6 @@ function showScreen(name) {
   const params = new URLSearchParams(window.location.search);
   const token  = params.get('token');
   if (token) {
-    // Strip token from URL bar without reloading
     window.history.replaceState({}, '', '/portal');
     document.getElementById('reset-screen').dataset.token = token;
     showScreen('reset');
@@ -476,8 +475,10 @@ function showScreen(name) {
   }
   try {
     const r = await fetch('/api/portal/me', { credentials: 'same-origin' });
-    if (r.ok) { const d = await r.json(); user = d.user; showDashboard(); }
+    if (r.ok) { const d = await r.json(); user = d.user; showDashboard(); return; }
   } catch {}
+  // Not authenticated — show login
+  document.getElementById('login-screen').style.display = 'flex';
 })();
 
 // ── PASSWORD TOGGLE ──

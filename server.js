@@ -6,6 +6,7 @@ const session = require('express-session');
 const pgSession = require('connect-pg-simple')(session);
 const path = require('path');
 
+const db = require('./lib/db');
 const contactRoute = require('./routes/contact');
 const mobileRoute = require('./routes/mobile');
 const corporateRoute = require('./routes/corporate');
@@ -38,9 +39,8 @@ app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 if (process.env.DATABASE_URL) {
   app.use(session({
     store: new pgSession({
-      conString: process.env.DATABASE_URL,
+      pool: db,
       tableName: 'session',
-      ssl: { rejectUnauthorized: false },
     }),
     secret: process.env.SESSION_SECRET || 'vpi-dev-secret-change-me',
     resave: false,

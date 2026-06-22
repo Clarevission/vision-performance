@@ -637,6 +637,7 @@ function showTab(name, btn) {
   }
   document.title = name.charAt(0).toUpperCase() + name.slice(1) + ' — VPI Client Portal';
   history.replaceState(null, '', '/portal#' + name);
+  if (name === 'dashboard')                loadDashboard();
   if (name === 'employees'  && !empCache)  loadEmployees();
   if (name === 'orders'     && !ordCache)  loadOrders();
   if (name === 'compliance' && !compCache) loadCompliance();

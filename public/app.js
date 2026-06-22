@@ -396,8 +396,7 @@ if(!localStorage.getItem('vp-privacy-ack')){const cb=document.getElementById('co
 renderTo('homeProdsGrid','all',8);
 filterShop('all');
 triggerReveals();
-// Restore portal session if user was already logged in
-checkPortalSession();
+// Portal is now at /portal — no session check needed on main site
 
 // ════ COOKIE CONSENT ════
 (function(){

@@ -16,22 +16,28 @@ router.post('/', async (req, res) => {
     return res.status(400).json({ error: 'Please enter a valid email address.' });
   }
 
-  const safeName    = escape(trim(name)).slice(0, 120);
-  const safeCompany = escape(trim(company || '')).slice(0, 120);
-  const safeSubject = escape(trim(subject || 'General Enquiry')).slice(0, 200);
-  const safeMessage = escape(trim(message)).slice(0, 4000);
-  const safeEmail   = trim(email).toLowerCase().slice(0, 254);
+  // Raw values for DB storage (trim + length only)
+  const rawName    = trim(name).slice(0, 120);
+  const rawCompany = trim(company || '').slice(0, 120) || null;
+  const rawSubject = trim(subject || 'General Enquiry').slice(0, 200);
+  const rawMessage = trim(message).slice(0, 4000);
+  const rawEmail   = trim(email).toLowerCase().slice(0, 254);
 
-  // Save to DB first — so nothing is lost even if email fails
+  // HTML-escaped values for email templates
+  const safeName    = escape(rawName);
+  const safeCompany = rawCompany ? escape(rawCompany) : null;
+  const safeSubject = escape(rawSubject);
+  const safeMessage = escape(rawMessage);
+  const safeEmail   = rawEmail;
+
   try {
     await db.query(
       `INSERT INTO enquiries (type, name, email, company, subject, message)
        VALUES ('contact', $1, $2, $3, $4, $5)`,
-      [safeName, safeEmail, safeCompany || null, safeSubject, safeMessage]
+      [rawName, rawEmail, rawCompany, rawSubject, rawMessage]
     );
   } catch (dbErr) {
     console.error('Contact DB save error:', dbErr);
-    // Don't block the response — still attempt email
   }
 
   const html = `
@@ -48,17 +54,17 @@ router.post('/', async (req, res) => {
   try {
     await sendMail({
       to: process.env.NOTIFY_EMAIL || 'info@visionperformanceinc.ca',
-      subject: `[Contact] ${safeSubject} — ${safeName}`,
+      subject: `[Contact] ${rawSubject} — ${rawName}`,
       html,
-      text: `Name: ${safeName}\nCompany: ${safeCompany}\nEmail: ${safeEmail}\nSubject: ${safeSubject}\n\n${safeMessage}`,
+      text: `Name: ${rawName}\nCompany: ${rawCompany || ''}\nEmail: ${rawEmail}\nSubject: ${rawSubject}\n\n${rawMessage}`,
     });
     await sendMail({
-      to: safeEmail,
+      to: rawEmail,
       subject: 'We received your message — Vision Performance Inc.',
       html: `<p style="font-family:sans-serif">Hi ${safeName},</p>
              <p style="font-family:sans-serif">Thanks for reaching out. Our team will respond within 1 business day.</p>
              <p style="font-family:sans-serif">— Vision Performance Team</p>`,
-      text: `Hi ${safeName},\n\nThanks for reaching out. Our team will respond within 1 business day.\n\n— Vision Performance Team`,
+      text: `Hi ${rawName},\n\nThanks for reaching out. Our team will respond within 1 business day.\n\n— Vision Performance Team`,
     });
     res.json({ message: "Message sent! We'll respond within 1 business day." });
   } catch (err) {

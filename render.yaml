@@ -10,17 +10,15 @@ services:
         value: production
       - key: PORT
         value: 3000
+      - key: APP_ORIGIN
+        value: https://visionperformanceinc.ca
+      - key: SESSION_SECRET
+        sync: false   # Set in Render dashboard — must be a long random string
+      - key: DATABASE_URL
+        sync: false   # Set in Render dashboard — Neon PostgreSQL connection string
+      - key: RESEND_API_KEY
+        sync: false   # Set in Render dashboard — Resend API key
       - key: NOTIFY_EMAIL
-        sync: false
+        sync: false   # Where form submissions are sent (default: info@visionperformanceinc.ca)
       - key: MAIL_FROM
-        sync: false
-      - key: SMTP_HOST
-        sync: false
-      - key: SMTP_PORT
-        sync: false
-      - key: SMTP_SECURE
-        sync: false
-      - key: SMTP_USER
-        sync: false
-      - key: SMTP_PASS
-        sync: false
+        sync: false   # Resend verified sender address

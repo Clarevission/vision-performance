@@ -44,7 +44,7 @@ function productCardHTML(p,prefix='c'){
   const imgEl=p.photo
     ?'<img src="'+p.photo+'" alt="'+p.name+'" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;">'
     :'<canvas id="'+prefix+p.id+'" width="320" height="320" aria-hidden="true"></canvas>';
-  return`<div class="product-card" role="listitem"><div class="product-img">${imgEl}${p.badge?`<div class="product-badge ${bm[p.badge]||''}">${p.badge==='csa'?'CSA Compliant':p.badge==='new'?'New':'Pro'}</div>`:''}<button class="product-wishlist" onclick="showToast('Saved to wishlist')" aria-label="Add to wishlist">♡</button></div><div class="product-info"><div class="product-collection">${p.col}</div><div class="product-name">${p.name}</div><div class="product-desc">${p.desc}</div><div class="product-footer"><div class="product-price">$${p.price}</div><button class="add-to-cart-btn" onclick="addToCart(${p.id})">Add to Cart</button></div></div></div>`;
+  return`<div class="product-card" role="listitem"><div class="product-img">${imgEl}${p.badge?`<div class="product-badge ${bm[p.badge]||''}">${p.badge==='csa'?'CSA Compliant':p.badge==='new'?'New':'Pro'}</div>`:''}<button class="product-wishlist" onclick="showToast('Wishlist coming soon — contact us to enquire about this frame.')" aria-label="Add to wishlist">♡</button></div><div class="product-info"><div class="product-collection">${p.col}</div><div class="product-name">${p.name}</div><div class="product-desc">${p.desc}</div><div class="product-footer"><div class="product-price">$${p.price}</div><button class="add-to-cart-btn" onclick="addToCart(${p.id})">Add to Cart</button></div></div></div>`;
 }
 function renderTo(id,filter='all',limit=null){
   const el=document.getElementById(id);if(!el)return;
@@ -70,7 +70,7 @@ function addToCart(id){
   const p=allProducts.find(x=>x.id===id);
   const ex=cart.find(x=>x.id===id);
   if(ex)ex.qty++;else cart.push({...p,qty:1});
-  updateCart();showToast(`${p.name} added to cart`);
+  updateCart();saveCart();showToast(`${p.name} added to cart`);
   if(!document.getElementById('cartSidebar').classList.contains('open'))toggleCart();
 }
 function updateCart(){
@@ -84,7 +84,7 @@ function updateCart(){
   body.innerHTML=cart.map(item=>`<div class="cart-line"><div class="cart-line-img">${item.photo?'<img src="'+item.photo+'" alt="'+item.name+'" style="width:100%;height:100%;object-fit:cover;border-radius:12px;display:block;">':'<canvas id="cc'+item.id+'" width="160" height="120" aria-hidden="true" style="border-radius:12px;"></canvas>'}</div><div><div class="cart-line-name">${item.name}</div><div class="cart-line-col">${item.col}</div><div class="cart-qty"><button class="qty-b" onclick="changeQty(${item.id},-1)" aria-label="Decrease quantity">−</button><span class="qty-n">${item.qty}</span><button class="qty-b" onclick="changeQty(${item.id},1)" aria-label="Increase quantity">+</button></div></div><div class="cart-line-price">$${(item.price*item.qty).toFixed(2)}</div></div>`).join('');
   cart.forEach(item=>setTimeout(()=>{const c=document.getElementById(`cc${item.id}`);if(c)drawFrame(c,item.shape,item.col);},30));
 }
-function changeQty(id,d){const i=cart.findIndex(x=>x.id===id);cart[i].qty+=d;if(cart[i].qty<=0)cart.splice(i,1);updateCart();}
+function changeQty(id,d){const i=cart.findIndex(x=>x.id===id);cart[i].qty+=d;if(cart[i].qty<=0)cart.splice(i,1);updateCart();saveCart();}
 function toggleCart(){document.getElementById('cartSidebar').classList.toggle('open');document.getElementById('cartOverlay').classList.toggle('open');}
 
 // ════ NAVIGATION ════
@@ -94,9 +94,8 @@ function navigate(page,collection=null){
     p.classList.toggle('active',isActive);
     p.setAttribute('aria-hidden',String(!isActive));
   });
-  // Hide navbar on portal page so login is fully fullscreen
-  const navbar=document.getElementById('navbar');
-  if(navbar) navbar.style.display=page==='portal'?'none':'';
+    const navbar=document.getElementById('navbar');
+  if(navbar) navbar.style.display='';
   document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('nav-active'));
   const target=document.getElementById(`page-${page}`);
   if(target){window.scrollTo({top:0,behavior:'smooth'});}
@@ -148,6 +147,14 @@ async function submitForm(type){
   const data={};
   const map=fields[type]||{};
   for(const[k,sel]of Object.entries(map)){const el=document.querySelector(sel);if(el)data[k]=el.value;}
+  // Client-side preflight for appointment exam type
+  if(type==='appointment'&&!data.exam_type){
+    const el=document.getElementById('appt-exam-type');
+    if(el){el.style.outline='2px solid #EF4444';el.focus();setTimeout(()=>el.style.outline='',3000);}
+    showToast('Please select an exam type.');
+    if(btn){btn.disabled=false;btn.innerHTML=orig;}
+    return;
+  }
   try{
     const r=await fetch(`/api/${type}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
     const j=await r.json();
@@ -175,7 +182,7 @@ function toggleMobileNav(){
   document.body.style.overflow=open?'hidden':'';
 }
 // ════ CHAT ════
-const chatReplies={"Get a corporate quote":"Great! I'll connect you with our corporate team. Please fill out our quick form: [Industrial Programs →]","Book mobile clinic":"Sure! Our mobile clinic visits workplaces across Canada. Use the form on the Mobile Clinic page to schedule.","Shop eyewear":"Of course! Browse our collections at the Shop page — we have Professional, Digital Eye, Industrial Safety, and Lunettes ranges."};
+const chatReplies={"Get a corporate quote":"Great! Our corporate team can help. Use the button below to reach the right form.","Book mobile clinic":"Sure! Our mobile clinic visits workplaces across Canada. Use the form on the Mobile Clinic page to schedule.","Shop eyewear":"Of course! Browse our collections at the Shop page — we have Professional, Digital Eye, Industrial Safety, and Lunettes ranges."};
 function toggleChat(){
   const open=document.getElementById('chatPanel').classList.toggle('open');
   if(open){const notif=document.querySelector('.chat-notif');if(notif)notif.style.display='none';}
@@ -203,7 +210,7 @@ document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el=>reve
 // ════ FOOTER INJECTION ════
 function injectFooters(){
   const tpl=document.getElementById('footerTemplate');
-  ['home','shop','mobile','industrial','book','about','contact','learn','portal','privacy'].forEach(page=>{
+  ['home','shop','mobile','industrial','book','about','contact','learn','privacy'].forEach(page=>{
     const el=document.getElementById(`footer-${page}`);
     if(el&&tpl){el.appendChild(tpl.content.cloneNode(true));}
   });
@@ -222,181 +229,23 @@ document.addEventListener('keydown',e=>{
   }
 });
 
-// ════ CLIENT PORTAL ════
-let portalUser = null;
-let portalEmployeesCache = null;
-let portalOrdersCache = null;
-
-async function portalLogin(e) {
-  e.preventDefault();
-  const btn = document.getElementById('portal-login-btn');
-  const errEl = document.getElementById('portal-login-error');
-  const email = document.getElementById('portal-email').value;
-  const password = document.getElementById('portal-password').value;
-  btn.textContent = 'Signing in…'; btn.disabled = true;
-  errEl.style.display = 'none';
-  try {
-    const res = await fetch('/api/portal/login', {
-      method: 'POST', headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ email, password }), credentials: 'same-origin'
-    });
-    const data = await res.json();
-    if (!res.ok) { errEl.textContent = data.error || 'Login failed'; errEl.style.display = 'block'; return; }
-    portalUser = data.user;
-    showPortalDashboard();
-  } catch { errEl.textContent = 'Network error. Please try again.'; errEl.style.display = 'block'; }
-  finally { btn.textContent = 'Sign In to Portal'; btn.disabled = false; }
-}
-
-async function portalLogout() {
-  await fetch('/api/portal/logout', { method: 'POST', credentials: 'same-origin' });
-  portalUser = null; portalEmployeesCache = null; portalOrdersCache = null;
-  document.getElementById('portal-login-screen').style.display = '';
-  document.getElementById('portal-dashboard-screen').style.display = 'none';
-  document.getElementById('portal-email').value = '';
-  document.getElementById('portal-password').value = '';
-  // Keep navbar hidden — still on portal page (login screen)
-}
-
-function showPortalDashboard() {
-  const navbar = document.getElementById('navbar');
-  if (navbar) navbar.style.display = 'none';
-  document.getElementById('portal-login-screen').style.display = 'none';
-  document.getElementById('portal-dashboard-screen').style.display = '';
-  document.getElementById('portal-user-name').textContent = portalUser.name || portalUser.email;
-  document.getElementById('portal-company-name').textContent = portalUser.company;
-  showPortalTab('dashboard', document.querySelector('.ptab'));
-  loadPortalDashboard();
-}
-
-async function checkPortalSession() {
-  try {
-    const res = await fetch('/api/portal/me', { credentials: 'same-origin' });
-    if (res.ok) { const d = await res.json(); portalUser = d.user; showPortalDashboard(); }
-  } catch {}
-}
-
-function showPortalTab(tab, btn) {
-  document.querySelectorAll('.portal-tab-content').forEach(el => el.style.display = 'none');
-  document.querySelectorAll('.ptab').forEach(b => b.classList.remove('active'));
-  document.getElementById('ptab-' + tab).style.display = '';
-  if (btn) btn.classList.add('active');
-  if (tab === 'employees' && !portalEmployeesCache) loadPortalEmployees();
-  if (tab === 'orders' && !portalOrdersCache) loadPortalOrders();
-  if (tab === 'compliance') loadPortalCompliance();
-}
-
-function statusBadge(s) {
-  const labels = { complete:'✓ Complete', pending:'⏳ Pending', processing:'⚙ Processing', in_review:'🔍 In Review' };
-  return '<span class="pbadge pbadge-' + s + '">' + (labels[s]||s) + '</span>';
-}
-
-function fmtDate(d) {
-  if (!d) return '—';
-  return new Date(d).toLocaleDateString('en-CA', { month:'short', day:'numeric', year:'numeric' });
-}
-
-async function loadPortalDashboard() {
-  document.getElementById('dashboard-orders-body').innerHTML = '<div class="portal-loading">Loading…</div>';
-  try {
-    const res = await fetch('/api/portal/dashboard', { credentials: 'same-origin' });
-    const d = await res.json();
-    document.getElementById('stat-employees').textContent = d.totalEmployees ?? '—';
-    document.getElementById('stat-compliance').textContent = d.complianceRate != null ? d.complianceRate + '%' : '—';
-    document.getElementById('stat-pending').textContent = d.pendingOrders ?? '—';
-    const rows = d.recentOrders || [];
-    if (!rows.length) { document.getElementById('dashboard-orders-body').innerHTML = '<div class="portal-empty">No orders yet.</div>'; return; }
-    document.getElementById('dashboard-orders-body').innerHTML = rows.map(function(o) {
-      return '<div class="ptable-row"><div class="ptable-cell-name">' + (o.employee_name||'—') + '</div><div class="ptable-cell">' + (o.frame_name||'—') + '</div><div class="ptable-cell">' + fmtDate(o.order_date) + '</div><div class="ptable-cell">' + (o.compliance_type||'—') + '</div><div>' + statusBadge(o.status) + '</div></div>';
-    }).join('');
-  } catch { document.getElementById('dashboard-orders-body').innerHTML = '<div class="portal-empty">Failed to load data.</div>'; }
-}
-
-async function loadPortalEmployees() {
-  document.getElementById('employees-body').innerHTML = '<div class="portal-loading">Loading…</div>';
-  try {
-    const res = await fetch('/api/portal/employees', { credentials: 'same-origin' });
-    const d = await res.json();
-    portalEmployeesCache = d.employees || [];
-    renderEmployees(portalEmployeesCache);
-  } catch { document.getElementById('employees-body').innerHTML = '<div class="portal-empty">Failed to load employees.</div>'; }
-}
-
-function renderEmployees(list) {
-  const body = document.getElementById('employees-body');
-  if (!list.length) { body.innerHTML = '<div class="portal-empty">No employees enrolled yet.</div>'; return; }
-  body.innerHTML = list.map(function(e) {
-    return '<div class="ptable-row" style="grid-template-columns:2fr 1.5fr 1.5fr 1fr 1fr;"><div class="ptable-cell-name">' + e.name + '</div><div class="ptable-cell">' + (e.department||'—') + '</div><div class="ptable-cell">' + (e.job_title||'—') + '</div><div class="ptable-cell">' + fmtDate(e.enrolled_at) + '</div><div><span class="pbadge ' + (e.eligible ? 'pbadge-eligible' : 'pbadge-ineligible') + '">' + (e.eligible ? '✓ Eligible' : 'Ineligible') + '</span></div></div>';
-  }).join('');
-}
-
-function filterEmployees() {
-  if (!portalEmployeesCache) return;
-  const q = document.getElementById('emp-search').value.toLowerCase();
-  renderEmployees(portalEmployeesCache.filter(function(e) {
-    return e.name.toLowerCase().includes(q) || (e.department||'').toLowerCase().includes(q) || (e.job_title||'').toLowerCase().includes(q);
-  }));
-}
-
-async function loadPortalOrders() {
-  document.getElementById('orders-body').innerHTML = '<div class="portal-loading">Loading…</div>';
-  try {
-    const res = await fetch('/api/portal/orders', { credentials: 'same-origin' });
-    const d = await res.json();
-    portalOrdersCache = d.orders || [];
-    renderOrders(portalOrdersCache);
-  } catch { document.getElementById('orders-body').innerHTML = '<div class="portal-empty">Failed to load orders.</div>'; }
-}
-
-function renderOrders(list) {
-  const body = document.getElementById('orders-body');
-  if (!list.length) { body.innerHTML = '<div class="portal-empty">No orders found.</div>'; return; }
-  body.innerHTML = list.map(function(o) {
-    return '<div class="ptable-row" style="grid-template-columns:2fr 1.5fr 1.5fr 1fr 1fr;"><div class="ptable-cell-name">' + (o.employee_name||'—') + '</div><div class="ptable-cell">' + (o.frame_name||'—') + '</div><div class="ptable-cell">' + (o.lens_type||'—') + '</div><div class="ptable-cell">' + fmtDate(o.order_date) + '</div><div>' + statusBadge(o.status) + '</div></div>';
-  }).join('');
-}
-
-function filterOrders() {
-  if (!portalOrdersCache) return;
-  const f = document.getElementById('order-status-filter').value;
-  renderOrders(f ? portalOrdersCache.filter(function(o){ return o.status === f; }) : portalOrdersCache);
-}
-
-async function loadPortalCompliance() {
-  document.getElementById('compliance-docs-body').innerHTML = '<div class="portal-loading">Loading…</div>';
-  document.getElementById('compliance-summary-body').innerHTML = '';
-  try {
-    const res = await fetch('/api/portal/compliance', { credentials: 'same-origin' });
-    const d = await res.json();
-    const docs = d.docs || [];
-    const stats = d.stats || [];
-    const typeIcons = { certificate:'📋', wcb_report:'🛡️', safety_doc:'⚠️', report:'📊' };
-    if (!docs.length) {
-      document.getElementById('compliance-docs-body').innerHTML = '<div class="portal-empty">No documents available yet. Contact Vision Performance to request compliance documentation.</div>';
-    } else {
-      document.getElementById('compliance-docs-body').innerHTML = docs.map(function(doc) {
-        return '<div class="pdoc-row"><div style="display:flex;align-items:center;gap:16px;"><div class="pdoc-icon">' + (typeIcons[doc.doc_type]||'📄') + '</div><div><div style="font-size:14px;font-weight:600;color:white;margin-bottom:4px;">' + doc.title + '</div><div style="font-size:12px;color:var(--text-muted);">Issued ' + fmtDate(doc.issue_date) + ' · ' + (doc.doc_type||'document').replace('_',' ') + '</div></div></div>' + (doc.file_url ? '<a class="pdoc-download" href="' + doc.file_url + '" target="_blank" rel="noopener">⬇ Download</a>' : '<span style="font-size:12px;color:var(--text-muted);font-family:Outfit,sans-serif;">Contact VPI to request</span>') + '</div>';
-      }).join('');
-    }
-    if (stats.length) {
-      document.getElementById('compliance-summary-body').innerHTML = stats.map(function(s) {
-        return '<div style="display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid rgba(255,255,255,0.05);"><div style="font-size:14px;color:white;font-weight:600;">' + (s.compliance_type||'Standard') + '</div><div style="font-family:Outfit,sans-serif;font-size:13px;color:var(--text-muted);">' + s.count + ' completed order' + (s.count!=1?'s':'') + '</div></div>';
-      }).join('');
-    } else {
-      document.getElementById('compliance-summary-body').innerHTML = '<div class="portal-empty">No completed orders yet.</div>';
-    }
-  } catch { document.getElementById('compliance-docs-body').innerHTML = '<div class="portal-empty">Failed to load compliance data.</div>'; }
-}
+// ════ CART PERSISTENCE ════
+function saveCart(){try{localStorage.setItem('vp-cart',JSON.stringify(cart));}catch{}}
+function loadCart(){try{const s=localStorage.getItem('vp-cart');if(s)cart=JSON.parse(s);}catch{cart=[];}}
 
 // ════ INIT ════
 // Set aria-hidden on all inactive pages at load so screen readers only see page-home
 document.querySelectorAll('.page:not(.active)').forEach(p=>p.setAttribute('aria-hidden','true'));
 // Show PIPEDA privacy notice if not yet acknowledged
 if(!localStorage.getItem('vp-privacy-ack')){const cb=document.getElementById('cookieBar');if(cb)cb.style.display='flex';}
+// Restore cart from localStorage
+loadCart();
 renderTo('homeProdsGrid','all',8);
 filterShop('all');
+updateCart();
 triggerReveals();
-// Portal is now at /portal — no session check needed on main site
+// Set appointment date minimum to today
+(function(){const d=document.getElementById('appt-date');if(d)d.min=new Date().toISOString().split('T')[0];})();
 
 // ════ COOKIE CONSENT ════
 (function(){

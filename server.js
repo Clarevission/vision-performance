@@ -46,8 +46,9 @@ const apiLimiter = rateLimit({
 });
 app.use('/api', apiLimiter);
 
-// Stricter limit for login
+// Stricter limit for login endpoints
 app.use('/api/portal/login', rateLimit({ windowMs: 15 * 60 * 1000, max: 10, message: { error: 'Too many login attempts.' } }));
+app.use('/api/staff/login',  rateLimit({ windowMs: 15 * 60 * 1000, max: 10, message: { error: 'Too many login attempts.' } }));
 
 // Reject cross-origin form submissions
 const ALLOWED_ORIGINS = [

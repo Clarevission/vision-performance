@@ -54,15 +54,26 @@ function renderTo(id,filter='all',limit=null){
   prods.forEach(p=>setTimeout(()=>{const c=document.getElementById(`h${p.id}`);if(c)drawFrame(c,p.shape,p.col);},30));
 }
 function filterHomeProds(btn,f){document.querySelectorAll('.col-tab').forEach(b=>{b.classList.remove('active');b.setAttribute('aria-selected','false');});btn.classList.add('active');btn.setAttribute('aria-selected','true');renderTo('homeProdsGrid',f,8);}
+let currentShopFilter='all';
+let currentShopSort='featured';
+function applyShopSort(prods){
+  const s=[...prods];
+  if(currentShopSort==='Price: Low to High')s.sort((a,b)=>a.price-b.price);
+  else if(currentShopSort==='Price: High to Low')s.sort((a,b)=>b.price-a.price);
+  else if(currentShopSort==='Newest')s.sort((a,b)=>(b.badge==='new'?1:0)-(a.badge==='new'?1:0));
+  return s;
+}
 function filterShop(f){
+  currentShopFilter=f;
   document.querySelectorAll('.shop-sidebar .sb-links a').forEach(a=>a.classList.remove('sb-active'));
   const ids={all:'sbf-all','Professional Performance':'sbf-pp','Digital Eye Performance':'sbf-dep','Industrial Prescription Safety':'sbf-ips','Lunettes Signature':'sbf-ls','Accessories':'sbf-acc'};
   const el=document.getElementById(ids[f]);if(el)el.classList.add('sb-active');
-  const prods=f==='all'?allProducts:allProducts.filter(p=>p.col===f);
+  const prods=applyShopSort(f==='all'?allProducts:allProducts.filter(p=>p.col===f));
   document.getElementById('shopCount').textContent=prods.length;
   const g=document.getElementById('shopGrid');g.innerHTML=prods.map(p=>productCardHTML(p,'s')).join('');
   prods.forEach(p=>setTimeout(()=>{const c=document.getElementById(`s${p.id}`);if(c)drawFrame(c,p.shape,p.col);},30));
 }
+function sortShop(val){currentShopSort=val;filterShop(currentShopFilter);}
 
 // ════ CART ════
 let cart=[];
@@ -86,6 +97,21 @@ function updateCart(){
 }
 function changeQty(id,d){const i=cart.findIndex(x=>x.id===id);cart[i].qty+=d;if(cart[i].qty<=0)cart.splice(i,1);updateCart();saveCart();}
 function toggleCart(){document.getElementById('cartSidebar').classList.toggle('open');document.getElementById('cartOverlay').classList.toggle('open');}
+function requestQuoteFromCart(){
+  toggleCart();
+  navigate('contact');
+  if(!cart.length)return;
+  setTimeout(()=>{
+    const subEl=document.getElementById('ct-subject');
+    const msgEl=document.getElementById('ct-message');
+    if(subEl)subEl.value='Product Quote Request';
+    if(msgEl){
+      const lines=cart.map(i=>`- ${i.name} (${i.col}) x${i.qty} — $${(i.price*i.qty).toFixed(2)}`);
+      const total=cart.reduce((s,i)=>s+i.price*i.qty,0);
+      msgEl.value=`Hi,\n\nI'd like to request a quote for the following frames:\n\n${lines.join('\n')}\n\nSubtotal: $${total.toFixed(2)}\n\nPlease confirm pricing including prescription lenses and any available volume discounts.`;
+    }
+  },100);
+}
 
 // ════ NAVIGATION ════
 function navigate(page,collection=null){
@@ -144,9 +170,27 @@ async function submitForm(type){
     contact:{name:'#ct-name',company:'#ct-company',email:'#ct-email',subject:'#ct-subject',message:'#ct-message'},
     appointment:{name:'#appt-name',email:'#appt-email',phone:'#appt-phone',exam_type:'#appt-exam-type',preferred_date:'#appt-date',preferred_time:'#appt-time',notes:'#appt-notes'}
   };
+  const requiredFields={
+    mobile:['org','contact','email','address'],
+    corporate:['company','contact','email','phone'],
+    contact:['name','email','message'],
+    appointment:['name','email']
+  };
   const data={};
   const map=fields[type]||{};
   for(const[k,sel]of Object.entries(map)){const el=document.querySelector(sel);if(el)data[k]=el.value;}
+  // Client-side required field validation
+  let valid=true;
+  for(const k of(requiredFields[type]||[])){
+    const el=map[k]?document.querySelector(map[k]):null;
+    if(el&&!el.value.trim()){
+      el.style.outline='2px solid #EF4444';
+      el.addEventListener('input',()=>el.style.outline='',{once:true});
+      if(valid)el.focus();
+      valid=false;
+    }
+  }
+  if(!valid){showToast('Please fill in all required fields.');if(btn){btn.disabled=false;btn.innerHTML=orig;}return;}
   // Client-side preflight for appointment exam type
   if(type==='appointment'&&!data.exam_type){
     const el=document.getElementById('appt-exam-type');
@@ -236,8 +280,6 @@ function loadCart(){try{const s=localStorage.getItem('vp-cart');if(s)cart=JSON.p
 // ════ INIT ════
 // Set aria-hidden on all inactive pages at load so screen readers only see page-home
 document.querySelectorAll('.page:not(.active)').forEach(p=>p.setAttribute('aria-hidden','true'));
-// Show PIPEDA privacy notice if not yet acknowledged
-if(!localStorage.getItem('vp-privacy-ack')){const cb=document.getElementById('cookieBar');if(cb)cb.style.display='flex';}
 // Restore cart from localStorage
 loadCart();
 renderTo('homeProdsGrid','all',8);
@@ -256,11 +298,6 @@ triggerReveals();
 })();
 function acceptCookies(){
   localStorage.setItem('cookie-consent','accepted');
-  const b=document.getElementById('cookie-banner');
-  if(b) b.style.display='none';
-}
-function declineCookies(){
-  localStorage.setItem('cookie-consent','declined');
   const b=document.getElementById('cookie-banner');
   if(b) b.style.display='none';
 }

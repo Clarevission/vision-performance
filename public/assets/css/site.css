@@ -296,7 +296,7 @@ body.nav-open { overflow: hidden; }
 .hero { background: var(--ink); color: var(--on-dark); padding-block: clamp(3rem, 2rem + 5vw, 6.5rem); position: relative; overflow: hidden; }
 .hero__grid { display: grid; gap: var(--s-7); align-items: center; }
 @media (min-width: 1100px) { .hero__grid { grid-template-columns: 1fr 1fr; gap: var(--s-8); } }
-.hero__title { color: var(--white); font-size: clamp(2.25rem, 1.6rem + 3vw, 3.75rem); line-height: 1.06; letter-spacing: -.02em; margin-bottom: var(--s-5); }
+.hero__title { color: var(--white); font-size: clamp(2rem, 1.35rem + 3.2vw, 3.75rem); line-height: 1.06; letter-spacing: -.02em; margin-bottom: var(--s-5); }
 .hero__title span { color: var(--accent-on-dark); }
 .hero__lede { font-size: clamp(1.0625rem, 1rem + .45vw, 1.3125rem); color: var(--on-dark); opacity: .92; max-width: 38rem; }
 .hero .btn-row { margin-top: var(--s-6); }

@@ -1,0 +1,20 @@
+<article class="product-card">
+  <div class="product-card__head">
+    <p class="product-card__endorse">Vision Performance Inc.</p>
+    <h3 class="product-card__name">VPI SafetyOS™</h3>
+    {{> status kind="available"}}
+  </div>
+  <p class="product-card__lede">Health &amp; safety management that runs from the field, on the phones crews already carry. Built for Alberta contractors.</p>
+  <ul class="product-card__features" role="list">
+    <li><svg class="icon icon--sm" aria-hidden="true"><use href="#i-clipboard"/></svg>Audits &amp; compliance, including COR and ISO 45001</li>
+    <li><svg class="icon icon--sm" aria-hidden="true"><use href="#i-alert"/></svg>Incidents, investigations &amp; learning teams</li>
+    <li><svg class="icon icon--sm" aria-hidden="true"><use href="#i-hardhat"/></svg>Hazard assessments, work permits &amp; lockout/tagout</li>
+    <li><svg class="icon icon--sm" aria-hidden="true"><use href="#i-users"/></svg>Training, competency &amp; contractor management</li>
+    <li><svg class="icon icon--sm" aria-hidden="true"><use href="#i-bolt"/></svg>Emergency alerts, drills &amp; readiness</li>
+  </ul>
+  <div class="product-card__actions">
+    <a class="btn btn--primary" href="https://safetyos.visionperformanceinc.ca/" data-track="safetyos_click" data-track-location="{{$loc}}">Explore SafetyOS<span class="visually-hidden"> (opens the SafetyOS product site)</span><svg class="icon icon--sm" aria-hidden="true"><use href="#i-external"/></svg></a>
+    {{#$summary}}<a class="link-cta" href="/technology/safetyos">SafetyOS at a glance<svg class="icon icon--xs" aria-hidden="true"><use href="#i-arrow"/></svg></a>{{/$summary}}
+  </div>
+  <p class="product-card__domain">safetyos.visionperformanceinc.ca</p>
+</article>

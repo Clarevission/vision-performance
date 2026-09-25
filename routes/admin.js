@@ -1,5 +1,6 @@
 // Admin API — protected by ADMIN_KEY env var
 // Used by VPI staff to manage clients, employees, and orders
+const crypto = require('crypto');
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const router = express.Router();
@@ -8,8 +9,12 @@ const fs = require('fs');
 const path = require('path');
 
 function requireAdmin(req, res, next) {
-  const key = req.headers['x-admin-key'] || req.body?.adminKey;
-  if (!key || key !== process.env.ADMIN_KEY) return res.status(403).json({ error: 'Forbidden' });
+  const key = String(req.headers['x-admin-key'] || req.body?.adminKey || '');
+  const expected = process.env.ADMIN_KEY || '';
+  // Constant-time comparison; an unset ADMIN_KEY rejects everything.
+  const ok = expected.length > 0 && key.length === expected.length &&
+    crypto.timingSafeEqual(Buffer.from(key), Buffer.from(expected));
+  if (!ok) return res.status(403).json({ error: 'Forbidden' });
   next();
 }
 

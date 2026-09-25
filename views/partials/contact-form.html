@@ -1,0 +1,65 @@
+<form class="form" id="contact-form" action="/api/contact" method="post" data-contact-form>
+  <div class="form__errors" data-error-summary tabindex="-1" hidden>
+    <h2 class="form__errors-title">Please check the following</h2>
+    <ul></ul>
+  </div>
+  <div class="form__grid">
+    <div class="field">
+      <label for="cf-name">Full name <span class="field__req">(required)</span></label>
+      <input id="cf-name" name="name" type="text" autocomplete="name" maxlength="120" required>
+      <p class="field__error" id="cf-name-error" hidden></p>
+    </div>
+    <div class="field">
+      <label for="cf-email">Work email <span class="field__req">(required)</span></label>
+      <input id="cf-email" name="email" type="email" autocomplete="email" maxlength="254" required>
+      <p class="field__error" id="cf-email-error" hidden></p>
+    </div>
+    <div class="field">
+      <label for="cf-org">Organization</label>
+      <input id="cf-org" name="organization" type="text" autocomplete="organization" maxlength="120">
+    </div>
+    <div class="field">
+      <label for="cf-role">Role</label>
+      <input id="cf-role" name="role" type="text" autocomplete="organization-title" maxlength="120" placeholder="e.g. HSE Manager">
+    </div>
+    <div class="field">
+      <label for="cf-phone">Phone <span class="field__opt">(optional)</span></label>
+      <input id="cf-phone" name="phone" type="tel" autocomplete="tel" maxlength="20" inputmode="tel">
+      <p class="field__error" id="cf-phone-error" hidden></p>
+    </div>
+    <div class="field">
+      <label for="cf-topic">What is this about? <span class="field__req">(required)</span></label>
+      <select id="cf-topic" name="topic" required>
+        <option value="">Choose a topic</option>
+        <option value="occupational-vision">Occupational vision program</option>
+        <option value="mobile-clinics">Mobile vision clinics (planned)</option>
+        <option value="safety-eyewear">Prescription safety eyewear program</option>
+        <option value="visual-ergonomics">Visual ergonomics &amp; digital eye strain</option>
+        <option value="workplace-eye-health">Workplace eye-health education</option>
+        <option value="safetyos">VPI SafetyOS™</option>
+        <option value="mires">VPI Mires™</option>
+        <option value="partnership">Partnership or investment</option>
+        <option value="resources">Resources &amp; guides</option>
+        <option value="careers">Careers</option>
+        <option value="media">Media</option>
+        <option value="general">Something else</option>
+      </select>
+      <p class="field__error" id="cf-topic-error" hidden></p>
+    </div>
+    <div class="field field--full">
+      <label for="cf-message">Message <span class="field__req">(required)</span></label>
+      <textarea id="cf-message" name="message" rows="6" maxlength="4000" required aria-describedby="cf-message-hint"></textarea>
+      <p class="field__hint" id="cf-message-hint">Tell us about your organization and what you need. Please don't include personal health information.</p>
+      <p class="field__error" id="cf-message-error" hidden></p>
+    </div>
+    <div class="field field--hp" aria-hidden="true">
+      <label for="cf-website">Leave this field empty</label>
+      <input id="cf-website" name="website" type="text" tabindex="-1" autocomplete="off">
+    </div>
+  </div>
+  <div class="form__footer">
+    <button class="btn btn--primary" type="submit">Send message<svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+    <p class="form__note">We use these details only to reply to you. See our <a href="/privacy">privacy policy</a>.</p>
+  </div>
+  <div class="form__status" role="status" aria-live="polite" data-form-status></div>
+</form>

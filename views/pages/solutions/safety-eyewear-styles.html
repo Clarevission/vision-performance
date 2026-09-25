@@ -1,0 +1,63 @@
+<!--meta {
+  "path": "/solutions/prescription-safety-eyewear/styles",
+  "section": "solutions",
+  "title": "Safety Eyewear Styles: Browse & Shortlist",
+  "description": "Browse the main styles of prescription safety eyewear, including side shields, wraparound, sealed, multifocal and non-metal, and shortlist the ones that suit your crews.",
+  "crumb": "Styles",
+  "breadcrumb": [["Solutions", "/solutions"], ["Prescription Safety Eyewear", "/solutions/prescription-safety-eyewear"]],
+  "priority": "0.8"
+}-->
+{{> page-hero eyebrow="Safety Eyewear Styles" title="Browse and shortlist safety eyewear styles" lede="Pick the styles and lens features that suit your crews' work. Your shortlist is added to your program enquiry, so we start from your real requirements." icon="i-glasses"}}
+
+<section class="section" aria-labelledby="styles-grid-title">
+  <div class="container">
+    <div class="section-head section-head--split">
+      <div>
+        <h2 id="styles-grid-title">Frame styles</h2>
+        <p>These are style categories, not specific products. Frames from our supply partners will be listed under each style as programs launch.</p>
+      </div>
+    </div>
+    {{> eyewear-style-grid}}
+  </div>
+</section>
+
+<section class="section section--mist" aria-labelledby="lens-title">
+  <div class="container">
+    <div class="section-head">
+      <h2 id="lens-title">Lens features to discuss</h2>
+      <p>Coatings and lens types change how eyewear performs in different conditions. Add any you want to talk through.</p>
+    </div>
+    {{> eyewear-lens-options}}
+  </div>
+</section>
+
+<section class="section" aria-labelledby="how-choose-title">
+  <div class="container split split--top">
+    <div>
+      <h2 id="how-choose-title">How final eyewear is chosen</h2>
+      <ul class="checklist">
+        <li>Your hazard assessment sets the protection each role needs.</li>
+        <li>Each worker's prescription and working distances decide which styles will work for them.</li>
+        <li>Every frame and lens must carry the markings your program requires, for example CSA Z94.3.</li>
+        <li>Fit is checked for comfort and coverage with the other PPE the worker wears.</li>
+      </ul>
+    </div>
+    <div class="callout callout--note">
+      <p class="callout__title">Your shortlist stays on your device</p>
+      <p>Shortlisted items are saved in your browser only, until you choose to include them in an enquiry. There are no prices here, because every program is scoped individually.</p>
+    </div>
+  </div>
+</section>
+
+<div class="shortlist-bar" data-shortlist-bar hidden>
+  <div class="container shortlist-bar__inner">
+    <p><strong>Your shortlist: <span data-shortlist-count>0 items</span></strong><span class="shortlist-bar__items" data-shortlist-items></span></p>
+    <div class="shortlist-bar__actions">
+      <button type="button" class="btn--text-light" data-shortlist-clear>Clear</button>
+      <a class="btn btn--primary" href="/contact?topic=safety-eyewear&amp;shortlist=1" data-track="contact_cta" data-track-location="shortlist-bar">Add shortlist to an enquiry<svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+    </div>
+  </div>
+</div>
+
+{{> subnav-solutions}}
+{{> cta id="styles" title="Ready to talk about a program?" body="Send your shortlist with a few details about your workforce, and we'll follow up to discuss coverage, fitting and replacement." href="/contact?topic=safety-eyewear&amp;shortlist=1" label="Add shortlist to an enquiry" track="contact_cta" href2="/solutions/prescription-safety-eyewear" label2="How programs work" track2=""}}

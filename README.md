@@ -1,126 +1,50 @@
-# Vision Performance Inc. — Fullstack Website
+# Vision Performance Inc. — Corporate Website
 
-A fullstack Node.js/Express website for Vision Performance Inc., a precision vision care and industrial safety eyewear company serving Alberta, Canada.
+The corporate site for [visionperformanceinc.ca](https://visionperformanceinc.ca): occupational vision, workplace eye health and VPI technology (SafetyOS™, Mires™). It is a Node.js/Express app deployed on Render.
 
-## Prerequisites
-
-- [Node.js 18+](https://nodejs.org/) (download and install if not already installed)
-
-## Quick Start
+## Quick start
 
 ```bash
-# 1. Install dependencies
 npm install
-
-# 2. Configure environment variables
-copy .env.example .env
-# Then edit .env and fill in your SMTP credentials
-
-# 3. Run in development mode (auto-restarts on changes)
-npm run dev
-
-# 4. Open http://localhost:3000
+npm run dev        # http://localhost:3000 (nodemon)
+npm test           # regression suite (node:test)
+npm run check      # syntax check
+npm run images     # regenerate web image derivatives (dev-only, uses sharp)
 ```
 
-## Environment Variables
+With no `.env` file, form emails are logged to the console and database writes fail quietly, so the site runs locally with no configuration.
 
-Copy `.env.example` to `.env` and fill in:
+## How pages work
 
-| Variable | Description |
+There is no front-end framework and no build step. At boot, `lib/pages.js` composes every file in `views/pages/**` into complete HTML: layout, header, footer, metadata and JSON-LD. The result is cached in memory.
+
+- Each page starts with a `<!--meta {…}-->` JSON block: `path`, `title`, `description`, `crumb`, `breadcrumb`, `section`, `schema`, `robots`.
+- Partials: `{{> name key="value"}}`. Inside a partial, `{{$key}}` is a parameter and `{{#$key}}…{{/$key}}` renders only when it is set.
+- Data-driven partials are in `lib/dynamic-partials.js`, for example the safety eyewear style picker built from `views/data/eyewear-styles.js`.
+- Routes, `sitemap.xml`, canonical URLs and breadcrumbs all come from the same registry. **To add a page, add a file to `views/pages/`.**
+- Restart the server after editing views or assets (HTML and asset hashes are computed at boot).
+
+Styles are in `public/assets/css/site.css` and behaviour in `public/assets/js/site.js`. Neither uses inline handlers or styles, because the CSP forbids them on corporate pages.
+
+## Other apps in this repo
+
+| Path | What |
 |---|---|
-| `PORT` | Server port (default: 3000) |
-| `NOTIFY_EMAIL` | Where form submissions are sent |
-| `MAIL_FROM` | Sender name/email shown to recipients |
-| `SMTP_HOST` | Your SMTP provider host |
-| `SMTP_PORT` | SMTP port (usually 587) |
-| `SMTP_SECURE` | `true` for port 465, `false` otherwise |
-| `SMTP_USER` | SMTP username |
-| `SMTP_PASS` | SMTP password or API key |
+| `/portal` | Client portal (`public/portal.*`, `routes/portal.js`) |
+| `/staff` | Internal enquiry dashboard (`public/staff.*`, `routes/staff.js`) |
+| `/api/contact`, `/api/mobile`, `/api/corporate` | Enquiry endpoints (Postgres + Resend) |
+| `/api/admin/*` | Admin API (`x-admin-key` header) |
 
-**In development**, if you leave SMTP settings blank, emails are logged to the console instead of sent — no config needed to test locally.
+## Environment variables
 
-## Recommended SMTP Providers
+| Variable | Purpose |
+|---|---|
+| `SESSION_SECRET` | **Required in production.** Signs portal/staff cookies |
+| `DATABASE_URL` | Neon PostgreSQL connection string |
+| `RESEND_API_KEY`, `MAIL_FROM`, `NOTIFY_EMAIL` | Email delivery |
+| `ADMIN_KEY` | Admin API key |
+| `APP_ORIGIN` | Extra allowed origin for API requests |
 
-- **[Mailgun](https://mailgun.com)** — Free tier, 100 emails/day. Best for transactional mail.
-- **[SendGrid](https://sendgrid.com)** — Free tier, 100 emails/day.
-- **Gmail** — Use an [App Password](https://myaccount.google.com/apppasswords), not your account password.
+## Content rules
 
-## Deployment
-
-### Render (Recommended — Free tier available)
-
-1. Push this repo to GitHub
-2. Create a new **Web Service** at [render.com](https://render.com)
-3. Connect your GitHub repo
-4. Set environment variables in the Render dashboard
-5. Deploy — Render auto-detects the `render.yaml`
-
-### Railway
-
-1. Push to GitHub
-2. New project at [railway.app](https://railway.app) → Deploy from GitHub
-3. Add environment variables in the Variables tab
-
-### DigitalOcean App Platform
-
-1. Push to GitHub
-2. Create App → select repo
-3. Add environment variables
-4. Deploy
-
-### VPS (any provider)
-
-```bash
-npm install --production
-NODE_ENV=production node server.js
-```
-
-Use [PM2](https://pm2.keymetrics.io/) for process management and Nginx as a reverse proxy.
-
-## Project Structure
-
-```
-vision-performance/
-├── public/
-│   ├── index.html      ← The full SPA (all pages, CSS, client JS)
-│   ├── robots.txt
-│   └── sitemap.xml
-├── routes/
-│   ├── contact.js      ← POST /api/contact
-│   ├── mobile.js       ← POST /api/mobile
-│   └── corporate.js    ← POST /api/corporate
-├── lib/
-│   └── mailer.js       ← Nodemailer wrapper
-├── server.js           ← Express server entry point
-├── .env.example        ← Environment variable template
-├── .gitignore
-├── render.yaml         ← Render.com deploy config
-└── package.json
-```
-
-## API Endpoints
-
-| Endpoint | Method | Description |
-|---|---|---|
-| `/api/contact` | POST | General contact form |
-| `/api/mobile` | POST | Mobile clinic request |
-| `/api/corporate` | POST | Corporate program quote |
-| `/health` | GET | Health check |
-
-All endpoints validate required fields, sanitize input, send a notification email to `NOTIFY_EMAIL`, and send an auto-reply to the submitter.
-
-## Features
-
-- Working contact, mobile clinic, and corporate quote forms with real email delivery
-- Auto-replies sent to form submitters
-- Rate limiting (20 requests per 15 minutes per IP) to prevent spam
-- Input sanitization and validation on all form fields
-- Security headers via Helmet (CSP, XSS protection, etc.)
-- robots.txt and sitemap.xml for SEO
-- Static file caching with ETags
-- Health check endpoint for uptime monitoring
-- In development: emails logged to console when SMTP not configured
-
-## Updating the Domain in sitemap.xml
-
-Open `public/sitemap.xml` and replace `www.visionperformance.ca` with your actual domain before deploying.
+Every service on the site carries a status: *Available now*, *In development*, *Planned* or *Internal*. Do not publish testimonials, prices, certifications, clinicians, clients or coverage claims without evidence. `npm test` includes a guard that fails on the most common ones. See `docs/website-refresh/` for the audit, strategy, design system and backlog.

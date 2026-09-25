@@ -5,6 +5,7 @@ const rateLimit = require('express-rate-limit');
 const path = require('path');
 
 const site = require('./lib/pages');
+const { current: analytics } = require('./lib/analytics');
 const contactRoute     = require('./routes/contact');
 const portalRoute      = require('./routes/portal');
 const staffRoute       = require('./routes/staff');
@@ -35,14 +36,15 @@ app.use((req, res, next) => {
 // Security headers. Corporate pages have no inline scripts or event handlers.
 const CSP = {
   defaultSrc: ["'self'"],
-  scriptSrc: ["'self'"],
+  // Optional cookieless analytics (lib/analytics.js); empty unless CF_ANALYTICS_TOKEN is set.
+  scriptSrc: ["'self'", ...analytics.scriptSrc],
   scriptSrcAttr: ["'none'"],
   // Fonts are self-hosted (public/assets/fonts), so no third-party style or font origins.
   styleSrc: ["'self'"],
   fontSrc: ["'self'"],
   // Stock photography is served from Unsplash's image CDN (see views/data/photos.js).
   imgSrc: ["'self'", 'data:', 'https://images.unsplash.com'],
-  connectSrc: ["'self'"],
+  connectSrc: ["'self'", ...analytics.connectSrc],
   formAction: ["'self'"],
   frameSrc: ["'none'"],
   frameAncestors: ["'none'"],

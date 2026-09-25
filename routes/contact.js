@@ -107,9 +107,9 @@ router.post('/', async (req, res) => {
       to: rawEmail,
       subject: 'We received your message — Vision Performance Inc.',
       html: `<p style="font-family:sans-serif">Hi ${safe(rawName)},</p>
-             <p style="font-family:sans-serif">Thanks for contacting Vision Performance Inc. about "${safe(subjectLabel)}". We aim to reply within one business day.</p>
+             <p style="font-family:sans-serif">Thanks for contacting Vision Performance Inc. about "${safe(subjectLabel)}". We usually reply within two business days.</p>
              <p style="font-family:sans-serif">— Vision Performance Inc.</p>`,
-      text: `Hi ${rawName},\n\nThanks for contacting Vision Performance Inc. about "${subjectLabel}". We aim to reply within one business day.\n\n— Vision Performance Inc.`,
+      text: `Hi ${rawName},\n\nThanks for contacting Vision Performance Inc. about "${subjectLabel}". We usually reply within two business days.\n\n— Vision Performance Inc.`,
     });
   } catch (err) {
     console.error('Contact mail error:', err.message);

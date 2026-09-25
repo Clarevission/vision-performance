@@ -61,6 +61,10 @@ Referrer-Policy (F-23) was changed in `179c0f2`.
 3. ✅ Lighthouse re-run on production: mobile 100 / 99 / 97, desktop 100 / 100 / 100 ([18](18-performance-audit.md)).
 4. ⏳ Owner: complete the search-console steps in [16](16-search-index-cleanup.md).
 
+## Owner decisions applied (25 Sep 2026)
+
+The phone number was removed (F-16). The reply promise was softened to "two business days" (C-12). A Privacy Officer was designated (F-17). The footer "Client sign-in" link was removed (F-19). Cloudflare was added to the privacy policy (F-32). Analytics is wired but off until a token is set (F-27).
+
 ## Open items for the owner
 
 | ID | Decision / action | Where |
@@ -68,11 +72,7 @@ Referrer-Policy (F-23) was changed in `179c0f2`.
 | F-07 | Make the GitHub repo private (or remove `archive/legacy-spa`) | https://github.com/Clarevission/vision-performance/settings |
 | F-08 | Search Console + Bing: sitemap, re-index, change of address | [16](16-search-index-cleanup.md) |
 | F-15 | Set `SESSION_SECRET` in Render | https://dashboard.render.com |
-| F-16 / C-11 | Confirm the phone number is monitored, or remove it (also in the JSON-LD) | n/a |
-| C-12 | Confirm the "reply within one business day" commitment | n/a |
-| F-17 | Name a privacy officer (a title is enough) | n/a |
 | F-18 | Cloudflare: single-hop `.com` → `.ca` rule | https://dash.cloudflare.com |
-| F-19 | Keep or remove "Client sign-in" in the footer | n/a |
-| F-27 | Choose an analytics tool | n/a |
+| F-27 | Create a Cloudflare Web Analytics site (manual JS snippet, not auto-inject) and set its token as `CF_ANALYTICS_TOKEN` in Render | https://dash.cloudflare.com (Analytics & Logs → Web Analytics) |
 | F-28 | Set up uptime monitoring | n/a |
 | F-30 | HSTS 1 year / preload | n/a |

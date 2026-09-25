@@ -256,7 +256,7 @@
       }).then(function (res) {
         if (res.ok) {
           status.className = 'form__status is-success';
-          status.textContent = "Thank you. Your message has been sent. We aim to reply by email within one business day.";
+          status.textContent = "Thank you. Your message has been sent. We usually reply by email within two business days.";
           var t = data.topic;
           window.vpiTrack('enquiry_submitted', { topic: t });
           if (t === 'occupational-vision') window.vpiTrack('occupational_vision_enquiry');

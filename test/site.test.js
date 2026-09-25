@@ -259,6 +259,37 @@ test('client script parses', () => {
   new vm.Script(fs.readFileSync(path.join(__dirname, '../public/assets/js/site.js'), 'utf8'));
 });
 
+test('owner decisions: no phone number, no footer client sign-in, softened reply time', () => {
+  for (const [p, { html }] of pages) {
+    assert.ok(!/tel:|886-4397/.test(html), `${p}: phone number is published`);
+    assert.ok(!/Client sign-in|href="\/portal"/.test(html), `${p}: links to the client portal`);
+    assert.ok(!/one business day/i.test(html), `${p}: one-business-day promise`);
+  }
+  assert.ok(!/one business day/i.test(fs.readFileSync(path.join(__dirname, '../public/assets/js/site.js'), 'utf8')));
+  assert.match(pages.get('/privacy').html, /Privacy Officer/);
+});
+
+test('analytics stay off without a token, and switch on with disclosure when one is set', async () => {
+  const { analytics } = require('../lib/analytics');
+  for (const bad of [undefined, '', 'not-a-token', '<script>'.padEnd(32, 'a')]) assert.equal(analytics(bad).enabled, false);
+  for (const [p, { html }] of pages) assert.ok(!/cloudflareinsights/.test(html), `${p}: analytics loaded without a token`);
+  assert.ok(!/cloudflareinsights/.test((await get('/')).headers.get('content-security-policy')));
+
+  // Reload the page registry with a token set: the beacon and the privacy notice appear together.
+  const token = 'a'.repeat(32);
+  process.env.CF_ANALYTICS_TOKEN = token;
+  for (const m of ['../lib/analytics', '../lib/pages']) delete require.cache[require.resolve(m)];
+  try {
+    const withToken = require('../lib/pages').load().pages;
+    for (const [p, { html }] of withToken) assert.ok(html.includes(`"token": "${token}"`), `${p}: beacon missing`);
+    assert.match(withToken.get('/privacy').html, /Cloudflare Web Analytics/);
+    assert.equal(analytics(token).scriptSrc[0], 'https://static.cloudflareinsights.com');
+  } finally {
+    delete process.env.CF_ANALYTICS_TOKEN;
+    for (const m of ['../lib/analytics', '../lib/pages']) delete require.cache[require.resolve(m)];
+  }
+});
+
 test('every "request this guide" link uses a guide id the contact form knows', () => {
   const js = fs.readFileSync(path.join(__dirname, '../public/assets/js/site.js'), 'utf8');
   const known = new Set(attr(js.slice(js.indexOf('var GUIDES'), js.indexOf('};', js.indexOf('var GUIDES'))), /'([a-z0-9-]+)':/g));

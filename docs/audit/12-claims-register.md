@@ -14,11 +14,11 @@ Every factual or implied claim on the public site, with its evidence status. "Ow
 | C-08 | Specific frames will be listed once supplier arrangements are in place | Styles | Replaces the unverified "supply partners" claim (F-04) | Changed |
 | C-09 | CSA Z94.3 is referenced as a *standard to consider*, not as a certification | Eyewear, Resources | Guard test blocks "CSA Z94.3 certified/compliant" | Keep |
 | C-10 | Contact email `info@visionperformanceinc.ca` | Footer, Contact, Legal | Domain mail in use | Keep |
-| C-11 | Phone +1 (780) 886-4397 | Footer, Contact | Owner kept it, but it is **not confirmed as monitored** | REQUIRES OWNER INPUT (F-16) |
-| C-12 | "We aim to reply by email within one business day" | Contact form success message | A service commitment, not evidence-based | REQUIRES OWNER INPUT: confirm the commitment or soften it to "as soon as we can" |
+| C-11 | Phone +1 (780) 886-4397 | (removed) | Not confirmed as monitored | Removed 25 Sep 2026 (owner decision, F-16) |
+| C-12 | "We usually reply within two business days" | Contact page, form success, thank-you page, confirmation email, accessibility statement | Owner decision: softened from "one business day" | Changed |
 | C-13 | Handling in line with PIPA / PIPEDA | Privacy | Policy statement, not a certification. The guard blocks "PIPEDA-compliant" | Keep |
-| C-14 | Service providers Render, Neon and Resend (US processing possible) | Privacy | Matches the architecture | Keep |
-| C-15 | "Client sign-in" (implies existing portal clients) | Footer | Unverified | REQUIRES OWNER INPUT (F-19) |
+| C-14 | Service providers Render, Cloudflare, Neon and Resend (US processing possible) | Privacy | Matches the architecture; Cloudflare added (F-32) | Changed |
+| C-15 | "Client sign-in" (implied existing portal clients) | (removed from footer) | Unverified | Removed 25 Sep 2026 (owner decision, F-19) |
 
 ## Blocked by test (must never appear)
 

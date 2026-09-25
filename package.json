@@ -8,7 +8,9 @@
     "dev": "nodemon server.js",
     "test": "node --test test/site.test.js",
     "check": "node --check server.js && node --check public/assets/js/site.js && node --check lib/pages.js",
-    "images": "node scripts/optimize-images.js"
+    "images": "node scripts/optimize-images.js",
+    "test:e2e": "node --test test/e2e/journeys.e2e.js",
+    "audit:crawl": "node scripts/audit/crawl.js"
   },
   "engines": {
     "node": ">=18.0.0"

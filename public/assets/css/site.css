@@ -124,6 +124,7 @@ hr { border: 0; border-top: 1px solid var(--line); margin: var(--s-7) 0; }
 .grid { display: grid; gap: var(--s-5); }
 .grid > *, .split > *, .hero__grid > *, .page-hero__grid > *, .cta-band__inner > * { min-width: 0; }
 .grid--2, .grid--3, .grid--4 { grid-template-columns: 1fr; }
+.grid--tight { gap: var(--s-3); }
 .grid--auto { grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr)); }
 @media (min-width: 768px) {
   .grid--2 { grid-template-columns: repeat(2, 1fr); }
@@ -134,12 +135,27 @@ hr { border: 0; border-top: 1px solid var(--line); margin: var(--s-7) 0; }
   .grid--3 { grid-template-columns: repeat(3, 1fr); }
   .grid--4 { grid-template-columns: repeat(4, 1fr); }
 }
+/* In two-column mode, an odd item out spans the full row instead of leaving an empty cell. */
+@media (min-width: 768px) {
+  .grid--2 > :last-child:nth-child(odd):not(:first-child) { grid-column: 1 / -1; }
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  .grid--3 > :last-child:nth-child(odd):not(:first-child) { grid-column: 1 / -1; }
+  .grid--3 > :last-child:nth-child(odd):not(:first-child) .card__media .photo { aspect-ratio: 21 / 9; }
+}
 .split { display: grid; gap: var(--s-7); align-items: center; }
 @media (min-width: 900px) {
   .split { grid-template-columns: 1fr 1fr; gap: var(--s-8); }
   .split--wide-text { grid-template-columns: 1.2fr .8fr; }
   .split--top { align-items: start; }
+  /* Text + photo: the photo column stretches to the text height, so neither side leaves a gap. */
+  .split--media { align-items: stretch; }
+  .split--media > .figure, .split--media > .media-fill { display: flex; flex-direction: column; }
+  .split--media > .figure img, .split--media > .media-fill .photo { flex: 1; min-height: 280px; height: 100%; object-fit: cover; border-radius: var(--r-lg); }
+  /* A side note beside longer text fills the column height, with its content centred. */
+  .split > .callout { align-self: stretch; display: flex; flex-direction: column; justify-content: center; }
 }
+.media-fill .photo { border-radius: var(--r-lg); aspect-ratio: 16 / 10; object-fit: cover; }
 
 /* ---------- Buttons ---------- */
 .btn {
@@ -291,13 +307,20 @@ body.nav-open { overflow: hidden; }
   width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: var(--r-lg);
   box-shadow: 0 18px 40px rgba(0, 0, 0, .35); background: var(--navy);
 }
-@media (min-width: 900px) { .page-hero__media .photo { aspect-ratio: 4 / 3; } }
+@media (min-width: 900px) {
+  /* The photo matches the text column's height (never shorter than 260px), so the hero is balanced. */
+  .page-hero--media .page-hero__grid { align-items: stretch; }
+  .page-hero__media { display: flex; }
+  .page-hero__media .photo { aspect-ratio: auto; height: 100%; min-height: 260px; max-height: 420px; }
+}
 
 /* ---------- Photography ---------- */
 .photo { display: block; width: 100%; height: auto; background: var(--mist); }
 .rounded-photo .photo { border-radius: var(--r-lg); aspect-ratio: 16 / 9; object-fit: cover; }
-.photo-tile-grid { display: grid; gap: var(--s-3); grid-template-columns: repeat(auto-fill, minmax(min(100%, 12rem), 1fr)); }
-@media (max-width: 479px) { .photo-tile-grid { grid-template-columns: 1fr 1fr; } }
+/* Explicit column counts so 10 tiles fill 2×5 or 5×2, and 8 tiles fill 2×4 or 4×2, with no gaps. */
+.photo-tile-grid { display: grid; gap: var(--s-3); grid-template-columns: 1fr 1fr; }
+@media (min-width: 900px) { .photo-tile-grid { grid-template-columns: repeat(5, 1fr); } }
+@media (min-width: 768px) { .photo-tile-grid--4 { grid-template-columns: repeat(4, 1fr); } }
 .photo-tile {
   position: relative; display: block; overflow: hidden; border-radius: var(--r-md); aspect-ratio: 4 / 3;
   background: var(--navy); text-decoration: none; box-shadow: var(--shadow-1);
@@ -308,13 +331,16 @@ body.nav-open { overflow: hidden; }
   position: absolute; left: var(--s-4); right: var(--s-4); bottom: var(--s-3); z-index: 1;
   color: var(--white); font-family: var(--font-head); font-weight: 700; font-size: 1rem; line-height: 1.25;
 }
+@media (max-width: 419px) {
+  .photo-tile span { left: var(--s-3); right: var(--s-3); bottom: var(--s-2); font-size: .8125rem; hyphens: auto; overflow-wrap: anywhere; }
+}
 .photo-tile:hover .photo { transform: scale(1.04); }
 .photo-tile:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
 
 /* ---------- Home hero ---------- */
 .hero { background: var(--ink); color: var(--on-dark); padding-block: clamp(3rem, 2rem + 5vw, 6.5rem); position: relative; overflow: hidden; }
 .hero__grid { display: grid; gap: var(--s-7); align-items: center; }
-@media (min-width: 1100px) { .hero__grid { grid-template-columns: 1fr 1fr; gap: var(--s-8); } }
+@media (min-width: 1200px) { .hero__grid { grid-template-columns: 1fr 1fr; gap: var(--s-8); } }
 .hero__title { color: var(--white); font-size: clamp(2rem, 1.35rem + 3.2vw, 3.75rem); line-height: 1.06; letter-spacing: -.02em; margin-bottom: var(--s-5); }
 .hero__title span { color: var(--accent-on-dark); }
 .hero__lede { font-size: clamp(1.0625rem, 1rem + .45vw, 1.3125rem); color: var(--on-dark); opacity: .92; max-width: 38rem; }
@@ -429,17 +455,25 @@ body.nav-open { overflow: hidden; }
 .section--ink .checklist li::after { border-color: var(--ink); }
 
 /* Steps */
-.steps { list-style: none; margin: 0; padding: 0; counter-reset: step; display: grid; gap: var(--s-4); }
-@media (min-width: 900px) { .steps--row { grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); gap: var(--s-4); } }
+/* Default: compact vertical list (number beside text). .steps--row becomes one row of
+   equal columns only where every step gets enough width (≥1280px). */
+.steps { list-style: none; margin: 0; padding: 0; counter-reset: step; display: grid; gap: var(--s-3); }
 .steps li {
-  counter-increment: step; position: relative; padding: var(--s-5); background: var(--white);
+  counter-increment: step; position: relative; background: var(--white);
   border: 1px solid var(--line); border-radius: var(--r-md);
+  display: grid; grid-template-columns: 2.5rem minmax(0, 1fr); column-gap: var(--s-3); padding: var(--s-4) var(--s-5);
 }
 .steps li::before {
-  content: counter(step, decimal-leading-zero); display: block; font-family: var(--font-head); font-weight: 800; font-size: .9375rem;
-  color: var(--accent-text); margin-bottom: var(--s-3);
+  content: counter(step, decimal-leading-zero); grid-row: span 2; font-family: var(--font-head); font-weight: 800; font-size: 1rem;
+  color: var(--accent-text); line-height: 1.6;
 }
-.steps h3 { font-size: 1.0313rem; margin-bottom: var(--s-2); }
+.steps h3 { font-size: 1.0313rem; margin-bottom: var(--s-1); }
+@media (min-width: 1280px) {
+  .steps--row { grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: var(--s-4); }
+  .steps--row li { display: block; padding: var(--s-5); }
+  .steps--row li::before { display: block; margin-bottom: var(--s-3); }
+  .steps--row h3 { margin-bottom: var(--s-2); }
+}
 .steps p { font-size: .9375rem; color: var(--text-2); margin: 0; }
 
 /* Industry tiles */
@@ -477,6 +511,7 @@ a.tile:hover .icon { color: var(--accent-text); }
 .status-table td { color: var(--text-2); }
 
 /* FAQ */
+@media (min-width: 900px) { .faq-split { grid-template-columns: .8fr 1.2fr; } }
 .faq { border-top: 1px solid var(--line); }
 .faq details { border-bottom: 1px solid var(--line); }
 .faq summary {
@@ -536,7 +571,8 @@ a.tile:hover .icon { color: var(--accent-text); }
 .form__status.is-error { background: #FEF2F2; color: var(--error); }
 .btn[aria-busy="true"] { opacity: .7; cursor: progress; }
 
-/* Contact aside */
+/* Contact aside: stays in view beside the (taller) form on desktop. */
+@media (min-width: 900px) { .contact-aside { position: sticky; top: calc(var(--header-h) + var(--s-5)); } }
 .contact-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s-5); }
 .contact-list li { display: flex; gap: var(--s-4); align-items: flex-start; }
 
@@ -634,6 +670,47 @@ a.tile:hover .icon { color: var(--accent-text); }
 .section--ink .tag-list li { background: rgba(255, 255, 255, .05); border-color: var(--line-dark); color: var(--on-dark); }
 .kicker-list { display: grid; gap: var(--s-5); margin: 0; }
 .kicker-list dd { margin: .25rem 0 0; overflow-wrap: anywhere; }
+/* Legal pages: reading column + sticky side panel (policy navigation and contact). */
+.legal-layout { display: grid; gap: var(--s-7); }
+@media (min-width: 1200px) {
+  .legal-layout { grid-template-columns: minmax(0, 68ch) minmax(0, 1fr); gap: var(--s-8); align-items: start; }
+  .legal-aside { position: sticky; top: calc(var(--header-h) + var(--s-5)); }
+}
+.legal-aside { display: grid; gap: var(--s-4); min-width: 0; }
+@media (min-width: 640px) and (max-width: 1199px) { .legal-aside { grid-template-columns: 1fr 1fr; } }
+.legal-aside > * { background: var(--mist); border: 1px solid var(--line); border-radius: var(--r-md); padding: var(--s-5); }
+.legal-aside__title { font-family: var(--font-head); font-weight: 700; color: var(--navy); margin-bottom: var(--s-3); }
+.legal-aside ul li + li { margin-top: var(--s-1); }
+.legal-aside__nav a { display: block; padding: .45rem 0; color: var(--text); text-decoration: none; }
+.legal-aside__nav a:hover { color: var(--accent-text); text-decoration: underline; }
+.legal-aside__nav a[aria-current="page"] { color: var(--accent-text); font-weight: 600; }
+.legal-aside__contact p:last-child { color: var(--text-2); font-size: .9375rem; overflow-wrap: anywhere; }
+
+/* Panel: a boxed text + actions row, so short action columns never leave an empty half-page. */
+.panel {
+  display: grid; gap: var(--s-5); align-items: center; padding: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+  background: var(--mist); border: 1px solid var(--line); border-radius: var(--r-lg);
+}
+.panel h2 { font-size: clamp(1.375rem, 1.15rem + .9vw, 1.875rem); }
+.panel p:last-child { margin-bottom: 0; max-width: 44rem; }
+.panel__actions { display: flex; flex-wrap: wrap; gap: var(--s-3); }
+@media (min-width: 900px) { .panel { grid-template-columns: 1fr auto; gap: var(--s-7); } .panel__actions { justify-content: flex-end; } }
+
+/* Brand architecture cards (About): 1 → 2 (odd one spans) → 5 across. */
+.brand-grid { display: grid; gap: var(--s-4); margin: 0; }
+.brand-grid > div { background: var(--white); border: 1px solid var(--line); border-radius: var(--r-md); padding: var(--s-5); border-top: 3px solid var(--navy); }
+.brand-grid > div:nth-child(2) { border-top-color: var(--accent); }
+.brand-grid > div:nth-child(3) { border-top-color: var(--signal); }
+.brand-grid dt { font-family: var(--font-head); font-weight: 700; color: var(--navy); margin-bottom: var(--s-2); }
+.brand-grid dd { margin: 0; color: var(--text-2); font-size: .9375rem; overflow-wrap: anywhere; }
+@media (min-width: 640px) {
+  .brand-grid { grid-template-columns: 1fr 1fr; }
+  .brand-grid > :last-child:nth-child(odd) { grid-column: 1 / -1; }
+}
+@media (min-width: 1100px) {
+  .brand-grid { grid-template-columns: repeat(5, 1fr); }
+  .brand-grid > :last-child:nth-child(odd) { grid-column: auto; }
+}
 .site-footer__products a { overflow-wrap: anywhere; }
 .number { font-family: var(--font-head); font-weight: 800; color: var(--accent-text); }
 

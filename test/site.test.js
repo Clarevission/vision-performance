@@ -40,6 +40,9 @@ for (const [p] of pages) {
 
     assert.match(html, /<html lang="en-CA">/);
     assert.equal((html.match(/<h1[\s>]/g) || []).length, 1, 'exactly one h1');
+    const levels = [...html.matchAll(/<h([1-6])[\s>]/g)].map(m => +m[1]);
+    assert.equal(levels[0], 1, 'first heading is the h1');
+    levels.forEach((h, i) => assert.ok(i === 0 || h <= levels[i - 1] + 1, `heading level skips to h${h}`));
     const title = html.match(/<title>([^<]*)<\/title>/)[1];
     assert.ok(title.length >= 15 && title.length <= 70, `title length ${title.length}: ${title}`);
     const desc = html.match(/<meta name="description" content="([^"]*)"/)[1].replace(/&amp;/g, '&').replace(/&quot;/g, '"');

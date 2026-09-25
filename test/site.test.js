@@ -245,3 +245,32 @@ test('cross-origin API posts are rejected', async () => {
   });
   assert.equal(res.status, 403);
 });
+
+// ---------------------------------------------------------------- auth hardening
+test('admin API rejects missing or wrong keys', async () => {
+  const res = await fetch(base + '/api/admin/companies', { headers: { 'x-admin-key': 'guess' } });
+  assert.equal(res.status, 403);
+  assert.equal((await fetch(base + '/api/admin/companies')).status, 403);
+});
+
+test('production never signs cookies with the published development secret', () => {
+  const crypto = require('crypto');
+  const auth = require('../lib/auth');
+  const env = { NODE_ENV: process.env.NODE_ENV, SESSION_SECRET: process.env.SESSION_SECRET };
+  const warn = console.warn;
+  try {
+    console.warn = () => {};
+    process.env.NODE_ENV = 'production';
+    delete process.env.SESSION_SECRET;
+    let cookie = '';
+    auth.setAuthCookie({ setHeader: (_k, v) => { cookie = v; } }, { id: 1, role: 'admin' });
+    const token = cookie.split(';')[0].split('=')[1];
+    const [data, sig] = [token.slice(0, token.lastIndexOf('.')), token.slice(token.lastIndexOf('.') + 1)];
+    const forged = crypto.createHmac('sha256', 'vpi-dev-secret-change-me').update(data).digest('base64url');
+    assert.notEqual(sig, forged);
+  } finally {
+    console.warn = warn;
+    process.env.NODE_ENV = env.NODE_ENV;
+    if (env.SESSION_SECRET) process.env.SESSION_SECRET = env.SESSION_SECRET;
+  }
+});

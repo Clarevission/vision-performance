@@ -102,7 +102,7 @@ Label above the field (always visible, never placeholder-only). Inputs are 44 px
 
 ## Iconography
 
-*Updated 2026-09-25 at the owner's request:* **no decorative SVG imagery.** SVG is used only for interface glyphs: menu, close, dropdown chevron, arrow and external-link, from an inline sprite (iews/partials/icons.html). Checkmarks in lists and checkboxes are drawn in CSS. A test enforces this.
+*Updated 2026-09-25 at the owner's request:* **no decorative SVG imagery.** SVG is used only for interface glyphs: menu, close, dropdown chevron, arrow and external-link, from an inline sprite (`views/partials/icons.html`). Checkmarks in lists and checkboxes are drawn in CSS. A test enforces this.
 
 ## Interactive states
 
@@ -120,8 +120,9 @@ Transitions only (150–200 ms, `ease-out`). No autoplay, parallax, pulsing or s
 
 ## Imagery
 
-- **Photography** (owner request, 2026-09-25): real photographs from Unsplash (free licence), registered in iews/data/photos.js with alt text, photographer credit and the Unsplash photo slug. They are served responsively from Unsplash's CDN (srcset 480–1600 w, uto=format for WebP/AVIF). They are illustrative stock images: the people and places are not VPI staff, clients or sites, so captions never imply otherwise.
-- **Where photos appear:** every section page header (4:3), homepage pillar, product and industry cards, overview cards, and the safety-eyewear style cards (representative of each style, not specific products).
-- **Concept van render:** used once, captioned "Concept livery. VPI mobile units are in planning."
-- **Brand marks:** a transparent wordmark (/assets/img/vpi-wordmark.png, generated from the master by 
-pm run images) in the header (54 px mobile, 66 px desktop), footer (104 px) and home ecosystem diagram. Favicons and app icons (`vpi-favicon-32`, `vpi-icon-192`, `vpi-apple-touch-icon`, `vpi-icon-512`) are the same wordmark centred on brand navy. The circular badge now appears only in the social-share image.
+- **Photography** (owner request, 2026-09-25): real photographs from Unsplash (free licence; attribution not required, so none is shown on the site), registered in `views/data/photos.js` with alt text, photographer credit and the Unsplash photo slug. They are served responsively from Unsplash's CDN (`srcset` 480–1600 w, `auto=format` for WebP/AVIF). They are illustrative stock images: the people and places are not VPI staff, clients or sites, so captions never imply otherwise.
+- **Where photos appear:** every section page header, homepage pillar, product and industry cards, overview cards, text-and-photo sections, and the safety-eyewear style cards (representative of each style, not specific products).
+- **Concept van render:** used on the homepage and Mobile Clinics page, captioned as a concept.
+- **Brand marks:** everything uses the main VPI wordmark; the circular badge is no longer used on the site.
+  - A transparent wordmark (`/assets/img/vpi-wordmark.png`, generated from the master by `npm run images`) appears in the header (54 px mobile, 66 px desktop), the footer (104 px) and the home ecosystem diagram.
+  - The favicons and app icons (`vpi-favicon-32`, `vpi-icon-192`, `vpi-apple-touch-icon`, `vpi-icon-512`) and the social-share image (`vpi-share.jpg`, 1200×630) show the same wordmark centred on brand navy.

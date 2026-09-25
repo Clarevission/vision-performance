@@ -6,7 +6,6 @@ const path = require('path');
 const sharp = require('sharp');
 
 const pub = p => path.join(__dirname, '..', 'public', p);
-const BADGE = pub('images/logo-badge.png');
 const WORDMARK = pub('images/logo-dark-alt.png');
 const INK = '#00071A';
 
@@ -65,16 +64,20 @@ async function transparentWordmark(src, out, height) {
       .png({ compressionLevel: 9 }).toFile(pub(`assets/img/${file}`));
   }
 
-  // Default social-share image: wordmark + badge on brand navy, logo-rule colours along the bottom.
-  const wordmark = await sharp(WORDMARK).resize(560).png().toBuffer();
-  const badge = await sharp(BADGE).resize(300, 300).png().toBuffer();
+  // Default social-share image (1200×630): the main VPI wordmark centred on brand navy,
+  // with the logo-rule colours along the bottom edge.
+  const shareMark = await sharp(wordmarkMaster).resize({ height: 380 }).png().toBuffer();
+  const sm = await sharp(shareMark).metadata();
   const rule = Buffer.from(
     '<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630">' +
     '<rect x="0" y="606" width="840" height="8" fill="#22D3EE"/>' +
     '<rect x="840" y="606" width="360" height="8" fill="#F97316"/></svg>');
-  await sharp({ create: { width: 1200, height: 630, channels: 3, background: '#02091B' } })
-    .composite([{ input: wordmark, left: 90, top: 128 }, { input: badge, left: 810, top: 165 }, { input: rule, left: 0, top: 0 }])
-    .jpeg({ quality: 86, mozjpeg: true }).toFile(pub('assets/img/og-default.jpg'));
+  await sharp({ create: { width: 1200, height: 630, channels: 3, background: INK } })
+    .composite([
+      { input: shareMark, left: Math.round((1200 - sm.width) / 2), top: Math.round((606 - sm.height) / 2) },
+      { input: rule, left: 0, top: 0 },
+    ])
+    .jpeg({ quality: 88, mozjpeg: true }).toFile(pub('assets/img/vpi-share.jpg'));
 
   // Concept van render: responsive widths.
   for (const w of [480, 960]) {
@@ -82,7 +85,7 @@ async function transparentWordmark(src, out, height) {
   }
 
   for (const f of ['assets/img/vpi-favicon-32.png', 'assets/img/vpi-icon-192.png', 'assets/img/vpi-apple-touch-icon.png', 'assets/img/vpi-icon-512.png',
-    'assets/img/vpi-wordmark.png', 'assets/img/og-default.jpg',
+    'assets/img/vpi-wordmark.png', 'assets/img/vpi-share.jpg',
     'assets/img/van-concept-480.webp', 'assets/img/van-concept-960.webp']) {
     console.log(f.padEnd(36), `${Math.round(fs.statSync(pub(f)).size / 1024)} KB`);
   }

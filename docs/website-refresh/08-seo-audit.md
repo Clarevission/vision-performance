@@ -16,7 +16,7 @@
 | Titles | Unique per page, ≤ 70 characters (test). Pattern: `{Page} \| Vision Performance Inc.`, or `\| VPI` when the full brand would exceed 65 characters |
 | Descriptions | Unique per page, 70–170 characters (test). No unverified claims |
 | Canonical | Absolute `https://visionperformanceinc.ca{path}` on every page (test) |
-| Open Graph / Twitter | `og:title/description/url/image/type/locale=en_CA`, `twitter:card=summary_large_image`. Default share image 1200×630 (`/assets/img/og-default.jpg`, 59 KB) |
+| Open Graph / Twitter | `og:title/description/url/image/type/locale=en_CA`, `twitter:card=summary_large_image`. Default share image 1200×630: the VPI wordmark on brand navy (`/assets/img/vpi-share.jpg`, 39 KB) |
 | Structured data | `Organization` + `WebSite` (home). `BreadcrumbList` (every inner page). `SoftwareApplication` (SafetyOS, Mires: no ratings or offers, so nothing is fabricated). `FAQPage` only where the FAQ is visible (mobile clinics, safety eyewear). All JSON-LD parses (test) |
 | Headings | One `h1` per page; logical hierarchy (test) |
 | Sitemap | `/sitemap.xml` generated from the page registry: 24 indexable URLs. It excludes `/contact/thank-you`, the 404 page, `/portal` and `/staff` (test) |

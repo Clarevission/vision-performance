@@ -48,7 +48,7 @@ for (const [p] of pages) {
     const desc = html.match(/<meta name="description" content="([^"]*)"/)[1].replace(/&amp;/g, '&').replace(/&quot;/g, '"');
     assert.ok(desc.length >= 70 && desc.length <= 170, `description length ${desc.length}`);
     assert.ok(html.includes(`<link rel="canonical" href="${SITE_URL}${p === '/' ? '/' : p}">`), 'canonical');
-    assert.match(html, /<meta property="og:image" content="https:\/\/visionperformanceinc\.ca\/assets\/img\/og-default\.jpg">/);
+    assert.match(html, /<meta property="og:image" content="https:\/\/visionperformanceinc\.ca\/assets\/img\/vpi-share\.jpg">/);
     assert.ok(!/\{\{|\}\}/.test(html.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/g, '')), 'no unresolved template tokens');
 
     for (const block of attr(html, /<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) JSON.parse(block);

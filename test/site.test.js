@@ -247,6 +247,14 @@ test('client script parses', () => {
   new vm.Script(fs.readFileSync(path.join(__dirname, '../public/assets/js/site.js'), 'utf8'));
 });
 
+test('every "request this guide" link uses a guide id the contact form knows', () => {
+  const js = fs.readFileSync(path.join(__dirname, '../public/assets/js/site.js'), 'utf8');
+  const known = new Set(attr(js.slice(js.indexOf('var GUIDES'), js.indexOf('};', js.indexOf('var GUIDES'))), /'([a-z0-9-]+)':/g));
+  const used = ['/', '/resources'].flatMap(p => attr(pages.get(p).html, /guide=([a-z0-9-]+)/g));
+  assert.ok(used.length >= 9, 'guide links present');
+  for (const g of used) assert.ok(known.has(g), `unknown guide id ${g}`);
+});
+
 // ---------------------------------------------------------------- forms
 const post = (p, body, type = 'application/json', accept = 'application/json') => fetch(base + p, {
   method: 'POST', redirect: 'manual',

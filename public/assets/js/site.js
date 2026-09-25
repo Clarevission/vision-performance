@@ -162,6 +162,21 @@
     var requested = params.get('topic');
     if (requested && topic.querySelector('option[value="' + requested.replace(/[^a-z-]/g, '') + '"]')) topic.value = requested;
 
+    // Guide requests from /resources: only known guide ids prefill the message.
+    var GUIDES = {
+      'safety-eyewear-programs': "Prescription safety eyewear programs: an employer's guide",
+      'csa-z94-3-eyewear': 'Choosing safety eyewear with CSA Z94.3 in mind',
+      'digital-eye-strain': 'Digital eye strain and visual ergonomics at work',
+      'shift-remote-crews': 'Planning eye care for shift-based and remote crews',
+      'hse-connected-record': 'Connecting incidents, hazards and corrective actions',
+      'clinic-software': 'Choosing practice management software for an eye clinic'
+    };
+    var guide = params.get('guide');
+    if (guide && Object.prototype.hasOwnProperty.call(GUIDES, guide) && !message.value) {
+      topic.value = 'resources';
+      message.value = 'Please send me "' + GUIDES[guide] + '" when it is published.\n';
+    }
+
     var shortlist = readShortlist();
     if ((requested === 'safety-eyewear' || params.has('shortlist')) && shortlist.length && !message.value) {
       topic.value = 'safety-eyewear';

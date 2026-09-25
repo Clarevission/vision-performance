@@ -73,6 +73,17 @@ for (const [p] of pages) {
   });
 }
 
+test('every page has a unique title and meta description', () => {
+  for (const re of [/<title>([^<]*)<\/title>/, /<meta name="description" content="([^"]*)"/]) {
+    const seen = new Map();
+    for (const [p, { html }] of pages) {
+      const v = html.match(re)[1];
+      assert.ok(!seen.has(v), `${p} duplicates ${seen.get(v)}: ${v}`);
+      seen.set(v, p);
+    }
+  }
+});
+
 test('internal links resolve to real pages, anchors and assets', async () => {
   const targets = new Set([...pages.keys(), '/portal']);
   const problems = [];
@@ -153,6 +164,7 @@ const FORBIDDEN = [
   [/(serving|serves|on-site|services) (professionals )?across Canada/i, 'national coverage claim'],
   [/nationwide/i, 'national coverage claim'],
   [/trusted by/i, 'social proof claim'],
+  [/supply partners?|our suppliers/i, 'supplier relationship claim'],
   [/app\.visionperformanceinc\.ca/i, 'internal Command Centre link'],
 ];
 test('no unverified claims or internal links are published', () => {

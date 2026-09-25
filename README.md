@@ -8,11 +8,13 @@ The corporate site for [visionperformanceinc.ca](https://visionperformanceinc.ca
 npm install
 npm run dev        # http://localhost:3000 (nodemon)
 npm test           # regression suite (node:test)
+npm run test:e2e   # browser journeys (Playwright + installed Chrome; E2E_CHANNEL=msedge for Edge)
+npm run audit:crawl -- --label after   # 9-viewport layout + axe crawl (see docs/audit/)
 npm run check      # syntax check
 npm run images     # regenerate web image derivatives (dev-only, uses sharp)
 ```
 
-With no `.env` file, form emails are logged to the console and database writes fail quietly, so the site runs locally with no configuration.
+With no `.env` file, form emails are logged to the console and database writes are skipped (no `DATABASE_URL` means no database connection is attempted), so the site runs locally with no configuration.
 
 ## How pages work
 
@@ -32,8 +34,16 @@ Styles are in `public/assets/css/site.css` and behaviour in `public/assets/js/si
 |---|---|
 | `/portal` | Client portal (`public/portal.*`, `routes/portal.js`) |
 | `/staff` | Internal enquiry dashboard (`public/staff.*`, `routes/staff.js`) |
-| `/api/contact`, `/api/mobile`, `/api/corporate` | Enquiry endpoints (Postgres + Resend) |
+| `/api/contact` | Enquiry endpoint (Postgres + Resend). `/api/appointment`, `/api/mobile` and `/api/corporate` are retired and return 410 |
 | `/api/admin/*` | Admin API (`x-admin-key` header) |
+
+## Images and brand masters
+
+Full-size logo and render masters live in `brand/` and are **not** served. `npm run images` writes the web derivatives (WebP wordmark, favicons, share image, van renders) to `public/assets/img/`. `/assets` is cached for a year, so a changed image needs a new filename. Fonts (Inter, Montserrat; OFL) are self-hosted in `public/assets/fonts/`.
+
+## Domains
+
+`visionperformanceinc.ca` is canonical. Requests for any other host (the `.com`, `onrender.com`) get a 301 to the same path on `.ca`; mixed-case paths get a 301 to lowercase. See `docs/audit/15-domain-canonicalization.md`.
 
 ## Environment variables
 
@@ -44,7 +54,8 @@ Styles are in `public/assets/css/site.css` and behaviour in `public/assets/js/si
 | `RESEND_API_KEY`, `MAIL_FROM`, `NOTIFY_EMAIL` | Email delivery |
 | `ADMIN_KEY` | Admin API key |
 | `APP_ORIGIN` | Extra allowed origin for API requests |
+| `CONTACT_RATE_LIMIT` | Contact submissions per 15 min per IP (default 8) |
 
 ## Content rules
 
-Every service on the site carries a status: *Available now*, *In development*, *Planned* or *Internal*. Do not publish testimonials, prices, certifications, clinicians, clients or coverage claims without evidence. `npm test` includes a guard that fails on the most common ones. See `docs/website-refresh/` for the audit, strategy, design system and backlog.
+Every service on the site carries a status: *Available now*, *In development*, *Planned* or *Internal*. Do not publish testimonials, prices, certifications, clinicians, clients or coverage claims without evidence. `npm test` includes a guard that fails on the most common ones. See `docs/website-refresh/` for the original audit, strategy, design system and backlog, and `docs/audit/` for the post-launch audit and remediation record.

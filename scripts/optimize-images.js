@@ -6,7 +6,8 @@ const path = require('path');
 const sharp = require('sharp');
 
 const pub = p => path.join(__dirname, '..', 'public', p);
-const WORDMARK = pub('images/logo-dark-alt.png');
+const brand = p => path.join(__dirname, '..', 'brand', p);
+const WORDMARK = brand('logo-dark-alt.png');
 const INK = '#00071A';
 
 // Removes a solid dark background by "un-blending" each pixel against it:
@@ -41,6 +42,11 @@ async function transparentWordmark(src, out, height) {
   // Header/footer wordmark: transparent version of the master (the master has a solid navy
   // background), trimmed and sized for up to ~100px display height at 3x density.
   await transparentWordmark(WORDMARK, pub('assets/img/vpi-wordmark.png'), 300);
+  // WebP versions for the page (header ~66px tall, footer 104px): 1x and 2x widths.
+  for (const w of [180, 360]) {
+    await sharp(pub('assets/img/vpi-wordmark.png')).resize({ width: w }).webp({ quality: 90, alphaQuality: 100 })
+      .toFile(pub(`assets/img/vpi-wordmark-${w}.webp`));
+  }
 
   // Favicons and app icons: the main VPI wordmark centred on brand navy. Small sizes use
   // less padding so the lettering stays as large as possible.
@@ -81,11 +87,11 @@ async function transparentWordmark(src, out, height) {
 
   // Concept van render: responsive widths.
   for (const w of [480, 960]) {
-    await sharp(pub('van.webp')).resize(w).webp({ quality: 78 }).toFile(pub(`assets/img/van-concept-${w}.webp`));
+    await sharp(brand('van-concept-master.webp')).resize(w).webp({ quality: 78 }).toFile(pub(`assets/img/van-concept-${w}.webp`));
   }
 
   for (const f of ['assets/img/vpi-favicon-32.png', 'assets/img/vpi-icon-192.png', 'assets/img/vpi-apple-touch-icon.png', 'assets/img/vpi-icon-512.png',
-    'assets/img/vpi-wordmark.png', 'assets/img/vpi-share.jpg',
+    'assets/img/vpi-wordmark.png', 'assets/img/vpi-wordmark-180.webp', 'assets/img/vpi-wordmark-360.webp', 'assets/img/vpi-share.jpg',
     'assets/img/van-concept-480.webp', 'assets/img/van-concept-960.webp']) {
     console.log(f.padEnd(36), `${Math.round(fs.statSync(pub(f)).size / 1024)} KB`);
   }

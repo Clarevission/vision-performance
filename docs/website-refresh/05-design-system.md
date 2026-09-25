@@ -71,7 +71,7 @@ Section padding: `clamp(3.5rem, 2rem + 5vw, 6rem)` block, `--gutter` inline.
 
 ## Breakpoints
 
-`480px` (large phones) · `768px` (tablet) · `1024px` (desktop nav appears) · `1280px` (wide). Mobile-first `min-width` queries only.
+`480px` (large phones) · `768px` (tablet: 2-column grids) · `1024px` (3-column grids) · `1100px` (desktop navigation and 2-column home hero; the full menu plus CTA needs this width) · `1280px` (wide). Mobile-first `min-width` queries, plus one `max-width: 559px` rule that compacts the hero ecosystem diagram.
 
 ## Radii, shadows, borders
 

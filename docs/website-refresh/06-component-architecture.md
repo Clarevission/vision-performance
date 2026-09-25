@@ -30,7 +30,7 @@ lib/pages.js                  load → resolve partials → wrap in layout → p
 | Hero (home) | Inline in `pages/index.html` | 1 | Only one display h1 |
 | Page hero | `partials/page-hero.html` (`eyebrow`, `title`, `lede`, `status`) | ~22 pages | Renders the page `<h1>` |
 | Section header | CSS pattern `.section-head` (eyebrow + h2 + lede) | Everywhere | Pattern, not a partial: content varies too much |
-| Status pill | `partials/status.html` (`kind` = available / development / planned / internal) | ~30 uses | Text label always present (never colour alone) |
+| Status pill | Dynamic partial `status` (`kind` = available / development / planned / internal) | ~60 uses | Text label always present (never colour alone); unknown kinds fail the build |
 | Solution card | `.card` + `.card--link` pattern | Home, Solutions, Industries | Whole-card link via a real `<a>` in the title and a stretched pseudo-element |
 | Product card (technology) | `partials/product-safetyos.html`, `partials/product-mires.html` | Home, Technology, Industries, About | Single source for product copy, so product-site claims are edited in one place |
 | Industry card | `.card` pattern | Home, Industries | — |
@@ -43,7 +43,7 @@ lib/pages.js                  load → resolve partials → wrap in layout → p
 | Contact form | `partials/contact-form.html` | Contact | Progressive enhancement: works without JS (POST → 303 → thank-you) |
 | Style picker | Dynamic partial + `site.js` shortlist | Styles page | `<button aria-pressed>` per style; shortlist in `localStorage`; "Add shortlist to enquiry" → `/contact?topic=safety-eyewear` with a prefilled message |
 | Footer | `partials/footer.html` | Every page | Server-rendered (previously JS-injected) |
-| Notice (cookie / storage) | `partials/notice.html` | Every page | Accurate text, single dismiss |
+| ~~Notice (cookie banner)~~ | Removed during implementation | — | Public pages set no cookies; localStorage use is disclosed in the privacy policy, so a banner added friction without purpose |
 
 ### Deliberately not built
 

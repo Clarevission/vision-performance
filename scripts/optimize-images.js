@@ -39,12 +39,31 @@ async function transparentWordmark(src, out, height) {
   fs.mkdirSync(pub('assets/img'), { recursive: true });
   const png = { compressionLevel: 9, palette: true };
 
-  await sharp(BADGE).resize(32, 32).png(png).toFile(pub('assets/img/favicon-32.png'));
-  await sharp(BADGE).resize(180, 180).flatten({ background: INK }).png(png).toFile(pub('assets/img/apple-touch-icon.png'));
-  await sharp(BADGE).resize(512, 512).png(png).toFile(pub('assets/img/icon-512.png'));
   // Header/footer wordmark: transparent version of the master (the master has a solid navy
   // background), trimmed and sized for up to ~100px display height at 3x density.
   await transparentWordmark(WORDMARK, pub('assets/img/vpi-wordmark.png'), 300);
+
+  // Favicons and app icons: the main VPI wordmark centred on brand navy. Small sizes use
+  // less padding so the lettering stays as large as possible.
+  const wordmarkMaster = await (async () => {
+    const tmp = pub('assets/img/.wordmark-hires.png');
+    await transparentWordmark(WORDMARK, tmp, 900);
+    const buf = fs.readFileSync(tmp);
+    fs.unlinkSync(tmp);
+    return buf;
+  })();
+  for (const [size, file, fill] of [
+    [32, 'vpi-favicon-32.png', 0.94],
+    [192, 'vpi-icon-192.png', 0.82],
+    [180, 'vpi-apple-touch-icon.png', 0.8],
+    [512, 'vpi-icon-512.png', 0.8],
+  ]) {
+    const mark = await sharp(wordmarkMaster).resize({ width: Math.round(size * fill) }).png().toBuffer();
+    const { width, height } = await sharp(mark).metadata();
+    await sharp({ create: { width: size, height: size, channels: 4, background: INK } })
+      .composite([{ input: mark, left: Math.round((size - width) / 2), top: Math.round((size - height) / 2) }])
+      .png({ compressionLevel: 9 }).toFile(pub(`assets/img/${file}`));
+  }
 
   // Default social-share image: wordmark + badge on brand navy, logo-rule colours along the bottom.
   const wordmark = await sharp(WORDMARK).resize(560).png().toBuffer();
@@ -62,7 +81,7 @@ async function transparentWordmark(src, out, height) {
     await sharp(pub('van.webp')).resize(w).webp({ quality: 78 }).toFile(pub(`assets/img/van-concept-${w}.webp`));
   }
 
-  for (const f of ['assets/img/favicon-32.png', 'assets/img/apple-touch-icon.png', 'assets/img/icon-512.png',
+  for (const f of ['assets/img/vpi-favicon-32.png', 'assets/img/vpi-icon-192.png', 'assets/img/vpi-apple-touch-icon.png', 'assets/img/vpi-icon-512.png',
     'assets/img/vpi-wordmark.png', 'assets/img/og-default.jpg',
     'assets/img/van-concept-480.webp', 'assets/img/van-concept-960.webp']) {
     console.log(f.padEnd(36), `${Math.round(fs.statSync(pub(f)).size / 1024)} KB`);

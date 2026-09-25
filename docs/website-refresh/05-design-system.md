@@ -124,4 +124,4 @@ Transitions only (150–200 ms, `ease-out`). No autoplay, parallax, pulsing or s
 - **Where photos appear:** every section page header (4:3), homepage pillar, product and industry cards, overview cards, and the safety-eyewear style cards (representative of each style, not specific products).
 - **Concept van render:** used once, captioned "Concept livery. VPI mobile units are in planning."
 - **Brand marks:** a transparent wordmark (/assets/img/vpi-wordmark.png, generated from the master by 
-pm run images) in the header (54 px mobile, 66 px desktop), footer (104 px) and home ecosystem diagram. The circular badge is used only for the favicon and the social-share image.
+pm run images) in the header (54 px mobile, 66 px desktop), footer (104 px) and home ecosystem diagram. Favicons and app icons (`vpi-favicon-32`, `vpi-icon-192`, `vpi-apple-touch-icon`, `vpi-icon-512`) are the same wordmark centred on brand navy. The circular badge now appears only in the social-share image.

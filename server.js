@@ -131,7 +131,7 @@ app.get(['/portal.html', '/staff.html'], (req, res) => res.redirect(301, req.pat
 
 // SEO files
 app.get('/sitemap.xml', (_req, res) => res.type('application/xml').send(sitemap));
-app.get('/favicon.ico', (_req, res) => res.type('image/png').sendFile(path.join(PUBLIC, 'assets/img/favicon-32.png')));
+app.get('/favicon.ico', (_req, res) => res.type('image/png').sendFile(path.join(PUBLIC, 'assets/img/vpi-favicon-32.png')));
 
 // Corporate pages (composed at boot from views/)
 for (const [pagePath, page] of pages) {

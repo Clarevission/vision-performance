@@ -109,6 +109,19 @@ test('every photo has alt text and a credit, and every style card has a photo', 
   for (const s of styles) assert.ok(photos[s.photo], `${s.id} photo`);
 });
 
+test('links to product sites and other external sites open in a new tab', () => {
+  let productLinks = 0;
+  for (const [p, page] of pages) {
+    for (const [, attrs, inner] of page.html.matchAll(/<a\b([^>]*\shref="https?:\/\/[^"]+"[^>]*)>([\s\S]*?)<\/a>/g)) {
+      if (/href="https:\/\/(safetyos|mires)\./.test(attrs)) productLinks++;
+      assert.match(attrs, /\starget="_blank"/, `${p}: ${attrs}`);
+      assert.match(attrs, /\srel="[^"]*noopener/, `${p}: ${attrs}`);
+      assert.match(inner, /new tab/, `${p}: link text should announce the new tab`);
+    }
+  }
+  assert.ok(productLinks > 20, 'product links found');
+});
+
 test('every icon referenced exists in the sprite', () => {
   const sprite = fs.readFileSync(path.join(__dirname, '../views/partials/icons.html'), 'utf8');
   for (const [, page] of pages) {

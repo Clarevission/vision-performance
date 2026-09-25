@@ -341,8 +341,8 @@ body.nav-open { overflow: hidden; }
 /* Modest top padding so the headline sits close under the menu; a little more room below. */
 .hero { background: var(--ink); color: var(--on-dark); padding-block: clamp(2rem, 1rem + 2vw, 3.25rem) clamp(3rem, 2rem + 3vw, 4.5rem); position: relative; overflow: hidden; }
 .hero__grid { display: grid; gap: var(--s-7); align-items: start; }
-/* The ecosystem panel lines up with the headline (just below the eyebrow line). */
-@media (min-width: 1200px) { .hero__grid { grid-template-columns: 1fr 1fr; gap: var(--s-8); } .hero__grid > .ecosystem { margin-top: 2.1rem; } }
+/* The ecosystem panel starts level with the headline. */
+@media (min-width: 1200px) { .hero__grid { grid-template-columns: 1fr 1fr; gap: var(--s-8); } .hero__grid > .ecosystem { margin-top: .5rem; } }
 .hero__title { color: var(--white); font-size: clamp(2rem, 1.35rem + 3.2vw, 3.75rem); line-height: 1.06; letter-spacing: -.02em; margin-bottom: var(--s-5); }
 .hero__title span { color: var(--accent-on-dark); }
 .hero__lede { font-size: clamp(1.0625rem, 1rem + .45vw, 1.3125rem); color: var(--on-dark); opacity: .92; max-width: 38rem; }

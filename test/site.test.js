@@ -7,6 +7,7 @@ const path = require('path');
 const vm = require('vm');
 
 process.env.NODE_ENV = 'test';
+process.env.CONTACT_RATE_LIMIT = '100';
 delete process.env.DATABASE_URL;
 delete process.env.RESEND_API_KEY;
 
@@ -22,7 +23,13 @@ before(async () => {
   await new Promise(r => { server = app.listen(0, r); });
   base = `http://127.0.0.1:${server.address().port}`;
 });
-after(() => { console.log = silence; server.close(); });
+after(async () => {
+  console.log = silence;
+  // Close keep-alive sockets and the (unconnected) DB pool so the process exits immediately.
+  server.closeAllConnections();
+  server.close();
+  await require('../lib/db').end().catch(() => {});
+});
 
 const get = (p, opts = {}) => fetch(base + p, { redirect: 'manual', ...opts });
 const textOf = html => html
@@ -65,6 +72,17 @@ for (const [p] of pages) {
     assert.ok(!/\sstyle="/.test(html), 'no inline style attributes (CSP)');
   });
 }
+
+test('every page has a unique title and meta description', () => {
+  for (const re of [/<title>([^<]*)<\/title>/, /<meta name="description" content="([^"]*)"/]) {
+    const seen = new Map();
+    for (const [p, { html }] of pages) {
+      const v = html.match(re)[1];
+      assert.ok(!seen.has(v), `${p} duplicates ${seen.get(v)}: ${v}`);
+      seen.set(v, p);
+    }
+  }
+});
 
 test('internal links resolve to real pages, anchors and assets', async () => {
   const targets = new Set([...pages.keys(), '/portal']);
@@ -146,6 +164,7 @@ const FORBIDDEN = [
   [/(serving|serves|on-site|services) (professionals )?across Canada/i, 'national coverage claim'],
   [/nationwide/i, 'national coverage claim'],
   [/trusted by/i, 'social proof claim'],
+  [/supply partners?|our suppliers/i, 'supplier relationship claim'],
   [/app\.visionperformanceinc\.ca/i, 'internal Command Centre link'],
 ];
 test('no unverified claims or internal links are published', () => {
@@ -240,6 +259,14 @@ test('client script parses', () => {
   new vm.Script(fs.readFileSync(path.join(__dirname, '../public/assets/js/site.js'), 'utf8'));
 });
 
+test('every "request this guide" link uses a guide id the contact form knows', () => {
+  const js = fs.readFileSync(path.join(__dirname, '../public/assets/js/site.js'), 'utf8');
+  const known = new Set(attr(js.slice(js.indexOf('var GUIDES'), js.indexOf('};', js.indexOf('var GUIDES'))), /'([a-z0-9-]+)':/g));
+  const used = ['/', '/resources'].flatMap(p => attr(pages.get(p).html, /guide=([a-z0-9-]+)/g));
+  assert.ok(used.length >= 9, 'guide links present');
+  for (const g of used) assert.ok(known.has(g), `unknown guide id ${g}`);
+});
+
 // ---------------------------------------------------------------- forms
 const post = (p, body, type = 'application/json', accept = 'application/json') => fetch(base + p, {
   method: 'POST', redirect: 'manual',
@@ -276,8 +303,63 @@ test('contact topics match the form options', () => {
   assert.deepEqual(options.sort(), Object.keys(TOPICS).sort());
 });
 
-test('retired appointment endpoint returns 410', async () => {
-  assert.equal((await post('/api/appointment', { name: 'x', email: 'x@example.com' })).status, 410);
+test('retired enquiry endpoints of the old site return 410', async () => {
+  for (const p of ['/api/appointment', '/api/mobile', '/api/corporate']) {
+    assert.equal((await post(p, { name: 'x', email: 'x@example.com' })).status, 410, p);
+  }
+});
+
+// ---------------------------------------------------------------- canonicalization
+const http = require('http');
+const rawGet = (p, host) => new Promise((resolve, reject) => {
+  const u = new URL(base + p);
+  http.get({ hostname: u.hostname, port: u.port, path: u.pathname + u.search, headers: { Host: host } }, res => {
+    res.resume();
+    resolve({ status: res.statusCode, location: res.headers.location });
+  }).on('error', reject);
+});
+
+test('non-canonical hosts redirect permanently to the same path on visionperformanceinc.ca', async () => {
+  for (const host of ['visionperformanceinc.com', 'www.visionperformanceinc.com', 'www.visionperformanceinc.ca', 'vision-performance.onrender.com']) {
+    const r = await rawGet('/about?x=1', host);
+    assert.equal(r.status, 301, host);
+    assert.equal(r.location, 'https://visionperformanceinc.ca/about?x=1', host);
+  }
+  assert.equal((await rawGet('/about', 'visionperformanceinc.ca')).status, 200);
+  assert.equal((await rawGet('/health', 'internal-host')).status, 200, 'health check is exempt');
+});
+
+test('mixed-case URLs redirect to lowercase; retired legacy assets are gone', async () => {
+  const r = await get('/About?ref=x');
+  assert.equal(r.status, 301);
+  assert.equal(r.headers.get('location'), '/about?ref=x');
+  for (const p of ['/app.js', '/van.webp']) assert.equal((await get(p)).status, 410, p);
+  for (const p of ['/favicon.png', '/images/logo-badge.png', '/images/logo-dark-alt.png']) {
+    assert.notEqual((await get(p)).status, 200, `${p} no longer public`);
+  }
+});
+
+test('error pages have no canonical URL; server errors never leak details', async () => {
+  const html = await (await get('/missing-page', { headers: { accept: 'text/html' } })).text();
+  assert.ok(!/rel="canonical"/.test(html), '404 has no canonical');
+  assert.ok(!/og:url/.test(html), '404 has no og:url');
+  for (const href of ['href="/"', 'href="/solutions"', 'href="/technology"', 'safetyos.visionperformanceinc.ca', 'mires.visionperformanceinc.ca', 'href="/contact"']) {
+    assert.ok(html.includes(href), `404 links to ${href}`);
+  }
+  const bad = await fetch(base + '/api/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{not json' });
+  assert.equal(bad.status, 400);
+  assert.deepEqual(Object.keys(await bad.json()), ['error']);
+});
+
+test('lookalike origins are rejected by the API origin check', async () => {
+  const res = await fetch(base + '/api/contact', {
+    method: 'POST', headers: { 'Content-Type': 'application/json', Origin: 'https://visionperformanceinc.ca.evil.example' }, body: JSON.stringify(valid),
+  });
+  assert.equal(res.status, 403);
+});
+
+test('referrer policy lets product sites see referrals without full URLs', async () => {
+  assert.equal((await get('/')).headers.get('referrer-policy'), 'strict-origin-when-cross-origin');
 });
 
 test('cross-origin API posts are rejected', async () => {

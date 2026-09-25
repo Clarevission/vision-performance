@@ -6,3 +6,7 @@ npm-debug.log*
 .DS_Store
 Thumbs.db
 dist/
+
+# Audit screenshots are large; kept locally, not in git (see docs/audit/README).
+docs/audit/screenshots/
+docs/audit/screenshots-after/

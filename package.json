@@ -8,7 +8,9 @@
     "dev": "nodemon server.js",
     "test": "node --test test/site.test.js",
     "check": "node --check server.js && node --check public/assets/js/site.js && node --check lib/pages.js",
-    "images": "node scripts/optimize-images.js"
+    "images": "node scripts/optimize-images.js",
+    "test:e2e": "node --test test/e2e/journeys.e2e.js",
+    "audit:crawl": "node scripts/audit/crawl.js"
   },
   "engines": {
     "node": ">=18.0.0"
@@ -19,12 +21,14 @@
     "express": "^4.19.2",
     "express-rate-limit": "^7.4.0",
     "helmet": "^7.1.0",
-    "pg": "^8.22.0",
-    "resend": "^6.14.0",
+    "pg": "^8.23.0",
+    "resend": "^6.30.0",
     "validator": "^13.12.0"
   },
   "devDependencies": {
+    "axe-core": "^4.13.0",
     "nodemon": "^3.1.4",
+    "playwright-core": "^1.63.0",
     "sharp": "^0.35.1"
   }
 }

@@ -7,11 +7,27 @@ The summary is in [PERFORMANCE-AUDIT](PERFORMANCE-AUDIT.md). Raw data: `docs/aud
 - **Tool:** Lighthouse 12, Chrome headless, default throttling (mobile: simulated slow 4G + 4× CPU; desktop preset).
 - **Pages:** `/`, `/technology`, `/contact`.
 - **Baseline:** production (`https://visionperformanceinc.ca`, through Cloudflare, `81b73d5`).
-- **After:** audit branch on a local production-mode server (`http://localhost:3100`).
+- **After (production):** `https://visionperformanceinc.ca` after the deploy of `77a826b`, measured under the same conditions as the baseline. These are the headline figures.
+- **After (local):** the audit branch on a local production-mode server (`http://localhost:3100`), measured before deploy.
 
-The environments differ. Local has no CDN, no Brotli (the app has no compression middleware because Cloudflare compresses) and no HTTP/2. That makes local transfer sizes larger, and it means the scores are not a like-for-like comparison. The render-blocking and FCP changes come from the removed third-party request chain, not from the environment. A production re-run after deploy is listed in [04](04-deployment-parity.md).
+## Production results (like for like)
 
-## Results
+| Page | Form factor | Perf | FCP ms | LCP ms | Render-blocking ms | CLS | Weight |
+|---|---|---|---|---|---|---|---|
+| Home | mobile | 89 → **100** | 2909 → 1041 | 3059 → 1683 | 1659 → 0 | 0.011 → 0.000 | 308 → 268 KB |
+| Home | desktop | 97 → **100** | 963 → 304 | 983 → 461 | 515 → 0 | 0.052 → 0.000 | 466 → 426 KB |
+| Technology | mobile | 89 → **99** | 2906 → 962 | 3056 → 2223 | 1687 → 102 | 0.036 → 0.000 | 340 → 300 KB |
+| Technology | desktop | 98 → **100** | 898 → 304 | 918 → 581 | 545 → 0 | 0.004 → 0.000 | 383 → 343 KB |
+| Contact | mobile | 89 → **97** | 2907 → 957 | 3057 → 2451 | 1690 → 0 | 0.018 → 0.000 | 214 → 206 KB |
+| Contact | desktop | 98 → **100** | 886 → 309 | 886 → 614 | 502 → 0 | 0.002 → 0.000 | 214 → 174 KB |
+
+Accessibility, Best Practices and SEO: 100 in every run.
+
+## Local pre-deploy results
+
+The local environment has no CDN, no Brotli (the app relies on Cloudflare for compression) and no HTTP/2, so its transfer sizes are larger.
+
+### Local table
 
 | Page | Form factor | Perf (before → after) | FCP ms | LCP ms | Render-blocking ms | CLS |
 |---|---|---|---|---|---|---|
@@ -34,4 +50,4 @@ Accessibility, Best Practices and SEO scored 100 in all 12 runs. TBT is 0–50 m
 
 - **Hero photographs** come from `images.unsplash.com` with `w=`/`q=` parameters; they are the LCP candidate on some pages. Self-hosting AVIF/WebP derivatives would remove the third-party connection ([20](20-future-proofing.md)).
 - **CSS is 47 KB uncompressed** (about 10 KB compressed). Inlining critical CSS isn't worth the complexity at this size.
-- **CLS:** desktop CLS of 0.018 and 0.034 on two pages comes from the font swap. It is well under the 0.1 threshold. A metric-matched fallback font (`size-adjust`) could remove it.
+- **CLS:** 0.000 in production. The small values seen locally (0.018, 0.034) came from the font swap without HTTP/2 preloading.

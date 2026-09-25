@@ -1,5 +1,5 @@
 {
-  "note": "baseline = production https://visionperformanceinc.ca (2026-09-25, before remediation, via Cloudflare). after = local production-mode server on http://localhost:3100 (no CDN/Brotli/HTTP2). Lighthouse 12, Chrome headless, default throttling.",
+  "note": "baseline = production https://visionperformanceinc.ca (2026-09-25, before remediation, via Cloudflare). after = local production-mode server on http://localhost:3100 (no CDN/Brotli/HTTP2). Lighthouse 12, Chrome headless, default throttling. prod-after = production after deploy of 77a826b (same conditions as baseline).",
   "runs": {
     "baseline-home-mobile": {
       "url": "https://visionperformanceinc.ca/",
@@ -179,6 +179,96 @@
       "si": 481,
       "renderBlockingMs": 80,
       "bytes": "243KB",
+      "requests": 8
+    },
+    "prod-after-home-mobile": {
+      "url": "https://visionperformanceinc.ca/",
+      "perf": 100,
+      "a11y": 100,
+      "bp": 100,
+      "seo": 100,
+      "fcp": 1041,
+      "lcp": 1683,
+      "tbt": 1,
+      "cls": "0.000",
+      "si": 1204,
+      "renderBlockingMs": 0,
+      "bytes": "268KB",
+      "requests": 10
+    },
+    "prod-after-home-desktop": {
+      "url": "https://visionperformanceinc.ca/",
+      "perf": 100,
+      "a11y": 100,
+      "bp": 100,
+      "seo": 100,
+      "fcp": 304,
+      "lcp": 461,
+      "tbt": 0,
+      "cls": "0.000",
+      "si": 393,
+      "renderBlockingMs": 0,
+      "bytes": "426KB",
+      "requests": 14
+    },
+    "prod-after-technology-mobile": {
+      "url": "https://visionperformanceinc.ca/technology",
+      "perf": 99,
+      "a11y": 100,
+      "bp": 100,
+      "seo": 100,
+      "fcp": 962,
+      "lcp": 2223,
+      "tbt": 11,
+      "cls": "0.000",
+      "si": 1109,
+      "renderBlockingMs": 102,
+      "bytes": "300KB",
+      "requests": 10
+    },
+    "prod-after-technology-desktop": {
+      "url": "https://visionperformanceinc.ca/technology",
+      "perf": 100,
+      "a11y": 100,
+      "bp": 100,
+      "seo": 100,
+      "fcp": 304,
+      "lcp": 581,
+      "tbt": 0,
+      "cls": "0.000",
+      "si": 409,
+      "renderBlockingMs": 0,
+      "bytes": "343KB",
+      "requests": 11
+    },
+    "prod-after-contact-mobile": {
+      "url": "https://visionperformanceinc.ca/contact",
+      "perf": 97,
+      "a11y": 100,
+      "bp": 100,
+      "seo": 100,
+      "fcp": 957,
+      "lcp": 2451,
+      "tbt": 94,
+      "cls": "0.000",
+      "si": 1300,
+      "renderBlockingMs": 0,
+      "bytes": "206KB",
+      "requests": 9
+    },
+    "prod-after-contact-desktop": {
+      "url": "https://visionperformanceinc.ca/contact",
+      "perf": 100,
+      "a11y": 100,
+      "bp": 100,
+      "seo": 100,
+      "fcp": 309,
+      "lcp": 614,
+      "tbt": 0,
+      "cls": "0.000",
+      "si": 419,
+      "renderBlockingMs": 0,
+      "bytes": "174KB",
       "requests": 8
     }
   }

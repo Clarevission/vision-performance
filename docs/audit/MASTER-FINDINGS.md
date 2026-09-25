@@ -4,7 +4,7 @@ Audit branch: `audit/vpi-corporate-post-launch` (cut from `main` at `81b73d5`, t
 Severity: **P0** production broken, security breach or legal exposure · **P1** material SEO, security, trust or conversion harm · **P2** meaningful quality issue · **P3** polish or hygiene.
 Final status is one of: RESOLVED · ACCEPTED RISK · DEFERRED · REQUIRES OWNER INPUT · REQUIRES EXTERNAL CREDENTIAL.
 
-"RESOLVED" means fixed on the audit branch and verified locally by tests, the crawl and E2E. It reaches the public site only once the branch is merged and deployed (see [REMEDIATION-REPORT](REMEDIATION-REPORT.md)).
+"RESOLVED" means fixed, deployed to production (`77a826b`, 25 Sep 2026) and verified there ([04](04-deployment-parity.md)).
 
 No P0 findings were identified.
 

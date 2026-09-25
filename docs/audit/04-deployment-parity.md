@@ -30,9 +30,24 @@ These were captured with `curl.exe -I` (HEAD requests only; nothing was posted t
 | `https://visionperformanceinc.ca/About` | **200 (case duplicate, F-02)** |
 | `https://visionperformanceinc.ca/nope` | 404 |
 
-## After merge and deploy (to verify)
+## After deploy: verified 25 Sep 2026 (`77a826b`)
 
-Run these checks once the audit branch is deployed:
+| Check | Result |
+|---|---|
+| `https://visionperformanceinc.com/about?x=1` | 301 → `https://visionperformanceinc.ca/about?x=1` ✅ |
+| `https://vision-performance.onrender.com/technology` | 301 → `https://visionperformanceinc.ca/technology` ✅ |
+| `https://www.visionperformanceinc.com/` | 301 → `.com` (then 301 → `.ca`): two hops, F-18 owner action |
+| `/About` | 301 → `/about` ✅ |
+| `/van.webp` · `/api/mobile` | 410 · 410 ✅ |
+| `/images/logo-full.png` | 404 (no longer served) ✅ |
+| `/shop` | 301 → `/solutions/prescription-safety-eyewear/styles` ✅ |
+| `/health` | 200 ✅ |
+| CSP | `style-src 'self'; font-src 'self'` ✅ |
+| Referrer-Policy | `strict-origin-when-cross-origin` ✅ |
+| Read-only E2E (`E2E_BASE=…`) | 9 / 9 pass ✅ (form validated, not submitted) |
+| Crawl `prod-after` (26 URLs × 9 viewports) | 0 layout findings, 0 axe violations, 0 failed requests ✅ (`data/crawl-prod-after.json`) |
+
+To repeat the checks:
 
 ```bash
 npm run audit:crawl -- --label prod-after --base https://visionperformanceinc.ca --no-shots

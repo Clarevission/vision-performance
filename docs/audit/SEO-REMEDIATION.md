@@ -1,6 +1,6 @@
 # SEO remediation summary
 
-## Fixed in code (effective on deploy)
+## Fixed and live (deployed `77a826b`, verified 25 Sep 2026)
 
 | Issue | Fix |
 |---|---|
@@ -9,7 +9,7 @@
 | 404 page had a canonical and `og:url` (F-10) | Removed from error pages; 404 and 500 are `noindex` |
 | Old SPA assets (`/app.js`, `/van.*`) lingering | 410 Gone |
 | Duplicate titles or descriptions could slip in | Uniqueness test added |
-| Render-blocking fonts hurt mobile CWV (F-05) | Self-hosted; mobile FCP about 2.9 s → 1.1 s (local measurement) |
+| Render-blocking fonts hurt mobile CWV (F-05) | Self-hosted; production mobile FCP about 2.9 s → 1.0 s |
 
 Unchanged and already correct:
 

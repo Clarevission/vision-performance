@@ -1,6 +1,6 @@
 # Vision Performance Inc.: corporate website post-implementation audit
 
-**Site:** https://visionperformanceinc.ca · **Date:** 25 September 2026 · **Baseline:** `81b73d5` (live) · **Branch:** `audit/vpi-corporate-post-launch`
+**Site:** https://visionperformanceinc.ca · **Date:** 25 September 2026 · **Baseline:** `81b73d5` (live) · **Branch:** `audit/vpi-corporate-post-launch`, merged as `77a826b` and **live and verified** on 25 Sep 2026
 
 ## Verdict
 
@@ -16,7 +16,7 @@ The audit found **no P0 issues**. The most significant problems were outside the
 
 1. **Duplicate hosts** (`.com`, `onrender.com`) served full copies of the site, and **mixed-case URLs** returned duplicates. These are fixed with 301s (F-01, F-02).
 2. **Search results still show the old site.** Fixing that needs Search Console and Bing access (F-08), and the public GitHub repo (with the archived old site) is indexed (F-07).
-3. **Google Fonts blocked rendering for about 1.7 s on mobile.** Fonts are now self-hosted: mobile Lighthouse performance went from 89 to 97–98, and FCP from about 2.9 s to about 1.1 s (F-05).
+3. **Google Fonts blocked rendering for about 1.7 s on mobile.** Fonts are now self-hosted. On production, mobile Lighthouse performance went from 89 to 97–100, and FCP from about 2.9 s to about 1.0 s (F-05).
 4. **An API origin-check bypass** (F-03), **two unmonitored retired form endpoints** (F-06), and **one unverified supplier claim** (F-04). All are fixed.
 
 ## Numbers
@@ -30,8 +30,8 @@ The audit found **no P0 issues**. The most significant problems were outside the
 | `npm test` | 53 tests, 61 s | **55 tests, all pass, ~1.5 s** |
 | E2E journeys | none | **9, pass in Chrome and Edge** |
 | axe violations (26 URLs × 2 widths) | 0 | **0** |
-| Layout findings (26 URLs × 9 viewports) | 1 | **0** |
-| Lighthouse mobile performance (home / technology / contact) | 89 / 89 / 89 | **98 / 98 / 97** (local; production re-run after deploy) |
+| Layout findings (26 URLs × 9 viewports) | 1 | **0** (local and production) |
+| Lighthouse mobile performance (home / technology / contact), production | 89 / 89 / 89 | **100 / 99 / 97** |
 | Lighthouse a11y / best practices / SEO | 100 / 100 / 100 | 100 / 100 / 100 |
 | `npm audit` | 0 | 0 |
 | Committed secrets | 0 | 0 |
@@ -68,5 +68,4 @@ The counts add up as follows. RESOLVED: F-01 to F-06, F-09 to F-14, F-20 to F-24
 - Automated accessibility testing and scripted keyboard checks do not establish WCAG conformance; no screen-reader or user testing was done.
 - Firefox and Safari were not tested.
 - The portal and staff apps were reviewed as code, not exercised live.
-- The Lighthouse "after" figures are from a local server.
 - Search-engine work has not been done (no credentials).

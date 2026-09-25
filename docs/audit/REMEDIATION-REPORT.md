@@ -1,6 +1,6 @@
 # Remediation report
 
-Branch `audit/vpi-corporate-post-launch`, from `81b73d5`. **Not yet merged or deployed.** Deploying needs the owner's go-ahead: merging to `main` auto-deploys on Render.
+Branch `audit/vpi-corporate-post-launch`, from `81b73d5`. **Merged to `main` as `77a826b` with the owner's approval, deployed to production on 25 Sep 2026, and verified live** ([04](04-deployment-parity.md)).
 
 ## Commits
 
@@ -48,18 +48,18 @@ Referrer-Policy (F-23) was changed in `179c0f2`.
   - supplier-claim guard
 - **E2E:** employer path, eyewear shortlist, resources guide, contact validation + submit, mobile nav, skip link, 404.
 
-## After deploy (owner go-ahead needed)
+## Deploy status
 
-1. Merge `audit/vpi-corporate-post-launch` → `main`. Render deploys automatically.
-2. Check the deploy:
+1. ✅ Merged and deployed (`77a826b`).
+2. ✅ Production verified: the redirects, 410s and headers, the read-only E2E (9/9), and the crawl (0 findings). The spot check was:
 
    ```bash
    curl -sI https://visionperformanceinc.com/about
    ```
 
    Expect a 301 to `https://visionperformanceinc.ca/about`. Then run the production commands in [04](04-deployment-parity.md). They are read-only and the form is never submitted.
-3. Re-run Lighthouse against production, and update [18](18-performance-audit.md) and [PERFORMANCE-AUDIT](PERFORMANCE-AUDIT.md).
-4. Complete the search-console steps in [16](16-search-index-cleanup.md).
+3. ✅ Lighthouse re-run on production: mobile 100 / 99 / 97, desktop 100 / 100 / 100 ([18](18-performance-audit.md)).
+4. ⏳ Owner: complete the search-console steps in [16](16-search-index-cleanup.md).
 
 ## Open items for the owner
 

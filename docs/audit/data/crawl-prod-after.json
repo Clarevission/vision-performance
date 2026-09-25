@@ -1,0 +1,213 @@
+{
+  "label": "prod-after",
+  "base": "https://visionperformanceinc.ca",
+  "channel": "chrome",
+  "date": "2026-09-25T18:12:48.973Z",
+  "routes": 26,
+  "viewports": [
+    "1920x1080",
+    "1440x900",
+    "1280x800",
+    "1024x768",
+    "768x1024",
+    "430x932",
+    "390x844",
+    "375x812",
+    "320x568"
+  ],
+  "pages": {
+    "/": {
+      "layout": {},
+      "axe": {},
+      "console": [],
+      "failedRequests": [],
+      "status": 200
+    },
+    "/about": {
+      "layout": {},
+      "axe": {},
+      "console": [],
+      "failedRequests": [],
+      "status": 200
+    },
+    "/accessibility": {
+      "layout": {},
+      "axe": {},
+      "console": [],
+      "failedRequests": [],
+      "status": 200
+    },
+    "/contact": {
+      "layout": {},
+      "axe": {},
+      "console": [],
+      "failedRequests": [],
+      "status": 200
+    },
+    "/industries": {
+      "layout": {},
+      "axe": {},
+      "console": [],
+      "failedRequests": [],
+      "status": 200
+    },
+    "/industries/construction": {
+      "layout": {},
+      "axe": {},
+      "console": [],
+      "failedRequests": [],
+      "status": 200
+    },
+    "/industries/energy": {
+      "layout": {},
+      "axe": {},
+      "console": [],
+      "failedRequests": [],
+      "status": 200
+    },
+    "/industries/manufacturing": {
+      "layout": {},
+      "axe": {},
+      "console": [],
+      "failedRequests": [],
+      "status": 200
+    },
+    "/industries/office": {
+      "layout": {},
+      "axe": {},
+      "console": [],
+      "failedRequests": [],
+      "status": 200
+    },
+    "/industries/transportation": {
+      "layout": {},
+      "axe": {},
+      "console": [],
+      "failedRequests": [],
+      "status": 200
+    },
+    "/mobile-clinics": {
+      "layout": {},
+      "axe": {},
+      "console": [],
+      "failedRequests": [],
+      "status": 200
+    },
+    "/privacy": {
+      "layout": {},
+      "axe": {},
+      "console": [],
+      "failedRequests": [],
+      "status": 200
+    },
+    "/resources": {
+      "layout": {},
+      "axe": {},
+      "console": [],
+      "failedRequests": [],
+      "status": 200
+    },
+    "/solutions": {
+      "layout": {},
+      "axe": {},
+      "console": [],
+      "failedRequests": [],
+      "status": 200
+    },
+    "/solutions/occupational-vision": {
+      "layout": {},
+      "axe": {},
+      "console": [],
+      "failedRequests": [],
+      "status": 200
+    },
+    "/solutions/prescription-safety-eyewear": {
+      "layout": {},
+      "axe": {},
+      "console": [],
+      "failedRequests": [],
+      "status": 200
+    },
+    "/solutions/prescription-safety-eyewear/styles": {
+      "layout": {},
+      "axe": {},
+      "console": [],
+      "failedRequests": [],
+      "status": 200
+    },
+    "/solutions/visual-ergonomics": {
+      "layout": {},
+      "axe": {},
+      "console": [],
+      "failedRequests": [],
+      "status": 200
+    },
+    "/solutions/workplace-eye-health": {
+      "layout": {},
+      "axe": {},
+      "console": [],
+      "failedRequests": [],
+      "status": 200
+    },
+    "/technology": {
+      "layout": {},
+      "axe": {},
+      "console": [],
+      "failedRequests": [],
+      "status": 200
+    },
+    "/technology/mires": {
+      "layout": {},
+      "axe": {},
+      "console": [],
+      "failedRequests": [],
+      "status": 200
+    },
+    "/technology/operations": {
+      "layout": {},
+      "axe": {},
+      "console": [],
+      "failedRequests": [],
+      "status": 200
+    },
+    "/technology/safetyos": {
+      "layout": {},
+      "axe": {},
+      "console": [],
+      "failedRequests": [],
+      "status": 200
+    },
+    "/terms": {
+      "layout": {},
+      "axe": {},
+      "console": [],
+      "failedRequests": [],
+      "status": 200
+    },
+    "/contact/thank-you": {
+      "layout": {},
+      "axe": {},
+      "console": [],
+      "failedRequests": [],
+      "status": 200
+    },
+    "/this-page-does-not-exist": {
+      "layout": {},
+      "axe": {},
+      "console": [
+        "1920x1080: Failed to load resource: the server responded with a status of 404 ()",
+        "1440x900: Failed to load resource: the server responded with a status of 404 ()",
+        "1280x800: Failed to load resource: the server responded with a status of 404 ()",
+        "1024x768: Failed to load resource: the server responded with a status of 404 ()",
+        "768x1024: Failed to load resource: the server responded with a status of 404 ()",
+        "430x932: Failed to load resource: the server responded with a status of 404 ()",
+        "390x844: Failed to load resource: the server responded with a status of 404 ()",
+        "375x812: Failed to load resource: the server responded with a status of 404 ()",
+        "320x568: Failed to load resource: the server responded with a status of 404 ()"
+      ],
+      "failedRequests": [],
+      "status": 404
+    }
+  },
+  "screenshots": 0
+}

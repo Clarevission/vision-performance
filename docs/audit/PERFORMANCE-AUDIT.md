@@ -1,14 +1,16 @@
 # Performance audit summary
 
-| Page (mobile) | Perf before → after | FCP before → after | LCP before → after |
-|---|---|---|---|
-| Home | 89 → **98** | 2.9 s → **1.2 s** | 3.1 s → **2.3 s** |
-| Technology | 89 → **98** | 2.9 s → **1.1 s** | 3.1 s → **2.4 s** |
-| Contact | 89 → **97** | 2.9 s → **1.1 s** | 3.1 s → **2.6 s** |
+Both columns are production (https://visionperformanceinc.ca through Cloudflare), measured the same way: before at `81b73d5`, after at `77a826b`.
 
-Desktop scores went from 97–98 to **100** on all three pages. TBT is 0–50 ms throughout, and CLS stays at or below 0.034.
+| Page (mobile) | Perf before → after | FCP before → after | LCP before → after | Render-blocking |
+|---|---|---|---|---|
+| Home | 89 → **100** | 2.9 s → **1.0 s** | 3.1 s → **1.7 s** | 1.66 s → **0** |
+| Technology | 89 → **99** | 2.9 s → **1.0 s** | 3.1 s → **2.2 s** | 1.69 s → **0.10 s** |
+| Contact | 89 → **97** | 2.9 s → **1.0 s** | 3.1 s → **2.5 s** | 1.69 s → **0** |
 
-**Caveat:** the "before" runs are production through Cloudflare; the "after" runs are a local production-mode server. The main cause of the improvement doesn't depend on the environment: removing the Google Fonts request chain cut render-blocking time from about 1.7 s to about 0.1–0.25 s on mobile. A production re-run is scheduled for after deploy.
+Desktop scores went from 97–98 to **100** on all three pages, with FCP about 0.3 s. CLS is **0.000** in all six production runs, and page weight fell by 8–40 KB per page. Accessibility, Best Practices and SEO remain 100.
+
+The local pre-deploy runs are also kept in `data/lighthouse.json` (`after-*`).
 
 ## Changes
 

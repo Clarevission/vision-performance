@@ -1,0 +1,20 @@
+<article class="product-card">
+  <div class="product-card__head">
+    <p class="product-card__endorse">Vision Performance Inc.</p>
+    <h3 class="product-card__name">VPI Mires™</h3>
+    {{> status kind="available"}}
+  </div>
+  <p class="product-card__lede">Practice management for optometry and optical clinics: scheduling, exams, billing and dispensary in one system.</p>
+  <ul class="product-card__features" role="list">
+    <li><svg class="icon icon--sm" aria-hidden="true"><use href="#i-calendar"/></svg>Scheduling, reminders &amp; recall</li>
+    <li><svg class="icon icon--sm" aria-hidden="true"><use href="#i-eye"/></svg>Clinical exam charting &amp; electronic health records</li>
+    <li><svg class="icon icon--sm" aria-hidden="true"><use href="#i-file"/></svg>Billing &amp; claims, including AHCIP and private pay</li>
+    <li><svg class="icon icon--sm" aria-hidden="true"><use href="#i-glasses"/></svg>Dispensary, frames &amp; multi-location inventory</li>
+    <li><svg class="icon icon--sm" aria-hidden="true"><use href="#i-users"/></svg>Patient portal for booking, messages &amp; documents</li>
+  </ul>
+  <div class="product-card__actions">
+    <a class="btn btn--primary" href="https://mires.visionperformanceinc.ca/" data-track="mires_click" data-track-location="{{$loc}}">Explore Mires<span class="visually-hidden"> (opens the Mires product site)</span><svg class="icon icon--sm" aria-hidden="true"><use href="#i-external"/></svg></a>
+    {{#$summary}}<a class="link-cta" href="/technology/mires">Mires at a glance<svg class="icon icon--xs" aria-hidden="true"><use href="#i-arrow"/></svg></a>{{/$summary}}
+  </div>
+  <p class="product-card__domain">mires.visionperformanceinc.ca</p>
+</article>

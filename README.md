@@ -55,6 +55,7 @@ Full-size logo and render masters live in `brand/` and are **not** served. `npm 
 | `ADMIN_KEY` | Admin API key |
 | `APP_ORIGIN` | Extra allowed origin for API requests |
 | `CONTACT_RATE_LIMIT` | Contact submissions per 15 min per IP (default 8) |
+| `CF_ANALYTICS_TOKEN` | Optional. Cloudflare Web Analytics token; enables the beacon, its CSP allowances and the privacy-policy disclosure together (`lib/analytics.js`) |
 
 ## Content rules
 

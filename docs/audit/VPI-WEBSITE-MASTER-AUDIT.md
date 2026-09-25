@@ -23,9 +23,9 @@ The audit found **no P0 issues**. The most significant problems were outside the
 
 | Measure | Before | After |
 |---|---|---|
-| Findings | n/a | 31: **P0 0 · P1 8 · P2 9 · P3 14** |
-| Resolved on branch | n/a | **18** |
-| Owner input / external credential | n/a | **9** (7 owner input · 2 external credential) |
+| Findings | n/a | 32: **P0 0 · P1 8 · P2 10 · P3 14** |
+| Resolved | n/a | **22** (18 in the audit + 4 after owner decisions) |
+| Owner input / external credential | n/a | **6** (3 owner input · 3 external credential) |
 | Deferred / accepted risk | n/a | **2** deferred (F-25, F-26) · **2** accepted (F-29, F-30) |
 | `npm test` | 53 tests, 61 s | **55 tests, all pass, ~1.5 s** |
 | E2E journeys | none | **9, pass in Chrome and Edge** |
@@ -36,7 +36,7 @@ The audit found **no P0 issues**. The most significant problems were outside the
 | `npm audit` | 0 | 0 |
 | Committed secrets | 0 | 0 |
 
-The counts add up as follows. RESOLVED: F-01 to F-06, F-09 to F-14, F-20 to F-24 and F-31 (18). Owner input: F-07, F-16, F-17, F-18, F-19, F-27 and F-28 (7). External credential: F-08 and F-15 (2). The live portal/staff workflow test in [08](08-workflow-audit.md) also needs credentials but is not a finding. Deferred: F-25 and F-26. Accepted risk: F-29 and F-30.
+The counts add up as follows. RESOLVED: F-01 to F-06, F-09 to F-14, F-16, F-17, F-19 to F-24, F-31 and F-32 (22). Owner input: F-07, F-18 and F-28 (3). External credential: F-08, F-15 and F-27 (3). Deferred: F-25 and F-26. Accepted risk: F-29 and F-30.
 
 ## Documents
 

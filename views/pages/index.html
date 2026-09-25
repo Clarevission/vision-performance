@@ -21,25 +21,22 @@
 
     <div class="ecosystem" role="group" aria-label="The Vision Performance Inc. ecosystem">
       <div class="ecosystem__core">
-        <img src="/assets/img/badge-128.png" alt="" width="64" height="64">
-        <p><strong>Vision Performance Inc.</strong>One company across vision, occupational health and technology</p>
+        <img class="ecosystem__logo" src="/assets/img/vpi-wordmark.png" alt="Vision Performance Inc." width="486" height="300">
+        <p>One company across vision, occupational health and technology</p>
       </div>
       <div class="ecosystem__rail" aria-hidden="true"></div>
       <div class="ecosystem__nodes">
         <div class="ecosystem__node">
-          <svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg>
           <p class="ecosystem__title">Occupational Vision</p>
           <ul><li>Employer programs</li><li>Safety eyewear</li><li>Visual ergonomics</li></ul>
           {{> status kind="development"}}
         </div>
         <div class="ecosystem__node">
-          <svg class="icon" aria-hidden="true"><use href="#i-van"/></svg>
           <p class="ecosystem__title">Clinical &amp; Mobile Care</p>
           <ul><li>Mobile vision clinics</li><li>Clinical &amp; optical network</li><li>Referral pathways</li></ul>
           {{> status kind="planned"}}
         </div>
         <div class="ecosystem__node">
-          <svg class="icon" aria-hidden="true"><use href="#i-layers"/></svg>
           <p class="ecosystem__title">VPI Technology</p>
           <ul><li>VPI SafetyOS™</li><li>VPI Mires™</li><li>VPI Command Centre</li></ul>
           {{> status kind="available"}}
@@ -59,18 +56,21 @@
     </div>
     <div class="grid grid--3">
       <article class="card card--link pillar pillar--accent">
+        <div class="card__media">{{> photo key="worker-glasses" sizes="(min-width: 1024px) 380px, 100vw"}}</div>
         <p class="pillar__kicker">Occupational Vision</p>
         <h3 class="card__title"><a href="/solutions">Workplace eye health for employers</a></h3>
         <p>Occupational vision programs, prescription safety eyewear, visual ergonomics and mobile services, designed around how crews and offices actually work.</p>
         <div class="card__meta">{{> status kind="development"}}<span class="card__more">Our solutions<svg class="icon icon--xs" aria-hidden="true"><use href="#i-arrow"/></svg></span></div>
       </article>
       <article class="card card--link pillar">
+        <div class="card__media">{{> photo key="site-tablet" sizes="(min-width: 1024px) 380px, 100vw"}}</div>
         <p class="pillar__kicker">Health &amp; Safety Technology</p>
         <h3 class="card__title"><a href="/technology/safetyos">VPI SafetyOS™</a></h3>
         <p>Safety management that runs from the field: audits, incidents, permits, training and emergency readiness in one system.</p>
         <div class="card__meta">{{> status kind="available"}}<span class="card__more">About SafetyOS<svg class="icon icon--xs" aria-hidden="true"><use href="#i-arrow"/></svg></span></div>
       </article>
       <article class="card card--link pillar pillar--signal">
+        <div class="card__media">{{> photo key="eye-exam" sizes="(min-width: 1024px) 380px, 100vw"}}</div>
         <p class="pillar__kicker">Eye Care Technology</p>
         <h3 class="card__title"><a href="/technology/mires">VPI Mires™</a></h3>
         <p>Purpose-built practice management for optometry and optical clinics: scheduling, exams, billing and dispensary together.</p>
@@ -97,11 +97,12 @@
       </div>
     </div>
     <div class="grid">
-      <a class="tile" href="/solutions/occupational-vision"><svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg><span>Occupational Vision Programs<small>How an employer program is structured</small></span></a>
-      <a class="tile" href="/solutions/prescription-safety-eyewear"><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg><span>Prescription Safety Eyewear<small>Eligibility, fitting, replacement, reporting</small></span></a>
-      <a class="tile" href="/solutions/prescription-safety-eyewear/styles"><svg class="icon" aria-hidden="true"><use href="#i-glasses"/></svg><span>Safety Eyewear Styles<small>Browse and shortlist styles for your crews</small></span></a>
-      <a class="tile" href="/solutions/visual-ergonomics"><svg class="icon" aria-hidden="true"><use href="#i-monitor"/></svg><span>Visual Ergonomics<small>Screens, lighting, glare and comfort</small></span></a>
-      <a class="tile" href="/solutions/workplace-eye-health"><svg class="icon" aria-hidden="true"><use href="#i-pulse"/></svg><span>Workplace Eye Health<small>Education, screening and referral</small></span></a>
+      <div class="rounded-photo">{{> photo key="goggles-earmuffs" ratio="16:9" sizes="(min-width: 900px) 560px, 100vw"}}</div>
+      <a class="tile" href="/solutions/occupational-vision"><span>Occupational Vision Programs<small>How an employer program is structured</small></span></a>
+      <a class="tile" href="/solutions/prescription-safety-eyewear"><span>Prescription Safety Eyewear<small>Eligibility, fitting, replacement, reporting</small></span></a>
+      <a class="tile" href="/solutions/prescription-safety-eyewear/styles"><span>Safety Eyewear Styles<small>Browse and shortlist styles for your crews</small></span></a>
+      <a class="tile" href="/solutions/visual-ergonomics"><span>Visual Ergonomics<small>Screens, lighting, glare and comfort</small></span></a>
+      <a class="tile" href="/solutions/workplace-eye-health"><span>Workplace Eye Health<small>Education, screening and referral</small></span></a>
     </div>
   </div>
 </section>
@@ -137,8 +138,8 @@
       <a class="link-cta" href="/technology">Technology overview<svg class="icon icon--xs" aria-hidden="true"><use href="#i-arrow"/></svg></a>
     </div>
     <div class="grid grid--2">
-      {{> product-safetyos loc="home" summary="1"}}
-      {{> product-mires loc="home" summary="1"}}
+      {{> product-safetyos loc="home" summary="1" photo="construction-crew"}}
+      {{> product-mires loc="home" summary="1" photo="optical-display"}}
     </div>
   </div>
 </section>
@@ -150,17 +151,17 @@
       <h2 id="industries-title">Designed for workplaces where vision matters</h2>
       <p>Our programs and software are designed for environments with safety-sensitive work, shift patterns, screen-intensive roles or distributed sites.</p>
     </div>
-    <div class="tile-grid">
-      <a class="tile" href="/industries/energy"><svg class="icon" aria-hidden="true"><use href="#i-bolt"/></svg>Energy, Oil &amp; Gas</a>
-      <a class="tile" href="/industries/construction"><svg class="icon" aria-hidden="true"><use href="#i-hardhat"/></svg>Construction</a>
-      <a class="tile" href="/industries/manufacturing"><svg class="icon" aria-hidden="true"><use href="#i-factory"/></svg>Manufacturing</a>
-      <a class="tile" href="/industries/transportation"><svg class="icon" aria-hidden="true"><use href="#i-route"/></svg>Transportation</a>
-      <a class="tile" href="/industries/manufacturing#warehousing"><svg class="icon" aria-hidden="true"><use href="#i-warehouse"/></svg>Warehousing</a>
-      <a class="tile" href="/industries/energy#utilities"><svg class="icon" aria-hidden="true"><use href="#i-bolt"/></svg>Utilities</a>
-      <a class="tile" href="/industries#mining"><svg class="icon" aria-hidden="true"><use href="#i-mountain"/></svg>Mining</a>
-      <a class="tile" href="/industries#healthcare"><svg class="icon" aria-hidden="true"><use href="#i-cross"/></svg>Healthcare</a>
-      <a class="tile" href="/industries/office"><svg class="icon" aria-hidden="true"><use href="#i-building"/></svg>Corporate Offices</a>
-      <a class="tile" href="/industries#public-sector"><svg class="icon" aria-hidden="true"><use href="#i-landmark"/></svg>Public Sector</a>
+    <div class="photo-tile-grid">
+      <a class="photo-tile" href="/industries/energy">{{> photo key="energy-worker" ratio="4:3" sizes="(min-width: 1024px) 230px, (min-width: 640px) 33vw, 50vw"}}<span>Energy, Oil &amp; Gas</span></a>
+      <a class="photo-tile" href="/industries/construction">{{> photo key="construction" ratio="4:3" sizes="(min-width: 1024px) 230px, (min-width: 640px) 33vw, 50vw"}}<span>Construction</span></a>
+      <a class="photo-tile" href="/industries/manufacturing">{{> photo key="grinding" ratio="4:3" sizes="(min-width: 1024px) 230px, (min-width: 640px) 33vw, 50vw"}}<span>Manufacturing</span></a>
+      <a class="photo-tile" href="/industries/transportation">{{> photo key="truck" ratio="4:3" sizes="(min-width: 1024px) 230px, (min-width: 640px) 33vw, 50vw"}}<span>Transportation</span></a>
+      <a class="photo-tile" href="/industries/manufacturing#warehousing">{{> photo key="warehouse" ratio="4:3" sizes="(min-width: 1024px) 230px, (min-width: 640px) 33vw, 50vw"}}<span>Warehousing</span></a>
+      <a class="photo-tile" href="/industries/energy#utilities">{{> photo key="lineworkers" ratio="4:3" sizes="(min-width: 1024px) 230px, (min-width: 640px) 33vw, 50vw"}}<span>Utilities</span></a>
+      <a class="photo-tile" href="/industries#mining">{{> photo key="mining" ratio="4:3" sizes="(min-width: 1024px) 230px, (min-width: 640px) 33vw, 50vw"}}<span>Mining</span></a>
+      <a class="photo-tile" href="/industries#healthcare">{{> photo key="healthcare" ratio="4:3" sizes="(min-width: 1024px) 230px, (min-width: 640px) 33vw, 50vw"}}<span>Healthcare</span></a>
+      <a class="photo-tile" href="/industries/office">{{> photo key="office" ratio="4:3" sizes="(min-width: 1024px) 230px, (min-width: 640px) 33vw, 50vw"}}<span>Corporate Offices</span></a>
+      <a class="photo-tile" href="/industries#public-sector">{{> photo key="city" ratio="4:3" sizes="(min-width: 1024px) 230px, (min-width: 640px) 33vw, 50vw"}}<span>Public Sector</span></a>
     </div>
   </div>
 </section>
@@ -173,27 +174,27 @@
     </div>
     <div class="grid grid--3">
       <div class="feature">
-        <div class="feature__icon"><svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg></div>
+        
         <div><h3>Two disciplines at one table</h3><p>Clinical vision care and occupational health and safety are considered together, not handed off between departments.</p></div>
       </div>
       <div class="feature">
-        <div class="feature__icon"><svg class="icon" aria-hidden="true"><use href="#i-clipboard"/></svg></div>
+        
         <div><h3>Built around the employer</h3><p>Programs are designed around what employers administer: eligibility, authorization, scheduling, replacement and records.</p></div>
       </div>
       <div class="feature">
-        <div class="feature__icon"><svg class="icon" aria-hidden="true"><use href="#i-layers"/></svg></div>
+        
         <div><h3>Technology-enabled delivery</h3><p>We run our own operations on our own software, built by the team behind SafetyOS and Mires.</p></div>
       </div>
       <div class="feature">
-        <div class="feature__icon"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg></div>
+        
         <div><h3>Privacy by design</h3><p>Our software keeps each organization's records separate and logs who changed what and when.</p></div>
       </div>
       <div class="feature">
-        <div class="feature__icon"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></div>
+        
         <div><h3>Clear about status</h3><p>Every service on this site is labelled available, in development or planned, so you know what you can engage today.</p></div>
       </div>
       <div class="feature">
-        <div class="feature__icon"><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg></div>
+        
         <div><h3>Canadian, built to scale</h3><p>Based in Edmonton, Alberta, with programs and systems designed to extend to other provinces.</p></div>
       </div>
     </div>

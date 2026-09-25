@@ -29,7 +29,7 @@
 | Health information | Appointment form invited vision history | No health fields. The form hint and privacy policy ask users not to send health information |
 | Storage | `enquiries` table (Neon) | Unchanged schema. Role is stored in `notes` as "Role: …" |
 | Cookies | Banner claimed "essential cookies for session management" on public pages (there were none) | No cookies on public pages. The auth cookie is set only on portal sign-in. `localStorage` holds only the announcement dismissal and the eyewear shortlist, both documented in the privacy policy. The banner was removed as unnecessary |
-| Third parties | Google Fonts, Unsplash (hotlinked) | Google Fonts only (disclosed). Processors named: Render, Neon, Resend |
+| Third parties | Google Fonts, Unsplash (hotlinked) | Google Fonts and Unsplash image CDN (both disclosed in the privacy policy; `img-src` allows only `images.unsplash.com`). Processors named: Render, Neon, Resend |
 | Policy | PIPEDA-only; "compliant" badges | Alberta PIPA plus PIPEDA; practices described; rights; OIPC Alberta and OPC links; privacy contact role (no invented name) |
 | Analytics | GA snippet commented out | None loaded. A first-party `vpiTrack()` dispatcher emits events to `window.dataLayer` **only if** an analytics tool is installed later |
 

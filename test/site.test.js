@@ -84,6 +84,31 @@ test('internal links resolve to real pages, anchors and assets', async () => {
   assert.deepEqual(problems, []);
 });
 
+test('SVG is used only for interface glyphs; imagery is photographic', () => {
+  const UI = new Set(['i-arrow', 'i-external', 'i-chevron', 'i-menu', 'i-close']);
+  for (const [p, page] of pages) {
+    for (const id of attr(page.html, /<use href="#([^"]+)"/g)) assert.ok(UI.has(id), `${p}: decorative icon #${id}`);
+    const svgs = (page.html.match(/<svg\b[^>]*>/g) || []).filter(s => !/class="icon/.test(s) && !/class="icon-sprite"/.test(s));
+    assert.deepEqual(svgs, [], `${p}: non-icon <svg>`);
+    for (const src of attr(page.html, /<img\b[^>]*\ssrc="([^"]+)"/g)) {
+      assert.ok(src.startsWith('/') || src.startsWith('https://images.unsplash.com/'), `${p}: image host ${src}`);
+    }
+  }
+  const css = fs.readFileSync(path.join(__dirname, '../public/assets/css/site.css'), 'utf8');
+  assert.ok(!/image\/svg/.test(css), 'no SVG data URIs in CSS');
+});
+
+test('every photo has alt text and a credit, and every style card has a photo', () => {
+  const { photos } = require('../views/data/photos');
+  for (const [key, p] of Object.entries(photos)) {
+    assert.match(p.id, /^photo-[\da-f-]+$/, key);
+    assert.ok(p.alt && p.alt.length > 10, `${key} alt`);
+    assert.ok(p.credit && p.slug, `${key} credit`);
+  }
+  const { styles } = require('../views/data/eyewear-styles');
+  for (const s of styles) assert.ok(photos[s.photo], `${s.id} photo`);
+});
+
 test('every icon referenced exists in the sprite', () => {
   const sprite = fs.readFileSync(path.join(__dirname, '../views/partials/icons.html'), 'utf8');
   for (const [, page] of pages) {

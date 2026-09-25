@@ -10,6 +10,31 @@ const BADGE = pub('images/logo-badge.png');
 const WORDMARK = pub('images/logo-dark-alt.png');
 const INK = '#00071A';
 
+// Removes a solid dark background by "un-blending" each pixel against it:
+// pixel = a·foreground + (1−a)·background, solved for the smallest alpha that fits.
+async function transparentWordmark(src, out, height) {
+  const { data, info } = await sharp(src).removeAlpha().raw().toBuffer({ resolveWithObject: true });
+  const bg = [data[0], data[1], data[2]];
+  const rgba = Buffer.alloc(info.width * info.height * 4);
+  for (let i = 0, o = 0; i < data.length; i += 3, o += 4) {
+    let a = 0;
+    for (let c = 0; c < 3; c++) {
+      const d = data[i + c] - bg[c];
+      // Every logo colour is lighter than the background; darker pixels are grain.
+      if (d > 0) a = Math.max(a, d / (255 - bg[c]));
+    }
+    // The master has film grain; drop faint noise and re-stretch the remaining range.
+    a = Math.max(0, Math.min(1, (a - 0.08) / 0.85));
+    for (let c = 0; c < 3; c++) {
+      rgba[o + c] = a ? Math.max(0, Math.min(255, Math.round(bg[c] + Math.max(0, data[i + c] - bg[c]) / a))) : 0;
+    }
+    rgba[o + 3] = Math.round(a * 255);
+  }
+  const trimmed = await sharp(rgba, { raw: { width: info.width, height: info.height, channels: 4 } })
+    .trim({ threshold: 1 }).png().toBuffer();
+  await sharp(trimmed).resize({ height }).png({ compressionLevel: 9, palette: true, quality: 100, dither: 0 }).toFile(out);
+}
+
 (async () => {
   fs.mkdirSync(pub('assets/img'), { recursive: true });
   const png = { compressionLevel: 9, palette: true };
@@ -17,9 +42,9 @@ const INK = '#00071A';
   await sharp(BADGE).resize(32, 32).png(png).toFile(pub('assets/img/favicon-32.png'));
   await sharp(BADGE).resize(180, 180).flatten({ background: INK }).png(png).toFile(pub('assets/img/apple-touch-icon.png'));
   await sharp(BADGE).resize(512, 512).png(png).toFile(pub('assets/img/icon-512.png'));
-  await sharp(BADGE).resize(128, 128).png(png).toFile(pub('assets/img/badge-128.png'));
-  // Header/footer wordmark: 3x the 48px display height.
-  await sharp(pub('images/logo-nav.png')).resize({ height: 162 }).png(png).toFile(pub('assets/img/wordmark.png'));
+  // Header/footer wordmark: transparent version of the master (the master has a solid navy
+  // background), trimmed and sized for up to ~100px display height at 3x density.
+  await transparentWordmark(WORDMARK, pub('assets/img/vpi-wordmark.png'), 300);
 
   // Default social-share image: wordmark + badge on brand navy, logo-rule colours along the bottom.
   const wordmark = await sharp(WORDMARK).resize(560).png().toBuffer();
@@ -38,7 +63,7 @@ const INK = '#00071A';
   }
 
   for (const f of ['assets/img/favicon-32.png', 'assets/img/apple-touch-icon.png', 'assets/img/icon-512.png',
-    'assets/img/badge-128.png', 'assets/img/wordmark.png', 'assets/img/og-default.jpg',
+    'assets/img/vpi-wordmark.png', 'assets/img/og-default.jpg',
     'assets/img/van-concept-480.webp', 'assets/img/van-concept-960.webp']) {
     console.log(f.padEnd(36), `${Math.round(fs.statSync(pub(f)).size / 1024)} KB`);
   }

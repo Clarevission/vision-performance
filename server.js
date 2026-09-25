@@ -28,7 +28,8 @@ const CSP = {
   scriptSrcAttr: ["'none'"],
   styleSrc: ["'self'", 'https://fonts.googleapis.com'],
   fontSrc: ["'self'", 'https://fonts.gstatic.com'],
-  imgSrc: ["'self'", 'data:'],
+  // Stock photography is served from Unsplash's image CDN (see views/data/photos.js).
+  imgSrc: ["'self'", 'data:', 'https://images.unsplash.com'],
   connectSrc: ["'self'"],
   formAction: ["'self'"],
   frameSrc: ["'none'"],

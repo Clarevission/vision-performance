@@ -1,4 +1,4 @@
-<div class="page-hero">
+<div class="page-hero{{#$photo}} page-hero--media{{/$photo}}">
   <div class="container">
     {{breadcrumbs}}
     <div class="page-hero__grid">
@@ -8,7 +8,7 @@
         {{#$lede}}<p class="page-hero__lede">{{$lede}}</p>{{/$lede}}
         {{#$status}}<div class="page-hero__status">{{> status kind="{{$status}}"}}{{#$status_note}}<span class="page-hero__status-note">{{$status_note}}</span>{{/$status_note}}</div>{{/$status}}
       </div>
-      {{#$icon}}<div class="page-hero__mark" aria-hidden="true"><svg class="icon"><use href="#{{$icon}}"/></svg></div>{{/$icon}}
+      {{#$photo}}<div class="page-hero__media">{{> photo key="{{$photo}}" ratio="4:3" loading="eager" sizes="(min-width: 900px) 520px, 100vw"}}</div>{{/$photo}}
     </div>
   </div>
 </div>

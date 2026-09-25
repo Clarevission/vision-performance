@@ -102,7 +102,7 @@ Label above the field (always visible, never placeholder-only). Inputs are 44 px
 
 ## Iconography
 
-One family: **24 px line icons, 1.75 stroke, round caps**, drawn as an inline SVG sprite (`/assets/img/icons.svg`, `<symbol>` + `<use>`). They are decorative by default (`aria-hidden="true"`). Emoji are not used as icons.
+*Updated 2026-09-25 at the owner's request:* **no decorative SVG imagery.** SVG is used only for interface glyphs: menu, close, dropdown chevron, arrow and external-link, from an inline sprite (iews/partials/icons.html). Checkmarks in lists and checkboxes are drawn in CSS. A test enforces this.
 
 ## Interactive states
 
@@ -120,6 +120,8 @@ Transitions only (150–200 ms, `ease-out`). No autoplay, parallax, pulsing or s
 
 ## Imagery
 
-- No stock photography of models. The concept van render is used once, captioned "Concept livery. Mobile units are planned."
-- Product visuals: neutral SVG line illustrations for eyewear styles, and abstract UI compositions (drawn with HTML and CSS) for SafetyOS and Mires cards. There are no fake screenshots with names or numbers.
-- Brand marks: `logo-nav.png` wordmark (on `--ink` only) and a badge-derived favicon.
+- **Photography** (owner request, 2026-09-25): real photographs from Unsplash (free licence), registered in iews/data/photos.js with alt text, photographer credit and the Unsplash photo slug. They are served responsively from Unsplash's CDN (srcset 480–1600 w, uto=format for WebP/AVIF). They are illustrative stock images: the people and places are not VPI staff, clients or sites, so captions never imply otherwise.
+- **Where photos appear:** every section page header (4:3), homepage pillar, product and industry cards, overview cards, and the safety-eyewear style cards (representative of each style, not specific products).
+- **Concept van render:** used once, captioned "Concept livery. VPI mobile units are in planning."
+- **Brand marks:** a transparent wordmark (/assets/img/vpi-wordmark.png, generated from the master by 
+pm run images) in the header (54 px mobile, 66 px desktop), footer (104 px) and home ecosystem diagram. The circular badge is used only for the favicon and the social-share image.

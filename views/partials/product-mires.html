@@ -1,4 +1,4 @@
-<article class="product-card">
+<article class="product-card">{{#$photo}}<div class="product-card__media">{{> photo key="{{$photo}}" sizes="(min-width: 768px) 560px, 100vw"}}</div>{{/$photo}}
   <div class="product-card__head">
     <p class="product-card__endorse">Vision Performance Inc.</p>
     <h3 class="product-card__name">VPI Mires™</h3>
@@ -6,11 +6,11 @@
   </div>
   <p class="product-card__lede">Practice management for optometry and optical clinics: scheduling, exams, billing and dispensary in one system.</p>
   <ul class="product-card__features" role="list">
-    <li><svg class="icon icon--sm" aria-hidden="true"><use href="#i-calendar"/></svg>Scheduling, reminders &amp; recall</li>
-    <li><svg class="icon icon--sm" aria-hidden="true"><use href="#i-eye"/></svg>Clinical exam charting &amp; electronic health records</li>
-    <li><svg class="icon icon--sm" aria-hidden="true"><use href="#i-file"/></svg>Billing &amp; claims, including AHCIP and private pay</li>
-    <li><svg class="icon icon--sm" aria-hidden="true"><use href="#i-glasses"/></svg>Dispensary, frames &amp; multi-location inventory</li>
-    <li><svg class="icon icon--sm" aria-hidden="true"><use href="#i-users"/></svg>Patient portal for booking, messages &amp; documents</li>
+    <li>Scheduling, reminders &amp; recall</li>
+    <li>Clinical exam charting &amp; electronic health records</li>
+    <li>Billing &amp; claims, including AHCIP and private pay</li>
+    <li>Dispensary, frames &amp; multi-location inventory</li>
+    <li>Patient portal for booking, messages &amp; documents</li>
   </ul>
   <div class="product-card__actions">
     <a class="btn btn--primary" href="https://mires.visionperformanceinc.ca/" data-track="mires_click" data-track-location="{{$loc}}">Explore Mires<span class="visually-hidden"> (opens the Mires product site)</span><svg class="icon icon--sm" aria-hidden="true"><use href="#i-external"/></svg></a>

@@ -16,6 +16,7 @@ const TOPICS = {
   safetyos: 'VPI SafetyOS',
   mires: 'VPI Mires',
   partnership: 'Partnership or investment',
+  'corporate-profile': 'Corporate profile request',
   resources: 'Resources & guides',
   careers: 'Careers',
   media: 'Media',

@@ -334,6 +334,16 @@ test('contact topics match the form options', () => {
   assert.deepEqual(options.sort(), Object.keys(TOPICS).sort());
 });
 
+test('the corporate profile is requested through the contact form, not published', async () => {
+  assert.equal((await post('/api/contact', { ...valid, topic: 'corporate-profile' })).status, 200);
+  for (const p of ['/resources', '/about']) assert.match(pages.get(p).html, /href="\/contact\?topic=corporate-profile"/, p);
+  assert.match(pages.get('/').html, /href="\/contact\?topic=corporate-profile">Corporate profile</, 'footer link');
+  assert.match(fs.readFileSync(path.join(__dirname, '../public/assets/js/site.js'), 'utf8'), /requested === 'corporate-profile'/);
+  // Nothing of the profile itself is served while it's private.
+  assert.equal((await get('/corporate-profile')).status, 404);
+  assert.ok(!fs.existsSync(path.join(__dirname, '../public/assets/corporate-profile')));
+});
+
 test('retired enquiry endpoints of the old site return 410', async () => {
   for (const p of ['/api/appointment', '/api/mobile', '/api/corporate']) {
     assert.equal((await post(p, { name: 'x', email: 'x@example.com' })).status, 410, p);

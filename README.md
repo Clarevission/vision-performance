@@ -36,6 +36,17 @@ Styles are in `public/assets/css/site.css` and behaviour in `public/assets/js/si
 | `/staff` | Internal enquiry dashboard (`public/staff.*`, `routes/staff.js`) |
 | `/api/contact` | Enquiry endpoint (Postgres + Resend). `/api/appointment`, `/api/mobile` and `/api/corporate` are retired and return 410 |
 | `/api/admin/*` | Admin API (`x-admin-key` header) |
+| `/corporate-profile` | Corporate Profile 2026 flipbook: a standalone full-screen page, not a composed one (see below) |
+
+### Corporate profile flipbook
+
+`views/corporate-profile.html` and everything in `public/assets/corporate-profile/` are **generated**; don't edit them by hand. They come from the brochure project (`VPI-Corporate-Profile-2026`):
+
+```
+python tools/build_flipbook.py --no-render --web ../vision-performance
+```
+
+This replaces both outputs. Every asset URL carries one `?v=` hash for the whole bundle, so the year-long `/assets` caching is safe. The page runs under the strict corporate CSP: the viewer script and styles are separate files, and the page data is a non-executable JSON block. Restart the server afterwards. `npm test` checks that every page image and PDF the flipbook references exists.
 
 ## Images and brand masters
 

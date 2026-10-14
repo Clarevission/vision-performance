@@ -127,6 +127,19 @@ test('every photo has alt text and a credit, and every style card has a photo', 
   for (const s of styles) assert.ok(photos[s.photo], `${s.id} photo`);
 });
 
+test('no registered photo shows a third-party company logo', () => {
+  // Stock photos where workers' PPE carries real companies' branding: showing them
+  // would imply client relationships VPI doesn't have.
+  const branded = {
+    'ZH8Rsiz34t0': 'Imperial Oil / Esso logos on the hard hat',
+    'gyrKtgqMChY': 'cpac logos on both hard hats',
+  };
+  const { photos } = require('../views/data/photos');
+  for (const [key, p] of Object.entries(photos)) {
+    assert.ok(!branded[p.slug], `${key}: ${branded[p.slug]}`);
+  }
+});
+
 test('links to product sites and other external sites open in a new tab', () => {
   let productLinks = 0;
   for (const [p, page] of pages) {

@@ -269,6 +269,23 @@ test('owner decisions: no phone number, no footer client sign-in, softened reply
   assert.match(pages.get('/privacy').html, /Privacy Officer/);
 });
 
+test('company address is Leduc, published consistently', () => {
+  for (const [p, { html }] of pages) {
+    assert.ok(!/Edmonton, Alberta|addressLocality":"Edmonton/.test(html), `${p}: still says Edmonton, Alberta`);
+    if (!/class="site-footer"/.test(html)) continue;
+    assert.match(html, /4810 50th Ave<br>Suite #410<br>Leduc, AB T9E 6X9/, `${p}: footer address`);
+  }
+  for (const p of ['/contact', '/about', '/privacy']) assert.match(pages.get(p).html, /Leduc, AB T9E 6X9<\/address>/, `${p} shows the address`);
+  const org = pages.get('/').html.match(/<script type="application\/ld\+json">(\{"@context":"https:\/\/schema.org","@type":"Organization"[\s\S]*?)<\/script>/);
+  assert.ok(org, 'Organization JSON-LD on /');
+  assert.deepStrictEqual(JSON.parse(org[1]).address, { '@type': 'PostalAddress', streetAddress: '4810 50th Ave, Suite #410', addressLocality: 'Leduc', addressRegion: 'AB', postalCode: 'T9E 6X9', addressCountry: 'CA' });
+});
+
+test('stylesheet has no dangling selectors', () => {
+  const css = fs.readFileSync(path.join(__dirname, '../public/assets/css/site.css'), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+  assert.ok(!/[\w\]\)]\s*\r?\n\s*\.[\w-]+\s*\{/.test(css.replace(/,\s*\r?\n/g, ', ')), 'a selector line runs into the next rule');
+});
+
 test('analytics stay off without a token, and switch on with disclosure when one is set', async () => {
   const { analytics } = require('../lib/analytics');
   for (const bad of [undefined, '', 'not-a-token', '<script>'.padEnd(32, 'a')]) assert.equal(analytics(bad).enabled, false);

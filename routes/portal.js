@@ -137,7 +137,7 @@ router.post('/forgot-password', async (req, res) => {
           <p style="color:#666;font-size:13px;">Or copy this link: ${resetUrl}</p>
           <p style="color:#666;font-size:13px;">If you did not request a password reset, you can safely ignore this email.</p>
           <hr style="border:none;border-top:1px solid #eee;margin:24px 0;">
-          <p style="color:#999;font-size:12px;">Vision Performance Inc. · Edmonton, Alberta, Canada</p>
+          <p style="color:#999;font-size:12px;">Vision Performance Inc. · Leduc, Alberta, Canada</p>
         </div>`,
       text: `Reset your password: ${resetUrl}\n\nThis link expires in 1 hour. If you did not request this, ignore this email.`,
     });

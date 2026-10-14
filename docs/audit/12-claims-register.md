@@ -4,7 +4,7 @@ Every factual or implied claim on the public site, with its evidence status. "Ow
 
 | # | Claim | Pages | Evidence | Status |
 |---|---|---|---|---|
-| C-01 | VPI is based in Edmonton, Alberta | Footer, About, Privacy, JSON-LD `PostalAddress` | Owner-stated | Keep |
+| C-01 | VPI's address is 4810 50th Ave, Suite #410, Leduc, AB T9E 6X9 ("Leduc, in the Edmonton Metropolitan Region" in prose) | Footer, Contact, About, Home, Mobile clinics FAQ, Privacy, portal email, JSON-LD `PostalAddress` | Owner-stated (14 Oct 2026) | Changed from "Edmonton, Alberta" |
 | C-02 | VPI SafetyOS™ is available now | Technology, SafetyOS, Home | Product site live at safetyos.visionperformanceinc.ca | Keep |
 | C-03 | VPI Mires™ is available now | Technology, Mires, Home | Product site live at mires.visionperformanceinc.ca | Keep |
 | C-04 | Occupational vision, eyewear, ergonomics and eye-health programs are *in development* | Solutions pages | Owner-stated | Keep: labelled |

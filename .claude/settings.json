@@ -1,0 +1,14 @@
+{
+  "enabledPlugins": {
+    "vpi-business@vpi": true,
+    "vpi-core@vpi": true
+  },
+  "extraKnownMarketplaces": {
+    "vpi": {
+      "source": {
+        "source": "github",
+        "repo": "Clarevission/vpi-ai-skills-library"
+      }
+    }
+  }
+}

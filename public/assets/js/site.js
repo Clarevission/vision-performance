@@ -177,6 +177,11 @@
       message.value = 'Please send me "' + GUIDES[guide] + '" when it is published.\n';
     }
 
+    // Corporate profile requests: the profile isn't public; VPI emails a personal copy.
+    if (requested === 'corporate-profile' && !message.value) {
+      message.value = 'Please send me a copy of the Vision Performance Inc. Corporate Profile 2026.\n\nWhat I\'m interested in:\n';
+    }
+
     var shortlist = readShortlist();
     if ((requested === 'safety-eyewear' || params.has('shortlist')) && shortlist.length && !message.value) {
       topic.value = 'safety-eyewear';
